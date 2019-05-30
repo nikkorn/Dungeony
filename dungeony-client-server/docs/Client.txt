@@ -1,0 +1,4 @@
+Storing Level Data
+==================
+The client will generate its own dungeon using dungen and the seed that the server provides.
+That way the client-side dungeon layout will match the server-side one. 

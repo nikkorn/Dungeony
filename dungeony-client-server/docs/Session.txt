@@ -1,0 +1,5 @@
+A session represents a running game.
+
+Composition
+===========
+- The levels that are inhabited by players.
