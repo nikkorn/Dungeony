@@ -8,16 +8,15 @@ public class Constants {
 	// *********************************************************************
 	// LEVEL
 	// *********************************************************************
-	public static float TILE_SIZE                            = 30f;
-	
+	public static int TILE_SIZE                              = 30;
 	
 	// *********************************************************************
 	// CHARACTER
 	// *********************************************************************
-	public static float CHARACTER_SIZE_SMALL                 = 10f;
-	public static float CHARACTER_SIZE_MEDIUM                = 15f;
-	public static float CHARACTER_SIZE_LARGE                 = 20f;
-	public static float CHARACTER_SIZE_XLARGE                = 25f;
+	public static int CHARACTER_SIZE_SMALL                   = 10;
+	public static int CHARACTER_SIZE_MEDIUM                  = 15;
+	public static int CHARACTER_SIZE_LARGE                   = 20;
+	public static int CHARACTER_SIZE_XLARGE                  = 25;
 	
 	public static float CHARACTER_MOVEMENT_SPEED_STATIC      = 0f;
 	public static float CHARACTER_MOVEMENT_SPEED_VERY_SLOW   = 0.5f;

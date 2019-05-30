@@ -8,7 +8,7 @@ public class LevelFactory {
 	/**
 	 * Create a Level instance.
 	 * @param seed The seed to use in level generation.
-	 * @return
+	 * @return A Level instance.
 	 */
 	public static Level createLevel(long seed) {
 		// TODO Generate and build actual level.
