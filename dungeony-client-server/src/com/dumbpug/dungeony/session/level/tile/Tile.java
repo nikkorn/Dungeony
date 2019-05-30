@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.session.level.tile;
 
 import java.util.ArrayList;
+import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
@@ -54,4 +55,11 @@ public abstract class Tile {
 	 * @return Whether the tile is walkable.
 	 */
 	public abstract boolean isWalkable(); 
+	
+	/**
+	 * Called in response to an item being used on the tile.
+	 * @param itemType The type of the item being used.
+	 * @returns Whether the item was consumed in it use.
+	 */
+	public abstract boolean useItem(ItemType itemType);
 }

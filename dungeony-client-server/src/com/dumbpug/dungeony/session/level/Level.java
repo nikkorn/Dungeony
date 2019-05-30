@@ -21,7 +21,7 @@ public class Level {
 	 * Tick the level.
 	 */
 	public void tick() {
-		// TODO Tick all of the players, updating thir state based on the provided playersInputProvider.
+		// TODO Tick all of the players, updating their state based on the provided playersInputProvider.
 		// TODO Tick all characters that are not players.
 		// TODO Tick all tick-able level entities that are not characters.
 	}
