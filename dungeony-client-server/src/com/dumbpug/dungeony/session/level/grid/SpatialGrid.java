@@ -105,28 +105,73 @@ public class SpatialGrid<TGridPositionedEntity extends IGridPositionedEntity> {
 	}
 	
 	/**
-	 * Get a set ofentitys that reside in the current or adjacent cells to the specified one excluding it.
+	 * Get a set of entitys that reside in the current or adjacent cells to the specified one excluding it.
 	 * @param entity The entity for which to find a set ofentitys that reside in the current or adjacent cells to it.
 	 * @return A set ofentitys that reside in the current or adjacent cells to the specified one excluding it.
 	 */
 	public HashSet<TGridPositionedEntity> getCollisionCandidates(TGridPositionedEntity entity) {
 		// Get the spatially positioned entity for theentity.
-		SpatiallyPoisitionedEntity<TGridPositionedEntity> spatiallyPositionedentity = this.entityToSpatialEntityMap.get(entity);
+		SpatiallyPoisitionedEntity<TGridPositionedEntity> spatiallyPositionedEntity = this.entityToSpatialEntityMap.get(entity);
 		
 		// Create an empty set in which to add all neighbouring entities.
-		HashSet<TGridPositionedEntity> neighbouringentitys = new HashSet<TGridPositionedEntity>();
+		HashSet<TGridPositionedEntity> neighbouringEntities = new HashSet<TGridPositionedEntity>();
 		
 		// For each cell key that the entity overlaps, add every entity that overlaps that cell into the neighbouring set.
-		for (Cell<TGridPositionedEntity> cell : spatiallyPositionedentity.getCells()) {
+		for (Cell<TGridPositionedEntity> cell : spatiallyPositionedEntity.getCells()) {
 			// Add every entity that overlaps the cell to our set.
-			cell.collect(neighbouringentitys);
+			cell.collect(neighbouringEntities);
 		}
 		
 		// Remove the specified entity from the set.
-		neighbouringentitys.remove(entity);
+		neighbouringEntities.remove(entity);
 		
 		// Return the list of neighbouring entities.
-		return neighbouringentitys;
+		return neighbouringEntities;
+	}
+	
+	/**
+	 * Get a set of entitys that reside in the current or adjacent cells to the specified one excluding it and within the specified range.
+	 * @param entity The entity for which to find a set ofentitys that reside in the current or adjacent cells to it and within the specified range.
+	 * @param range The additional range.
+	 * @return A set ofentitys that reside in the current or adjacent cells to the specified one excluding it and within the specified range.
+	 */
+	public HashSet<TGridPositionedEntity> getCollisionCandidates(TGridPositionedEntity entity, double range) {
+		// Get the cell bounds of the entity including the additional range.
+		int xStartCell = this.getCellPosition(entity.getPosition().getX() - range);
+		int xEndCell   = this.getCellPosition(entity.getPosition().getX() + entity.getWidth() + range);
+		int yStartCell = this.getCellPosition(entity.getPosition().getY() - range);
+		int yEndCell   = this.getCellPosition(entity.getPosition().getY() + entity.getHeight() + range);
+		
+		// Create an empty set in which to add all neighbouring entities.
+		HashSet<TGridPositionedEntity> neighbouringEntities = new HashSet<TGridPositionedEntity>();
+				
+		// Find all cells that the entity plus the additional range intersects and record the entity against each one.
+		for (int cellX = xStartCell; cellX <= xEndCell; cellX++) {
+			for (int cellY = yStartCell; cellY <= yEndCell; cellY++) {
+				// Get the cell at the current position.
+				Cell<TGridPositionedEntity> cell = this.getCell(cellX, cellY);
+				
+				// Add every entity that overlaps the cell to our set.
+				cell.collect(neighbouringEntities);
+			}
+		}
+		
+		// Remove the specified entity from the set.
+		neighbouringEntities.remove(entity);
+		
+		// Return the list of neighbouring entities.
+		return neighbouringEntities;
+	}
+	
+	/**
+	 * Gets whether the two entites intersect on both the x and y axis. 
+	 * @param a The first entity.
+	 * @param b The second entity.
+	 * @return Whether the two entites intersect on both the x and y axis. 
+	 */
+	public static boolean doEntitiesIntersect(IGridPositionedEntity a, IGridPositionedEntity b) {
+		return a.getPosition().getX() < (b.getPosition().getX() + b.getWidth()) && (a.getPosition().getX() + a.getWidth()) > b.getPosition().getX() &&
+			a.getPosition().getY() < (b.getPosition().getY() + b.getHeight()) && (a.getPosition().getY() + a.getHeight()) > b.getPosition().getY();
 	}
 	
 	/**

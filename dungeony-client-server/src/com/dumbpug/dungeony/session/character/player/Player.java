@@ -2,6 +2,8 @@ package com.dumbpug.dungeony.session.character.player;
 
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.session.character.LevelCharacter;
+import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
+import com.dumbpug.dungeony.session.level.LevelPositionedEntityType;
 import com.dumbpug.dungeony.session.level.Position;
 
 /**

@@ -2,12 +2,13 @@ package com.dumbpug.dungeony.session.item;
 
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
+import com.dumbpug.dungeony.session.level.LevelPositionedEntityType;
 import com.dumbpug.dungeony.session.level.Position;
 
 /**
  * An item dropped within a level.
  */
-public abstract class ItemDrop implements ILevelPositionedEntity {
+public class ItemDrop implements ILevelPositionedEntity {
 	/**
 	 * The position of the dropped item.
 	 */
@@ -74,5 +75,34 @@ public abstract class ItemDrop implements ILevelPositionedEntity {
 	@Override
 	public float getHeight() {
 		return Constants.ITEM_DROPPED_SIZE;
+	}
+	
+	/**
+	 * Gets the type of the level posiitoned entity.
+	 * @return The type of the level posiitoned entity.
+	 */
+	@Override
+	public LevelPositionedEntityType getLevelPositionedEntityType() {
+		return LevelPositionedEntityType.ITEP_DROP;
+	}
+
+	/**
+	 * Gets whether this level positioned entity will collide (not be able to pass through) another entity.
+	 * @param entity The other entity.
+	 * @return Whether this level positioned entity will collide (not be able to pass through) another entity.
+	 */
+	@Override
+	public boolean collidesWith(ILevelPositionedEntity entity) {
+		switch (entity.getLevelPositionedEntityType()) {
+			case CHARACTER:
+			case ITEP_DROP:
+				// An item drop will not collide with a character or another item drop.
+				return false;
+			case TILE:
+				return entity.collidesWith(this);
+			default:
+				// We have no idea what the other entity is, so say that we collide with it for now.
+				return true;
+		}
 	}
 }

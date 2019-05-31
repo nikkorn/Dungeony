@@ -1,7 +1,6 @@
 package com.dumbpug.dungeony.session.character.player;
 
 import java.util.ArrayList;
-import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
 import com.dumbpug.dungeony.session.level.IPlayerInputState;
 import com.dumbpug.dungeony.session.level.IPlayersInputProvider;
@@ -37,30 +36,26 @@ public class Players {
 			// Create offsets to hold the total accumulated x/y offset for the player.
 			float xOffset = 0f, yOffset = 0f;
 			
-			// UPdate the x/y offset based on whether the player is moving forwards/backwards/left/right.
+			// Update the x/y offset based on whether the player is moving forwards/backwards/left/right.
 			if (playerInputState.isMovingForwards()) {
-				yOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.sin(Math.toRadians(player.getAngleOfView() + 90));
-				xOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.cos(Math.toRadians(player.getAngleOfView() + 90));
+				yOffset += player.getMovementSpeed() * Math.sin(Math.toRadians(player.getAngleOfView() + 90));
+				xOffset += player.getMovementSpeed() * Math.cos(Math.toRadians(player.getAngleOfView() + 90));
 			} 
 			if (playerInputState.isMovingBackwards()) {
-				yOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.sin(Math.toRadians(player.getAngleOfView() + 270));
-				xOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.cos(Math.toRadians(player.getAngleOfView() + 270));
+				yOffset += player.getMovementSpeed() * Math.sin(Math.toRadians(player.getAngleOfView() + 270));
+				xOffset += player.getMovementSpeed() * Math.cos(Math.toRadians(player.getAngleOfView() + 270));
 			} 
 			if (playerInputState.isStrafingLeft()) {
-				yOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.sin(Math.toRadians(player.getAngleOfView() + 360));
-				xOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.cos(Math.toRadians(player.getAngleOfView() + 360));
+				yOffset += player.getMovementSpeed() * Math.sin(Math.toRadians(player.getAngleOfView() + 360));
+				xOffset += player.getMovementSpeed() * Math.cos(Math.toRadians(player.getAngleOfView() + 360));
 			} 
 			if (playerInputState.isStrafingRight()) {
-				yOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.sin(Math.toRadians(player.getAngleOfView() + 180));
-				xOffset += Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM * Math.cos(Math.toRadians(player.getAngleOfView() + 180));
+				yOffset += player.getMovementSpeed() * Math.sin(Math.toRadians(player.getAngleOfView() + 180));
+				xOffset += player.getMovementSpeed() * Math.cos(Math.toRadians(player.getAngleOfView() + 180));
 			}
 			
-			// TODO Using the spatial grid, find any entities that are in any grid cells that the player would have moved through.
-			// Stop the player offset from pushing them into another entity.
-			
-			// Update the player x/y position.
-			player.getPosition().setX(player.getPosition().getX() + xOffset);
-			player.getPosition().setY(player.getPosition().getY() + yOffset);
+			// Attempt to move the player.
+			player.move(xOffset, yOffset, spatialGrid);
 		}
 	}
 	
