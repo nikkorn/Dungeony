@@ -3,12 +3,13 @@ package com.dumbpug.dungeony.session.level.tile;
 import java.util.ArrayList;
 import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
+import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
 /**
  * Base class for all tiles.
  */
-public abstract class Tile {
+public abstract class Tile implements ILevelPositionedEntity {
 	/**
 	 * The direction of the tile.
 	 */

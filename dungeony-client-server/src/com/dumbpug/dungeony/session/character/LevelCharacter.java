@@ -1,12 +1,13 @@
 package com.dumbpug.dungeony.session.character;
 
 import com.dumbpug.dungeony.session.level.Direction;
+import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
 import com.dumbpug.dungeony.session.level.Position;
 
 /**
  * A character within the context of a level.
  */
-public abstract class LevelCharacter {
+public abstract class LevelCharacter implements ILevelPositionedEntity {
 	/**
 	 * The position of the character.
 	 */
@@ -28,8 +29,27 @@ public abstract class LevelCharacter {
 	 * Gets the character position.
 	 * @return The character position.
 	 */
+	@Override
 	public Position getPosition() {
 		return this.position;
+	}
+	
+	/**
+	 * Gets the width of the character.
+	 * @return The width of the character.
+	 */
+	@Override
+	public float getWidth() {
+		return this.getSize();
+	}
+
+	/**
+	 * Gets the height of the character.
+	 * @return The height of the character.
+	 */
+	@Override
+	public float getHeight() {
+		return this.getSize();
 	}
 	
 	/**

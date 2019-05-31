@@ -35,7 +35,7 @@ public class Position {
 	 * Set the x position.
 	 * @param x The x position.
 	 */
-	public void setX(short x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
@@ -51,7 +51,7 @@ public class Position {
 	 * Set the y position.
 	 * @param y The y position.
 	 */
-	public void setY(short y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 }
