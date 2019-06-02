@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
+import com.dumbpug.dungeony.session.level.LevelPositionedEntityType;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
 /**
@@ -43,6 +44,15 @@ public abstract class Tile implements ILevelPositionedEntity {
 	 */
 	public ArrayList<Decoration> getDecorations() {
 		return this.decorations;
+	}
+
+	/**
+	 * Gets the type of the level positioned entity.
+	 * @return The type of the level positioned entity.
+	 */
+	@Override
+	public LevelPositionedEntityType getLevelPositionedEntityType() {
+		return LevelPositionedEntityType.TILE;
 	}
 	
 	/**

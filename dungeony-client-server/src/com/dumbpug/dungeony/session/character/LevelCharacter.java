@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.session.character;
 import java.util.HashSet;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
+import com.dumbpug.dungeony.session.level.LevelPositionedEntityType;
 import com.dumbpug.dungeony.session.level.Position;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
@@ -90,6 +91,32 @@ public abstract class LevelCharacter implements ILevelPositionedEntity {
 	 * @return The movement speed of the character.
 	 */
 	public abstract float getMovementSpeed();
+
+	/**
+	 * Gets the type of the level positioned entity.
+	 * @return The type of the level positioned entity.
+	 */
+	@Override
+	public LevelPositionedEntityType getLevelPositionedEntityType() {
+		return LevelPositionedEntityType.CHARACTER;
+	}
+
+	/**
+	 * Gets whether this level positioned entity will collide (not be able to pass through) another entity.
+	 * @param entity The other entity.
+	 * @return Whether this level positioned entity will collide (not be able to pass through) another entity.
+	 */
+	@Override
+	public boolean collidesWith(ILevelPositionedEntity entity) {
+		switch (entity.getLevelPositionedEntityType()) {
+			case CHARACTER:
+				return true;
+			case TILE:
+				return entity.collidesWith(this);
+			default:
+				return false;
+		}
+	}
 	
 	/**
 	 * Move the character and update their position based on an x/y offset, handling any resulting collisions.

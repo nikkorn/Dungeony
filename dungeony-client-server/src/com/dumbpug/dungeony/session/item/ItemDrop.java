@@ -94,15 +94,10 @@ public class ItemDrop implements ILevelPositionedEntity {
 	@Override
 	public boolean collidesWith(ILevelPositionedEntity entity) {
 		switch (entity.getLevelPositionedEntityType()) {
-			case CHARACTER:
-			case ITEP_DROP:
-				// An item drop will not collide with a character or another item drop.
-				return false;
 			case TILE:
 				return entity.collidesWith(this);
 			default:
-				// We have no idea what the other entity is, so say that we collide with it for now.
-				return true;
+				return false;
 		}
 	}
 }
