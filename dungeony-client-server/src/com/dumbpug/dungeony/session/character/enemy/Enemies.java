@@ -1,7 +1,7 @@
 package com.dumbpug.dungeony.session.character.enemy;
 
 import java.util.ArrayList;
-import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
+import com.dumbpug.dungeony.session.level.ICollidableEntity;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
 /**
@@ -17,7 +17,7 @@ public class Enemies {
      * Tick the enemies.
      * @param spatialGrid The spatial grid used to handle collisions between level entities.
      */
-    public void tick(SpatialGrid<ILevelPositionedEntity> spatialGrid) {
+    public void tick(SpatialGrid<ICollidableEntity> spatialGrid) {
         // TODO ...
     }
 }

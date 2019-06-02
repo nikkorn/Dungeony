@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.player.Player;
 import com.dumbpug.dungeony.session.character.player.Players;
+import com.dumbpug.dungeony.session.input.IPlayersInputProvider;
 import com.dumbpug.dungeony.session.item.ItemDrop;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 import com.dumbpug.dungeony.session.level.tile.Tiles;
@@ -13,21 +14,21 @@ import com.dumbpug.dungeony.session.level.tile.Tiles;
  */
 public class Level {
 	/**
-	 * The spatial grid used to handle collisions between level entities.
-	 */
-	private SpatialGrid<ILevelPositionedEntity> spatialGrid;
-	/**
 	 * The collection of all tiles in the level.
 	 */
-	private Tiles tiles = new Tiles();
+	private Tiles tiles;
+	/**
+	 * The collection of all enemies in the level.
+	 */
+	private Enemies enemies;
+	/**
+	 * The spatial grid used to handle collisions between level entities.
+	 */
+	private SpatialGrid<ICollidableEntity> spatialGrid;
 	/**
 	 * The collection of all players in the level.
 	 */
 	private Players players = new Players();
-	/**
-	 * The collection of all enemies in the level.
-	 */
-	private Enemies enemies = new Enemies();
 	/**
 	 * The list of dropped items in the level.
 	 */
@@ -36,10 +37,12 @@ public class Level {
 	/**
 	 * Creates a new instance of the Level class.
 	 * @param tiles The tiles that the level is composed of.
-	 * @param spatialGrid The spatial grid used to handle collisions between level entites.
+	 * @param enemies The enemies in the level.
+	 * @param spatialGrid The spatial grid used to handle collisions between level entities.
 	 */
-	public Level(Tiles tiles, SpatialGrid<ILevelPositionedEntity> spatialGrid) {
+	public Level(Tiles tiles, Enemies enemies, SpatialGrid<ICollidableEntity> spatialGrid) {
 		this.tiles       = tiles;
+		this.enemies     = enemies;
 		this.spatialGrid = spatialGrid;
 	}
 	
@@ -53,8 +56,6 @@ public class Level {
 
 		// Tick all of the enemies.
 		this.enemies.tick(this.spatialGrid);
-
-		// TODO Tick all tick-able level objects.
 
 		// Tick all tick-able level tiles.
 		this.tiles.tick();

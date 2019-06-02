@@ -2,15 +2,15 @@ package com.dumbpug.dungeony.session.character;
 
 import java.util.HashSet;
 import com.dumbpug.dungeony.session.level.Direction;
-import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
-import com.dumbpug.dungeony.session.level.LevelPositionedEntityType;
+import com.dumbpug.dungeony.session.level.ICollidableEntity;
+import com.dumbpug.dungeony.session.level.CollidableEntityType;
 import com.dumbpug.dungeony.session.level.Position;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
 /**
  * A character within the context of a level.
  */
-public abstract class LevelCharacter implements ILevelPositionedEntity {
+public abstract class LevelCharacter implements ICollidableEntity {
 	/**
 	 * The position of the character.
 	 */
@@ -97,8 +97,8 @@ public abstract class LevelCharacter implements ILevelPositionedEntity {
 	 * @return The type of the level positioned entity.
 	 */
 	@Override
-	public LevelPositionedEntityType getLevelPositionedEntityType() {
-		return LevelPositionedEntityType.CHARACTER;
+	public CollidableEntityType getCollidableEntityType() {
+		return CollidableEntityType.CHARACTER;
 	}
 
 	/**
@@ -107,8 +107,8 @@ public abstract class LevelCharacter implements ILevelPositionedEntity {
 	 * @return Whether this level positioned entity will collide (not be able to pass through) another entity.
 	 */
 	@Override
-	public boolean collidesWith(ILevelPositionedEntity entity) {
-		switch (entity.getLevelPositionedEntityType()) {
+	public boolean collidesWith(ICollidableEntity entity) {
+		switch (entity.getCollidableEntityType()) {
 			case CHARACTER:
 				return true;
 			case TILE:
@@ -124,16 +124,16 @@ public abstract class LevelCharacter implements ILevelPositionedEntity {
 	 * @param yOffset The offset to move on the y axis.
 	 * @param spatialGrid The spatial grid to use in finding collisions along the movement path.
 	 */
-	public void move(float xOffset, float yOffset, SpatialGrid<ILevelPositionedEntity> spatialGrid) {
+	public void move(float xOffset, float yOffset, SpatialGrid<ICollidableEntity> spatialGrid) {
 		// Find any level positioned entities that the character could potentially collide with while moving.
-		HashSet<ILevelPositionedEntity> collisionCandidates = spatialGrid.getCollisionCandidates(this, this.getMovementSpeed());
+		HashSet<ICollidableEntity> collisionCandidates = spatialGrid.getCollisionCandidates(this, this.getMovementSpeed());
 		
 		// Update the x axis.
 		this.position.setX(this.position.getX() + xOffset);
 		
 		// Try to find any entities that the character now collides with on the x axis if we are actually moving on it.
 		if (xOffset != 0) {
-			for (ILevelPositionedEntity entity : collisionCandidates) {
+			for (ICollidableEntity entity : collisionCandidates) {
 				if (xOffset > 0) {
 					// ... character is moving east ... 
 				} else {
@@ -147,7 +147,7 @@ public abstract class LevelCharacter implements ILevelPositionedEntity {
 		
 		// Try to find any entities that the character now collides with on the y axis if we are actually moving on it.
 		if (yOffset != 0) {
-			for (ILevelPositionedEntity entity : collisionCandidates) {
+			for (ICollidableEntity entity : collisionCandidates) {
 				if (yOffset > 0) {
 					// ... character is moving north ... 
 				} else {

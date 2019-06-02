@@ -1,9 +1,9 @@
 package com.dumbpug.dungeony.session.character.player;
 
 import java.util.ArrayList;
-import com.dumbpug.dungeony.session.level.ILevelPositionedEntity;
-import com.dumbpug.dungeony.session.level.IPlayerInputState;
-import com.dumbpug.dungeony.session.level.IPlayersInputProvider;
+import com.dumbpug.dungeony.session.level.ICollidableEntity;
+import com.dumbpug.dungeony.session.input.IPlayerInputState;
+import com.dumbpug.dungeony.session.input.IPlayersInputProvider;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
 /**
@@ -20,7 +20,7 @@ public class Players {
 	 * @param playersInputProvider The provider of input for all available players.
 	 * @param spatialGrid The spatial grid used to handle collisions between level entites.
 	 */
-	public void tick(IPlayersInputProvider playersInputProvider, SpatialGrid<ILevelPositionedEntity> spatialGrid) {
+	public void tick(IPlayersInputProvider playersInputProvider, SpatialGrid<ICollidableEntity> spatialGrid) {
 		// Update the positions and angles of view for the players.
 		this.updatePlayerPositions(playersInputProvider, spatialGrid);
 
@@ -49,7 +49,7 @@ public class Players {
 	 * @param playersInputProvider The provider of input for all available players.
 	 * @param spatialGrid The spatial grid used to handle collisions between level entites.
 	 */
-	private void updatePlayerPositions(IPlayersInputProvider playersInputProvider, SpatialGrid<ILevelPositionedEntity> spatialGrid) {
+	private void updatePlayerPositions(IPlayersInputProvider playersInputProvider, SpatialGrid<ICollidableEntity> spatialGrid) {
 		for (Player player : this.players) {
 			// Try to get the input state for the current player.
 			IPlayerInputState playerInputState = playersInputProvider.getInputStateForPlayer(player.getPlayerId());
