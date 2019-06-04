@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.session.character;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.ICollidableEntity;
 import com.dumbpug.dungeony.session.level.CollidableEntityType;
@@ -125,34 +126,56 @@ public abstract class LevelCharacter implements ICollidableEntity {
 	 * @param spatialGrid The spatial grid to use in finding collisions along the movement path.
 	 */
 	public void move(float xOffset, float yOffset, SpatialGrid<ICollidableEntity> spatialGrid) {
+		// There is nothing to do if no positional offset is being applied.
+		if (xOffset == 0 && yOffset == 0) {
+			return;
+		}
+		
 		// Find any level positioned entities that the character could potentially collide with while moving.
 		HashSet<ICollidableEntity> collisionCandidates = spatialGrid.getCollisionCandidates(this, this.getMovementSpeed());
-		
-		// Update the x axis.
-		this.position.setX(this.position.getX() + xOffset);
+
+		// Remove any collision candidates that are close enought ot be considered but cannot actually collide.
+		Iterator<ICollidableEntity> collidablesIterator = collisionCandidates.iterator();
+		while (collidablesIterator.hasNext()) {
+			ICollidableEntity collidable = collidablesIterator.next();
+			if (!collidable.collidesWith(this)) {
+				collidablesIterator.remove();
+			}
+		}
 		
 		// Try to find any entities that the character now collides with on the x axis if we are actually moving on it.
 		if (xOffset != 0) {
+			// Update the x axis.
+			this.position.setX(this.position.getX() + xOffset);
+			
 			for (ICollidableEntity entity : collisionCandidates) {
-				if (xOffset > 0) {
-					// ... character is moving east ... 
-				} else {
-					// ... character is moving west ... 
+				// Ignore an entities that we are not intersecting.
+				if (!SpatialGrid.doEntitiesIntersect(this, entity)) {
+					continue;
 				}
+				
+				// TODO Try moving this entity against the edge of the closest colliding entity on this axis.
+				// For now, we will simply reset the characters position on this axis to what it was before.
+				this.position.setX(this.position.getX() - xOffset);
+				break;
 	    	}
 		}
 		
-		// Update the y axis.
-		this.position.setY(this.position.getY() + yOffset);
-		
 		// Try to find any entities that the character now collides with on the y axis if we are actually moving on it.
 		if (yOffset != 0) {
+			// Update the y axis.
+			this.position.setY(this.position.getY() + yOffset);
+			
 			for (ICollidableEntity entity : collisionCandidates) {
-				if (yOffset > 0) {
-					// ... character is moving north ... 
-				} else {
-					// ... character is moving south ... 
+				// Ignore an entities that we are not intersecting.
+				if (!SpatialGrid.doEntitiesIntersect(this, entity)) {
+					continue;
 				}
+				
+				// TODO Try moving this entity against the edge of the closest colliding entity on this axis.
+				// For now, we will simply reset the characters position on this axis to what it was before.
+				this.position.setY(this.position.getY() - yOffset);
+				break;
 	    	}
 		}
 		

@@ -11,7 +11,15 @@ public class Enemies {
     /**
      * The list of enemies.
      */
-    private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<Enemy> enemies;
+    
+    /**
+     * Creates a new instance of the Enemies class.
+     * @param enemies The initial enemies in the collection of enemies.
+     */
+    public Enemies(ArrayList<Enemy> enemies) {
+    	this.enemies = enemies;
+    }
 
     /**
      * Tick the enemies.

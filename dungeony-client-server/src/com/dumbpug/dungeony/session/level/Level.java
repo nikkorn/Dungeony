@@ -47,6 +47,22 @@ public class Level {
 	}
 	
 	/**
+	 * Gets the level tiles.
+	 * @return The level tiles.
+	 */
+	public Tiles getTiles() {
+		return this.tiles;
+	}
+	
+	/**
+	 * Gets the players in the level.
+	 * @return The players in the level.
+	 */
+	public Players getPlayers() {
+		return this.players;
+	}
+	
+	/**
 	 * Tick the level.
 	 * @param playersInputProvider The provider of input for all available players.
 	 */

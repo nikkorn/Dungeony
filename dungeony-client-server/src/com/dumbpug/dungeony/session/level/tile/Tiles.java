@@ -9,7 +9,15 @@ public class Tiles {
     /**
      * The list of tiles.
      */
-    private ArrayList<Tile> tiles = new ArrayList<Tile>();
+    private ArrayList<Tile> tiles;
+    
+    /**
+     * Creates a new instance of the Tiles class.
+     * @param tiles The tiles in the collection of tiles.
+     */
+    public Tiles(ArrayList<Tile> tiles) {
+    	this.tiles = tiles;
+    }
 
     /**
      * Tick any tick-able tiles.
