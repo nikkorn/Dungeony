@@ -10,7 +10,7 @@
                 "direction": "EAST",
                 "door": "NONE"
             },
-            "entities": []
+            "tiles": []
         }
     ]
 }

@@ -9,10 +9,12 @@
             },
             "entrance": {
                 "direction": "NORTH",
-                "door": "SHOP"
+                "attributes": {
+                    "door_type": "SHOP"
+                }
             },
             "blocked": ["EAST", "SOUTH", "WEST"],
-            "entities": []
+            "tiles": []
         }
     ]
 }

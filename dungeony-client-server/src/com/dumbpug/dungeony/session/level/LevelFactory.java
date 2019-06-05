@@ -39,7 +39,7 @@ public class LevelFactory {
 		// Create the level tiles.
 		Tiles tiles = createLevelTiles(dungeon);
 		
-		// Create the level tiles.
+		// Create the level enemies.
 		Enemies enemies = createLevelEnemies(dungeon);
 		
 		// Create and return the actual level.

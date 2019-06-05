@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import com.dumbpug.dungeony.dungen.Direction;
-import com.dumbpug.dungeony.dungen.room.Entrance;
 import com.dumbpug.dungeony.dungen.room.PositionedEntity;
-import com.dumbpug.dungeony.dungen.tile.Door;
-import com.dumbpug.dungeony.dungen.tile.Empty;
 import com.dumbpug.dungeony.dungen.tile.Tile;
-import com.dumbpug.dungeony.dungen.tile.Wall;
+import com.dumbpug.dungeony.dungen.tile.TileType;
 
 /**
  * Generator of tiles based on positoned dungeon cells.
@@ -31,7 +28,7 @@ public class TileGenerator {
 			// Get the cell position.
 			Position position = cell.getPosition();
 			
-			// Get the x/y position of the bottom left tile in the cell.
+			// Get the min/max x/y positions of all of the tiles in the current cell.
 			int tileXMin = position.getX() * (Constants.CELL_TILE_SIZE + 1);
 			int tileYMin = position.getY() * (Constants.CELL_TILE_SIZE + 1);
 			int tileXMax = tileXMin + Constants.CELL_TILE_SIZE;
@@ -40,61 +37,64 @@ public class TileGenerator {
 			// Create a wall tile for each tile position around the cell.
 			for (int tileX = tileXMin - 1; tileX <= tileXMax; tileX++) {
 				for (int tileY = tileYMin - 1; tileY <= tileYMax; tileY++) {
-					tileMap.put(new Position(tileX, tileY), new Wall(tileX, tileY));
+					tileMap.put(new Position(tileX, tileY), new Tile(TileType.WALL, tileX, tileY, cell.getDepth()));
 				}
 			}
 			
-			// Create a tile for each tile position in the cell.
+			// Create an empty tile for each tile position in the cell.
 			for (int tileX = tileXMin; tileX < tileXMax; tileX++) {
 				for (int tileY = tileYMin; tileY < tileYMax; tileY++) {
-					tileMap.put(new Position(tileX, tileY), new Empty(tileX, tileY, cell.getDepth()));
+					tileMap.put(new Position(tileX, tileY), new Tile(TileType.EMPTY, tileX, tileY, cell.getDepth()));
 				}
 			}
 			
 			// Is the current cell the entrance cell for a room?
 			if (cell.getCell().getEntrance() != null) {
-				// Get the cell entrance info.
-				Entrance entrance = cell.getCell().getEntrance();
+				// Find the position of the entrance based on the entrance cell door direction.
+				Position entrancePosition = getEntrancePosition(cell.getCell().getEntrance().getDirection(), tileXMin, tileYMin, tileXMax, tileYMax);
 				
-				// Find the position of the door based on the entrance cell door direction.
-				Position doorPosition = getDoorPosition(entrance.getDirection(), tileXMin, tileYMin, tileXMax, tileYMax);
-				
-				// Create the door tile.
-				Door door = new Door(doorPosition.getX(), doorPosition.getY(), cell.getDepth(), entrance.getDoor(), entrance.getDirection());
+				// Create the entrance tile.
+				Tile entrance = new Tile(TileType.ENTRANCE, entrancePosition.getX(), entrancePosition.getY(), cell.getDepth());
 			
-				// Add the door to the tile map.
-				tileMap.put(new Position(doorPosition.getX(), doorPosition.getY()), door);
+				// Get the entrance attributes and add them to the tile.
+				entrance.setAttributes(cell.getCell().getEntrance().getAttributes());
+				
+				// Get the entrance facing direction and apply it to the tile.
+				entrance.setDirection(cell.getCell().getEntrance().getDirection());
+				
+				// Add the entrance tile to the tile map.
+				tileMap.put(new Position(entrancePosition.getX(), entrancePosition.getY()), entrance);
 			}
 			
 			// Is the cell above this one in the same room?
 			if (areRoomCellsBridged(cells, cell, Direction.NORTH)) {
-				// Create a tile for each tile position in the cell.
+				// Create an empty tile for each tile position between the two bridged cells.
 				for (int tileX = tileXMin; tileX < tileXMax; tileX++) {
-					tileMap.put(new Position(tileX, tileYMax), new Empty(tileX, tileYMax, cell.getDepth()));
+					tileMap.put(new Position(tileX, tileYMax), new Tile(TileType.EMPTY, tileX, tileYMax, cell.getDepth()));
 				}
 			}
 			
 			// Is the cell below this one in the same room?
 			if (areRoomCellsBridged(cells, cell, Direction.SOUTH)) {
-				// Create a tile for each tile position in the cell.
+				// Create an empty tile for each tile position between the two bridged cells.
 				for (int tileX = tileXMin; tileX < tileXMax; tileX++) {
-					tileMap.put(new Position(tileX, tileYMin - 1), new Empty(tileX, tileYMin - 1, cell.getDepth()));
+					tileMap.put(new Position(tileX, tileYMin - 1), new Tile(TileType.EMPTY, tileX, tileYMin - 1, cell.getDepth()));
 				}
 			}
 			
 			// Is the cell to the left of this one in the same room?
 			if (areRoomCellsBridged(cells, cell, Direction.WEST)) {
-				// Create a tile for each tile position in the cell.
+				// Create an empty tile for each tile position between the two bridged cells.
 				for (int tileY = tileYMin; tileY < tileYMax; tileY++) {
-					tileMap.put(new Position(tileXMin - 1, tileY), new Empty(tileXMin - 1, tileY, cell.getDepth()));
+					tileMap.put(new Position(tileXMin - 1, tileY), new Tile(TileType.EMPTY, tileXMin - 1, tileY, cell.getDepth()));
 				}
 			}
 			
 			// Is the cell to the right of this one in the same room?
 			if (areRoomCellsBridged(cells, cell, Direction.EAST)) {
-				// Create a tile for each tile position in the cell.
+				// Create an empty tile for each tile position between the two bridged cells.
 				for (int tileY = tileYMin; tileY < tileYMax; tileY++) {
-					tileMap.put(new Position(tileXMax, tileY), new Empty(tileXMax, tileY, cell.getDepth()));
+					tileMap.put(new Position(tileXMax, tileY), new Tile(TileType.EMPTY, tileXMax, tileY, cell.getDepth()));
 				}
 			}
 						
@@ -108,13 +108,8 @@ public class TileGenerator {
 				// Get the tile.
 				Tile tile = tileMap.get(positionedEntity.getPosition());
 				
-				// There is nothing to do if the tile at the entity position cannot hold an entity.
-				if (!(tile instanceof Empty)) {
-					continue;
-				}
-				
-				// Add the entity to its corresponding cell.
-				((Empty)tile).setEntity(positionedEntity.getEntity());
+				// Add the entity to the list of entities attached to the tile.
+				tile.getEntities().add(positionedEntity.getEntity());
 			}
 		}
 		
@@ -123,15 +118,15 @@ public class TileGenerator {
 	}
 	
 	/**
-	 * Get the absolute position of a door for a cell.
-	 * @param direction The door direction.
+	 * Get the absolute position of an entrance tile for a cell.
+	 * @param direction The entrance direction.
 	 * @param tileXMin
 	 * @param tileYMin
 	 * @param tileXMax
 	 * @param tileYMax
-	 * @return
+	 * @return The absolute position of an entrance tile for a cell.
 	 */
-	private static Position getDoorPosition(Direction direction, int tileXMin, int tileYMin, int tileXMax, int tileYMax) {
+	private static Position getEntrancePosition(Direction direction, int tileXMin, int tileYMin, int tileXMax, int tileYMax) {
 		// Find the position of the door based on the entrance cell door direction.
 		switch (direction) {
 			case NORTH:

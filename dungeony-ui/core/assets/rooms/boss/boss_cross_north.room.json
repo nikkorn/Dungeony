@@ -9,10 +9,12 @@
             },
             "entrance": {
                 "direction": "NORTH",
-                "door": "BOSS"
+                "attributes": {
+                    "door_type": "BOSS"
+                }
             },
             "blocked": ["WEST", "EAST"],
-            "entities": []
+            "tiles": []
         },
         {
             "position": {
@@ -20,19 +22,24 @@
                 "y": -1 
             },
             "blocked": ["NORTH", "SOUTH", "WEST"],
-            "entities": []
+            "tiles": []
         },
         {
             "position": {
                 "x": 0,
                 "y": -1 
             },
-            "entities": [
+            "tiles": [
                 { 
-                    "id": "boss", 
+                    "name": "boss_tile", 
                     "x": 2,  
-                    "y": 2, 
-                    "direction": "NORTH" 
+                    "y": 2,
+                    "entities": [
+                        { 
+                            "id": "boss",
+                            "direction": "NORTH"
+                        }
+                    ] 
                 }
             ]
         },
@@ -42,7 +49,7 @@
                 "y": -1 
             },
             "blocked": ["NORTH", "SOUTH", "EAST"],
-            "entities": []
+            "tiles": []
         },
         {
             "position": {
@@ -50,7 +57,7 @@
                 "y": -2 
             },
             "blocked": ["EAST", "SOUTH", "WEST"],
-            "entities": []
+            "tiles": []
         }
     ]
 }

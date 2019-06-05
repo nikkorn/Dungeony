@@ -126,7 +126,7 @@ public class RoomFactory {
 	 * @return An Entrance object based on a definition in JSON.
 	 */
 	private static Entrance createEntrance(JSONObject object) {
-		return new Entrance(getDirection(object.getString("direction")), object.getString("door"));
+		return new Entrance(getDirection(object.getString("direction")), object.getJSONObject("attributes"));
 	}
 	
 	/**

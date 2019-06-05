@@ -1,5 +1,6 @@
 package com.dumbpug.dungeony.dungen.room;
 
+import org.json.JSONObject;
 import com.dumbpug.dungeony.dungen.Direction;
 
 /**
@@ -11,33 +12,33 @@ public class Entrance {
 	 */
 	private Direction direction;
 	/**
-	 * The door type.
+	 * The entrance attributes.
 	 */
-	private String door;
+	private JSONObject attributes;
 	
 	/**
 	 * Create a new instance of the Entrance class.
 	 * @param direction The direction defining the side of a cell at which the entrance is placed.
-	 * @param door The door type.
+	 * @param attributes The entrance attributes.
 	 */
-	public Entrance(Direction direction, String door) {
-		this.direction = direction;
-		this.door      = door;
+	public Entrance(Direction direction, JSONObject attributes) {
+		this.direction  = direction;
+		this.attributes = attributes;
 	}
 
 	/**
-	 * Get the direction defining the side of a cell at which the entrance is placed.
+	 * Gets the direction defining the side of a cell at which the entrance is placed.
 	 * @return The direction defining the side of a cell at which the entrance is placed.
 	 */
 	public Direction getDirection() {
-		return direction;
+		return this.direction;
 	}
 	
 	/**
-	 * Get the door type.
-	 * @return The door type.
+	 * Gets the entrance attributes.
+	 * @return The entrance attributes.
 	 */
-	public String getDoor() {
-		return door;
+	public JSONObject getAttributes() {
+		return this.attributes;
 	}
 }
