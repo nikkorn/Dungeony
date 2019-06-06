@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.dungen.room;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
 import com.dumbpug.dungeony.dungen.Direction;
 import com.dumbpug.dungeony.dungen.tile.Entity;
 
@@ -16,6 +17,10 @@ public class TileDetails {
 	 * The tile direction.
 	 */
 	private Direction direction = Direction.UNKNOWN;
+	/**
+	 * The tile attributes.
+	 */
+	private JSONObject attributes = new JSONObject();
 	/**
 	 * The tile entities.
 	 */
@@ -35,6 +40,14 @@ public class TileDetails {
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+	
+	/** Gets/Sets the tile attributes. */
+	public JSONObject getAttributes() {
+		return attributes;
+	}
+	public void setAttributes(JSONObject attributes) {
+		this.attributes = attributes;
 	}
 	
 	/** Gets the tile entities. */

@@ -55,6 +55,11 @@ public class GeneratableTileDetailsProcessor {
 				tileDetails.setDirection(getDirection(node.getString("direction")));
 			}
 			
+			// The node may have attributes.
+			if (node.has("attributes")) {
+				tileDetails.setAttributes(node.getJSONObject("attributes"));
+			}
+			
 			// There may be entities attached to the tile.
 			if (node.has("entities")) {
 				// If we have a 'entities' array then we should process each one.
