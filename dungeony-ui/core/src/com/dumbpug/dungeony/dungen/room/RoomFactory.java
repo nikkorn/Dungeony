@@ -97,7 +97,7 @@ public class RoomFactory {
 			blocked.add(getDirection(blockedJsonArray.getString(directionIndex)));
 		}
 		
-		return new Cell(position, entrance, blocked, object.getJSONArray("entities"));
+		return new Cell(position, entrance, blocked, object.getJSONArray("tiles"));
 	}
 	
 	/**

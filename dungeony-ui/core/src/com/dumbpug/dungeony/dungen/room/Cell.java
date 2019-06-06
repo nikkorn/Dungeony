@@ -23,22 +23,22 @@ public class Cell {
 	 */
 	private ArrayList<Direction> blockedDirections;
 	/**
-	 * The JSON array holding generatable entities for the cell.
+	 * The JSON array holding generatable tile details for the cell.
 	 */
-	private JSONArray generatableEntities;
+	private JSONArray generatableTileDetails;
 	
 	/**
 	 * Create a new instance of the Cell class.
 	 * @param position The local position of the cell, relative to a room entrance cell position.
 	 * @param entrance The cell entrance, or null if this cell is not an entrance cell.
 	 * @param blockedDirections The list of the directions in which anchors cannot be attached to the cell.
-	 * @param entities The generatable entites.
+	 * @param generatableTileDetails The generatable tile details.
 	 */
-	public Cell(Position position, Entrance entrance, ArrayList<Direction> blockedDirections, JSONArray generatableEntities) {
-		this.position            = position;
-		this.entrance            = entrance;
-		this.blockedDirections   = blockedDirections;
-		this.generatableEntities = generatableEntities;
+	public Cell(Position position, Entrance entrance, ArrayList<Direction> blockedDirections, JSONArray generatableTileDetails) {
+		this.position               = position;
+		this.entrance               = entrance;
+		this.blockedDirections      = blockedDirections;
+		this.generatableTileDetails = generatableTileDetails;
 	}
 	
 	/**
@@ -58,12 +58,12 @@ public class Cell {
 	}
 	
 	/**
-	 * Generate entities for this cell.
-	 * @param random The rng to use in generating entities.
-	 * @return The generated entities for this cell.
+	 * Generate tile details for this cell.
+	 * @param random The rng to use in generating tile details.
+	 * @return The generated tile details for this cell.
 	 */
-	public ArrayList<PositionedEntity> generateEntities(Random random) {
-		return GeneratableEntitiesProcessor.process(this.generatableEntities, random);		
+	public PositionedTileDetails generateTileDetails(Random random) {
+		return GeneratableTileDetailsProcessor.process(this.generatableTileDetails, random);		
 	}
 	
 	/**

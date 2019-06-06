@@ -8,7 +8,9 @@
             },
             "entrance": {
                 "direction": "WEST",
-                "door": "NONE"
+                "attributes": {
+                    "door_type": "NORMAL"
+                }
             },
             "tiles": []
         }

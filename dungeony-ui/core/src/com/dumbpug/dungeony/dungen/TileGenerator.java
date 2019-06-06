@@ -2,9 +2,10 @@ package com.dumbpug.dungeony.dungen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import com.dumbpug.dungeony.dungen.Direction;
-import com.dumbpug.dungeony.dungen.room.PositionedEntity;
+import com.dumbpug.dungeony.dungen.room.TileDetails;
 import com.dumbpug.dungeony.dungen.tile.Tile;
 import com.dumbpug.dungeony.dungen.tile.TileType;
 
@@ -99,17 +100,23 @@ public class TileGenerator {
 			}
 						
 			// Generate any entites for the cell and attach them to their corresponding tiles.
-			for (PositionedEntity positionedEntity : cell.getCell().generateEntities(random)) {
+			for (Map.Entry<Position, TileDetails> entry : cell.getCell().generateTileDetails(random).getEntrySet()) {
 				// There is nothing to do if there is no tile on which to place the entity.
-				if (!tileMap.containsKey(positionedEntity.getPosition())) {
+				if (!tileMap.containsKey(entry.getKey())) {
 					continue;
 				}
 				
 				// Get the tile.
-				Tile tile = tileMap.get(positionedEntity.getPosition());
+				Tile tile = tileMap.get(entry.getKey());
 				
-				// Add the entity to the list of entities attached to the tile.
-				tile.getEntities().add(positionedEntity.getEntity());
+				// Set the tile name.
+				tile.setName(entry.getValue().getName());
+				
+				// Set the tile direction.
+				tile.setDirection(entry.getValue().getDirection());
+				
+				// Add any generated tile entites to the list of entities attached to the tile.
+				tile.getEntities().addAll(entry.getValue().getEntities());
 			}
 		}
 		
