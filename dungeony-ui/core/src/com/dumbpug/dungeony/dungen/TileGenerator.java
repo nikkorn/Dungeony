@@ -115,6 +115,9 @@ public class TileGenerator {
 				// Set the tile direction.
 				tile.setDirection(entry.getValue().getDirection());
 				
+				// Set the tile attributes.
+				tile.setAttributes(entry.getValue().getAttributes());
+				
 				// Add any generated tile entites to the list of entities attached to the tile.
 				tile.getEntities().addAll(entry.getValue().getEntities());
 			}
