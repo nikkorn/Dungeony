@@ -24,7 +24,7 @@ public class DunGen {
 	 */
 	public static Dungeon generate(String path, DunGenConfiguration configuration) {
 		// Grab all of the room resources from disk.
-		RoomResources resources = RoomResourcesReader.getResources("rooms");
+		RoomResources resources = RoomResourcesReader.getResources(path);
 		
 		// Create the RNG to use in generating the dungeon.
 		Random random = new Random(configuration.seed);
