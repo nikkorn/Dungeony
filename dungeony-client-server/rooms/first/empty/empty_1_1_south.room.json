@@ -1,5 +1,8 @@
 {
     "name": "empty_1_1_south",
+    "attributes": {
+        "hasBlockingDoor": false
+    },
     "cells": [
         {
             "position": {
@@ -8,9 +11,11 @@
             },
             "entrance": {
                 "direction": "SOUTH",
-                "door": "NONE"
+                "attributes": {
+                    "door_type": "NORMAL"
+                }
             },
-            "entities": []
+            "tiles": []
         }
     ]
 }

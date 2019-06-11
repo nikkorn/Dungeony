@@ -2,14 +2,14 @@ package com.dumbpug.dungeony.session.level;
 
 import java.util.ArrayList;
 import com.dumbpug.dungeony.Constants;
-import com.dumbpug.dungeony.dungen.DunGen;
-import com.dumbpug.dungeony.dungen.DunGenConfiguration;
-import com.dumbpug.dungeony.dungen.Dungeon;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.enemy.Enemy;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 import com.dumbpug.dungeony.session.level.tile.Tile;
 import com.dumbpug.dungeony.session.level.tile.Tiles;
+import dungen.DunGen;
+import dungen.DunGenConfiguration;
+import dungen.Dungeon;
 
 /**
  * Factory for creating Level instances.
@@ -27,7 +27,7 @@ public class LevelFactory {
 		SpatialGrid<ICollidableEntity> levelSpatialGrid = new SpatialGrid<ICollidableEntity>(Constants.LEVEL_SPATIAL_GRID_CELL_SIZE);
 		
 		// Create a new DunGen configuration and set the provided seed.
-		DunGenConfiguration configuration = new DunGenConfiguration();
+		DunGenConfiguration configuration = new dungen.DunGenConfiguration();
 		configuration.seed                = seed;
 		
 		// Get the room resources directory to use in generating a dungeon based on the level depth.
