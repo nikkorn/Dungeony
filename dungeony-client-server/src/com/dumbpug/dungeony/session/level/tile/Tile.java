@@ -114,6 +114,17 @@ public abstract class Tile implements ICollidableEntity {
 	}
 	
 	/**
+	 * Gets whether this collidable entity will collide (not be able to pass through) another entity.
+	 * @param entity The other entity.
+	 * @return Whether this collidable entity will collides (not be able to pass through) another entity.
+	 */
+	@Override
+	public boolean collidesWith(ICollidableEntity entity) {
+		// Entities will collide with a tile if the tile is not walkable.
+		return !this.isWalkable();
+	}
+	
+	/**
 	 * Gets the type of the tile.
 	 * @return The type of the tile.
 	 */
