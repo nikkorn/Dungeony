@@ -24,6 +24,13 @@ public class Position {
 	}
 	
 	/**
+	 * Creates a new instance of the Position class.
+	 */
+	public Position() {
+		this(0, 0);
+	}
+	
+	/**
 	 * Get the x position.
 	 * @return The x position.
 	 */

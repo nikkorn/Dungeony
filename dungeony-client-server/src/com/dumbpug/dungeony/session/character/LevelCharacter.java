@@ -77,8 +77,7 @@ public abstract class LevelCharacter implements ICollidableEntity {
 	 * @return The cardinal facing direction of the character based on the angle of view.
 	 */
 	public Direction getFacingDirection() {
-		// TODO Calculate the correct cardinal direction based on the angle of view.
-		return Direction.NORTH;
+		return Direction.fromAngle(this.angleOfView);
 	}
 	
 	/**
