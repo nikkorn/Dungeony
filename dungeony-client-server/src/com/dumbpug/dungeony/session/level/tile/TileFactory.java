@@ -3,10 +3,12 @@ package com.dumbpug.dungeony.session.level.tile;
 import java.util.ArrayList;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
+import com.dumbpug.dungeony.session.level.tile.decoration.DecorationType;
 import com.dumbpug.dungeony.session.level.tile.tiles.Door;
 import com.dumbpug.dungeony.session.level.tile.tiles.DoorType;
 import com.dumbpug.dungeony.session.level.tile.tiles.Empty;
 import com.dumbpug.dungeony.session.level.tile.tiles.Wall;
+import dungen.tile.Entity;
 import dungen.tile.ITileDetails;
 
 /**
@@ -41,7 +43,7 @@ public class TileFactory {
 	 */
 	private static Tile createEmptyTile(ITileDetails generated, ArrayList<Decoration> decorations) {
 		// Create and return the empty tile.
-		return new Empty(generated.getX(), generated.getY(), getTileDirection(generated), decorations);
+		return new Empty(generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -55,7 +57,7 @@ public class TileFactory {
 		DoorType doorType = DoorType.valueOf(generated.getAttributes().getString("door_type"));
 		
 		// Create and return the door tile.
-		return new Door(doorType, generated.getX(), generated.getY(), getTileDirection(generated), decorations);
+		return new Door(doorType, generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -66,7 +68,7 @@ public class TileFactory {
 	 */
 	private static Tile createWallTile(ITileDetails generated, ArrayList<Decoration> decorations) {
 		// Create and return the wall tile.
-		return new Wall(generated.getX(), generated.getY(), getTileDirection(generated), decorations);
+		return new Wall(generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -75,17 +77,32 @@ public class TileFactory {
 	 * @returns The list of decorations for a generated tile.
 	 */
 	private static ArrayList<Decoration> createTileDecorations(ITileDetails generated) {
-		// TODO Parse the decorations from the generated tile entites.
-		return new ArrayList<Decoration>();
+		// Create an empty list to hold the decorations defined as generated entities.
+		ArrayList<Decoration> decorations = new ArrayList<Decoration>();
+		
+		// Any of the entities attached to our generated tile could be a decoration.
+		for (Entity entity : generated.getEntities()) {
+			// Is the entity a tile decoration?
+			if (DecorationType.hasType(entity.getId())) {
+				// Get the type of the decoration.
+				DecorationType decorationType = DecorationType.valueOf(entity.getId());
+				
+				// Create and add the decoration to the list of decorations for the current tile.
+				decorations.add(new Decoration(decorationType, getDirection(entity.getFacingDirection())));
+			}
+		}
+		
+		// Return the list of tile decorations.
+		return decorations;
 	}
 	
 	/**
-	 * Get the direction of a generated tile.
-	 * @param generated The generated tile details.
-	 * @return The direction of a generated tile.
+	 * Get the direction based on the generated direction type.
+	 * @param value The generated direction type.
+	 * @return The direction based on the generated direction type.
 	 */
-	private static Direction getTileDirection(ITileDetails generated) {
-		switch (generated.getDirection()) {
+	private static Direction getDirection(dungen.Direction value) {
+		switch (value) {
 			case EAST:
 				return Direction.EAST;
 			case NORTH:
