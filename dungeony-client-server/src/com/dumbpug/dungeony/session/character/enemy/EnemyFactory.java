@@ -1,5 +1,6 @@
 package com.dumbpug.dungeony.session.character.enemy;
 
+import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.Position;
 
@@ -28,7 +29,11 @@ public class EnemyFactory {
 				throw new RuntimeException("unknown enemy type: " + enemyType);
 		}
 		
-		// TODO Update the position of the enemy so that the oriign of the enemy sits at the centre of the tile defined by tileX and tileY.
+		// Update the position of the enemy so that the origin of the enemy sits at the centre of the tile defined by tileX and tileY.
+		float tileOriginX = (Constants.LEVEL_TILE_SIZE * tileX) + (Constants.LEVEL_TILE_SIZE / 2f);
+		float tileOriginY = (Constants.LEVEL_TILE_SIZE * tileY) + (Constants.LEVEL_TILE_SIZE / 2f);
+		enemy.getPosition().setX(tileOriginX - (enemy.getSize() / 2f));
+		enemy.getPosition().setY(tileOriginY - (enemy.getSize() / 2f));
 		
 		// Set the angle of view for the enemy.
 		enemy.setAngleOfView(facingDirection.toAngle());

@@ -1,7 +1,7 @@
 package com.dumbpug.dungeony.session.level.tile;
 
 import java.util.ArrayList;
-import com.dumbpug.dungeony.session.level.Direction;
+import com.dumbpug.dungeony.session.level.LevelFactory;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 import com.dumbpug.dungeony.session.level.tile.decoration.DecorationType;
 import com.dumbpug.dungeony.session.level.tile.tiles.Door;
@@ -43,7 +43,7 @@ public class TileFactory {
 	 */
 	private static Tile createEmptyTile(ITileDetails generated, ArrayList<Decoration> decorations) {
 		// Create and return the empty tile.
-		return new Empty(generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
+		return new Empty(generated.getX(), generated.getY(), LevelFactory.getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class TileFactory {
 		DoorType doorType = DoorType.valueOf(generated.getAttributes().getString("door_type"));
 		
 		// Create and return the door tile.
-		return new Door(doorType, generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
+		return new Door(doorType, generated.getX(), generated.getY(), LevelFactory.getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class TileFactory {
 	 */
 	private static Tile createWallTile(ITileDetails generated, ArrayList<Decoration> decorations) {
 		// Create and return the wall tile.
-		return new Wall(generated.getX(), generated.getY(), getDirection(generated.getDirection()), decorations);
+		return new Wall(generated.getX(), generated.getY(), LevelFactory.getDirection(generated.getDirection()), decorations);
 	}
 	
 	/**
@@ -88,32 +88,11 @@ public class TileFactory {
 				DecorationType decorationType = DecorationType.valueOf(entity.getId());
 				
 				// Create and add the decoration to the list of decorations for the current tile.
-				decorations.add(new Decoration(decorationType, getDirection(entity.getFacingDirection())));
+				decorations.add(new Decoration(decorationType, LevelFactory.getDirection(generated.getDirection())));
 			}
 		}
 		
 		// Return the list of tile decorations.
 		return decorations;
-	}
-	
-	/**
-	 * Get the direction based on the generated direction type.
-	 * @param value The generated direction type.
-	 * @return The direction based on the generated direction type.
-	 */
-	private static Direction getDirection(dungen.Direction value) {
-		switch (value) {
-			case EAST:
-				return Direction.EAST;
-			case NORTH:
-				return Direction.NORTH;
-			case SOUTH:
-				return Direction.SOUTH;
-			case WEST:
-				return Direction.WEST;
-			case UNKNOWN:
-			default:
-				return Direction.NORTH;
-		}
 	}
 }
