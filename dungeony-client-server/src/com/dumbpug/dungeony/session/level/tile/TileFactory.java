@@ -88,7 +88,7 @@ public class TileFactory {
 				DecorationType decorationType = DecorationType.valueOf(entity.getId());
 				
 				// Create and add the decoration to the list of decorations for the current tile.
-				decorations.add(new Decoration(decorationType, LevelFactory.getDirection(generated.getDirection())));
+				decorations.add(new Decoration(decorationType, LevelFactory.getDirection(entity.getFacingDirection())));
 			}
 		}
 		
