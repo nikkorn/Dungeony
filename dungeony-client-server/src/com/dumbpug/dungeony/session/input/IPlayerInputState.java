@@ -3,7 +3,7 @@ package com.dumbpug.dungeony.session.input;
 /**
  * Exposes information about a players input.
  */
-public interface IPlayerInputState {
+public interface IPlayerInputState extends IParticipantInputState {
 	/**
 	 * Gets whether the player is moving forwards.
 	 * @return Whether the player is moving forwards.

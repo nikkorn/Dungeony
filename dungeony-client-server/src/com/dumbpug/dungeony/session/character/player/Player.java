@@ -1,7 +1,9 @@
 package com.dumbpug.dungeony.session.character.player;
 
 import com.dumbpug.dungeony.Constants;
+import com.dumbpug.dungeony.session.ISessionParticipant;
 import com.dumbpug.dungeony.session.character.LevelCharacter;
+import com.dumbpug.dungeony.session.level.LevelTransition;
 import com.dumbpug.dungeony.session.level.Position;
 
 /**
@@ -9,26 +11,31 @@ import com.dumbpug.dungeony.session.level.Position;
  */
 public class Player extends LevelCharacter {
 	/**
-	 * The player id.
+	 * The session participant that the player represents.
 	 */
-	private String playerId;
+	private ISessionParticipant participant;
+	/**
+	 * The level transition for the player.
+	 */
+	private LevelTransition levelTransition = LevelTransition.NONE;
 
 	/**
 	 * Creates a new instance of the Player class.
+	 * @param participant The session participant that the player represents.
 	 * @param position The initial player position.
 	 * @param playerId The player id.
 	 */
-	public Player(Position position, String playerId) {
+	public Player(ISessionParticipant participant, Position position) {
 		super(position);
-		this.playerId = playerId;
+		this.participant = participant;
 	}
 	
 	/**
-	 * Gets the player id.
-	 * @return The player id.
+	 * Gets the session participant that the player represents.
+	 * @return The session participant that the player represents.
 	 */
-	public String getPlayerId() {
-		return this.playerId;
+	public ISessionParticipant getParticipant() {
+		return this.participant;
 	}
 
 	@Override
@@ -39,5 +46,21 @@ public class Player extends LevelCharacter {
 	@Override
 	public float getMovementSpeed() {
 		return Constants.CHARACTER_MOVEMENT_SPEED_MEDIUM;
+	}
+
+	/**
+	 * Gets the level transition for the player.
+	 * @return The level transition for the player.
+	 */
+	public LevelTransition getLevelTransition() {
+		return levelTransition;
+	}
+
+	/**
+	 * Sets the level transition for the player.
+	 * @param levelTransition The level transition for the player.
+	 */
+	public void setLevelTransition(LevelTransition levelTransition) {
+		this.levelTransition = levelTransition;
 	}
 }

@@ -1,10 +1,10 @@
 package com.dumbpug.dungeony.session.level;
 
 import java.util.ArrayList;
+import com.dumbpug.dungeony.session.ISessionParticipant;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.player.Player;
 import com.dumbpug.dungeony.session.character.player.Players;
-import com.dumbpug.dungeony.session.input.IPlayersInputProvider;
 import com.dumbpug.dungeony.session.item.ItemDrop;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 import com.dumbpug.dungeony.session.level.tile.Tiles;
@@ -63,12 +63,20 @@ public class Level {
 	}
 	
 	/**
-	 * Tick the level.
-	 * @param playersInputProvider The provider of input for all available players.
+	 * Gets whether the level is active.
+	 * @return Whether the level is active.
 	 */
-	public void tick(IPlayersInputProvider playersInputProvider) {
+	public boolean isActive() {
+		// A level is only active if there are participating players in it.
+		return this.players.any();
+	}
+	
+	/**
+	 * Tick the level.
+	 */
+	public void tick() {
 		// Tick all of the players, processing any movements and actions in the process.
-		this.players.tick(playersInputProvider, this.spatialGrid);
+		this.players.tick(this.spatialGrid);
 
 		// Tick all of the enemies.
 		this.enemies.tick(this.spatialGrid);
@@ -79,19 +87,42 @@ public class Level {
 
 	/**
 	 * Adds a player to the level.
-	 * @param player The player to add to the level.
+	 * @param participant The session participant wishing to join the level as a player.
 	 */
-	public void addPlayer(Player player) {
+	public void addPlayer(ISessionParticipant participant) {
+		// Create a new player for the participant and give them a safe spawn in the level.
+		Player player = new Player(participant, getSafePlayerSpawnPosition());
+		
+		// Add the player to the spatial grid used to handle collisions between level entities.
 		this.spatialGrid.add(player);
+		
+		// Add the player to the collection of players in the level.
 		this.players.addPlayer(player);
 	}
 
 	/**
 	 * Removes a player from the level.
-	 * @param player The player to remove from the level.
+	 * @param participant The session participant wishing to leave the level as a player.
 	 */
-	public void removePlayer(Player player) {
+	public void removePlayer(ISessionParticipant participant) {
+		// Get the player in the level fro the given participant.
+		Player player = this.players.getPlayerForParticipant(participant);
+		
+		// Remove the player from the spatial grid used to handle collisions between level entities.
 		this.spatialGrid.remove(player);
+		
+		// Remove the player from the collection of players in the level.
 		this.players.removePlayer(player);
+	}
+	
+	/**
+	 * Gets a safe player spawn position.
+	 * @return A safe player spawn position.
+	 */
+	private Position getSafePlayerSpawnPosition() {
+		// TODO Hunt down the player spawn tile entites and return the position of the first
+		// that is not colliding with anything. If all of them are colliding with something
+		// then we will have to move outwards until we can find the closest tile that is free.
+		return new Position(100, 100);
 	}
 }
