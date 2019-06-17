@@ -1,0 +1,19 @@
+Characters will have:
+- 10 inventory slots.
+- 1 primary slot (weapon)
+- 1 secondary slot (shield or charm)
+- 1 armour slot (chestplate or boots or gauntlets)
+- 1 accessory slot (buff or pendant or ring)
+
+
+Charcters can earn experience which that can use to spend on skill points.
+Each earned point means more experience is required to earn the next.
+Points could be used on:
+- Another health point
+- Another defense point
+- Another speed point
+- Another attack point
+- Another magic point
+- Another luck point
+- Another stealth point
+Each player starts with one point for each.
