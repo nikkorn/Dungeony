@@ -3,3 +3,10 @@ A session represents a running game.
 Composition
 ===========
 - The levels that are inhabited by players.
+
+Each session can have multiple active levels at one time, and players can be spread across different levels.
+
+Each level will have an exit that is a ladder down (in boss room) and an entrance that is a ladder up (not on first floor)
+Interacting with either of these will move a player into a previous level or an upcoming level.
+
+If at any point a players health reaches 0 then they are kicked from the session.

@@ -1,3 +1,5 @@
+Character skins will all be the same but only differ in colour per player.
+
 Characters will have:
 - 10 inventory slots.
 - 1 primary slot (weapon)
@@ -16,4 +18,12 @@ Points could be used on:
 - Another magic point
 - Another luck point
 - Another stealth point
+- Another crafting point
+- Another alchemy point
 Each player starts with one point for each.
+
+Players can also find/buy bestiary pages, each of which is associated with one enemy category.
+On using this item, the player will gain a skill point for that enemy category which helps towards:
+1. Attack dealt to that enemy.
+2. Ability to avoid being spotted by that enemy.
+3. Increase item/resource drops from that type of enemy.
