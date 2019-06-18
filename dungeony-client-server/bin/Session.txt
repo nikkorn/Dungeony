@@ -10,3 +10,10 @@ Each level will have an exit that is a ladder down (in boss room) and an entranc
 Interacting with either of these will move a player into a previous level or an upcoming level.
 
 If at any point a players health reaches 0 then they are kicked from the session.
+
+
+Tick
+====
+Ticking a session will:
+1. Tick each active level and consume input for players in them.
+2. Return a queue of session events to be processed and potentaiily forwarded to players.
