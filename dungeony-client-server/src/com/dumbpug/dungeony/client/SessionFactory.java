@@ -1,8 +1,6 @@
 package com.dumbpug.dungeony.client;
 
-import java.util.ArrayList;
 import com.dumbpug.dungeony.session.SessionParticipant;
-import com.dumbpug.dungeony.session.SessionParticipants;
 import com.dumbpug.dungeony.session.input.IPlayerInputState;
 
 /**
@@ -18,7 +16,7 @@ public class SessionFactory {
 		SessionParticipant user = new SessionParticipant(0, username, playerInputState);
 		
 		// Create and return the local session.
-		return new LocalSession(new SessionParticipants(new ArrayList<SessionParticipant>() {{ add(user); }}), 12345);
+		return new LocalSession(user, 12345);
 	}
 	
 	public static NetworkedSession createHostedSession(String userId, String username,int port) {
