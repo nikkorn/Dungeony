@@ -11,7 +11,7 @@ public class Session {
 	/**
 	 * The session participants.
 	 */
-	private ArrayList<ISessionParticipant> participants;
+	private SessionParticipants participants;
 	/**
 	 * The active levels in the session. 
 	 */
@@ -26,7 +26,7 @@ public class Session {
 	 * @param participant The session participants.
 	 * @param seed The seed to use throughout the session.
 	 */
-	public Session(ArrayList<ISessionParticipant> participants, long seed) {
+	public Session(SessionParticipants participants, long seed) {
 		this.participants = participants;
 		this.seed         = seed;
 	}
@@ -42,7 +42,7 @@ public class Session {
 		levels.add(initialLevel);
 		
 		// Add each participant to the initial level.
-		for (ISessionParticipant participant : participants) {
+		for (SessionParticipant participant : participants.getAll()) {
 			initialLevel.addPlayer(participant);
 		}
 	}

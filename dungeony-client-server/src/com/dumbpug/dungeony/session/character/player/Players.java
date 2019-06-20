@@ -2,7 +2,7 @@ package com.dumbpug.dungeony.session.character.player;
 
 import java.util.ArrayList;
 import com.dumbpug.dungeony.session.level.ICollidableEntity;
-import com.dumbpug.dungeony.session.ISessionParticipant;
+import com.dumbpug.dungeony.session.SessionParticipant;
 import com.dumbpug.dungeony.session.input.IPlayerInputState;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
@@ -33,7 +33,7 @@ public class Players {
 	 * @param participant The participant.
 	 * @return The player for the given participant.
 	 */
-	public Player getPlayerForParticipant(ISessionParticipant participant) {
+	public Player getPlayerForParticipant(SessionParticipant participant) {
 		for (Player player : this.players) {
 			if (player.getParticipant() == participant) {
 				return player;

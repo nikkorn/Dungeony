@@ -17,6 +17,7 @@ composition :
 - (1 bit) IsSecondaryPressed
 
 
+
 name        : VIEW_ANGLE_UPDATE
 frequency   : Constantly
 protocol    : UDP
@@ -28,7 +29,7 @@ composition :
 ====================================================================================================
 Server -> Client
 ====================================================================================================
-name        : LOBBY_JOIN_OK
+name        : JOIN_OK
 frequency   : Once, when the player joins the server without issue and moves into the lobby
 protocol    : TCP
 composition :
@@ -36,11 +37,21 @@ composition :
 - (4 bytes) The session seed
 
 
-name        : LOBBY_JOIN_NOT_OK
+
+name        : JOIN_NOT_OK
 frequency   : Once, when the player fails to join the lobby,
 protocol    : TCP
 composition :
 - (1 byte) The reason for the failure
+
+
+
+name        : SERVER_STATE_CHANGE
+frequency   : Whenever the server moves between the In_Session and In_Lobby state. 
+protocol    : TCP
+composition :
+- (1 bit) Whether the server is in the In_Session state
+
 
 
 name        : LOBBY_STATE_CHANGE
@@ -52,6 +63,7 @@ composition :
 - (2 bytes) Y
 
 
+
 name        : PLAYER_POSITION_UPDATE
 frequency   : Constantly
 protocol    : UDP
@@ -59,6 +71,7 @@ composition :
 - (1 byte) The Player ID
 - (2 bytes) X
 - (2 bytes) Y
+
 
 
 name        : PLAYER_ANGLE_UPDATE

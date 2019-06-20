@@ -1,7 +1,7 @@
 package com.dumbpug.dungeony.session.level;
 
 import java.util.ArrayList;
-import com.dumbpug.dungeony.session.ISessionParticipant;
+import com.dumbpug.dungeony.session.SessionParticipant;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.player.Player;
 import com.dumbpug.dungeony.session.character.player.Players;
@@ -89,7 +89,7 @@ public class Level {
 	 * Adds a player to the level.
 	 * @param participant The session participant wishing to join the level as a player.
 	 */
-	public void addPlayer(ISessionParticipant participant) {
+	public void addPlayer(SessionParticipant participant) {
 		// Create a new player for the participant and give them a safe spawn in the level.
 		Player player = new Player(participant, getSafePlayerSpawnPosition());
 		
@@ -104,7 +104,7 @@ public class Level {
 	 * Removes a player from the level.
 	 * @param participant The session participant wishing to leave the level as a player.
 	 */
-	public void removePlayer(ISessionParticipant participant) {
+	public void removePlayer(SessionParticipant participant) {
 		// Get the player in the level fro the given participant.
 		Player player = this.players.getPlayerForParticipant(participant);
 		
