@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.session;
 
 import java.util.ArrayList;
+import com.dumbpug.dungeony.session.events.SessionEventQueue;
 import com.dumbpug.dungeony.session.level.Level;
 import com.dumbpug.dungeony.session.level.LevelFactory;
 
@@ -20,6 +21,10 @@ public class Session {
 	 * The session seed.
 	 */
 	private long seed;
+	/**
+	 * The session event queue.
+	 */
+	private SessionEventQueue sessionEventQueue = new SessionEventQueue();
 	
 	/**
 	 * Creates a new instance of the Session class.
@@ -32,11 +37,19 @@ public class Session {
 	}
 	
 	/**
+	 * Gets the session event queue.
+	 * @return The session event queue.
+	 */
+	public SessionEventQueue getSessionEventQueue() {
+		return this.sessionEventQueue;
+	}
+	
+	/**
 	 * Initialise the session.
 	 */
 	public void initialise() {
 		// Create the initial level.
-		Level initialLevel = LevelFactory.createLevel(this.seed, 0);
+		Level initialLevel = LevelFactory.createLevel(this.seed, 0, this.sessionEventQueue);
 		
 		// Add the initial level to the list of active levels.
 		levels.add(initialLevel);
@@ -56,6 +69,18 @@ public class Session {
 			if (level.isActive()) {
 				level.tick();
 			}
+		}
+		
+		// TODO Process any players that should be despawning from their current level and spawn them in the next.
+	}
+	
+	/**
+	 * Consume all of the session events in the session event queue.
+	 * @param eventConsumer The consumer of the session events.
+	 */
+	public void consumeSessionEvents(ISessionEventConsumer eventConsumer) {
+		while (sessionEventQueue.hasNext()) {
+			eventConsumer.consume(sessionEventQueue.next());
 		}
 	}
 }

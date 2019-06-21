@@ -61,4 +61,13 @@ public class Position {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	/**
+	 * Get a copy of this position.
+	 * The state of the copy will not be changed if the original is modified.
+	 * @return A copy of this position.
+	 */
+	public Position copy() {
+		return new Position(this.getX(), this.getY());
+	}
 }

@@ -32,6 +32,9 @@ public class LocalSession extends Session {
 		// Create the session clock with which to tick this session.
 		this.sessionClock = new LocalSessionClock(this);
 		
+		// Initialise the session.
+		this.initialise();
+		
 		// Start the session clock on its own thread.
 		this.sessionClock.start();
 	}

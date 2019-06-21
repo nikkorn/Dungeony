@@ -6,6 +6,7 @@ import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.enemy.Enemy;
 import com.dumbpug.dungeony.session.character.enemy.EnemyFactory;
 import com.dumbpug.dungeony.session.character.enemy.EnemyType;
+import com.dumbpug.dungeony.session.events.SessionEventQueue;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 import com.dumbpug.dungeony.session.level.tile.Tile;
 import com.dumbpug.dungeony.session.level.tile.TileFactory;
@@ -25,9 +26,10 @@ public class LevelFactory {
 	 * Create a Level instance.
 	 * @param seed The seed to use in level generation.
 	 * @param depth The level depth.
+	 * @param sessionEventQueue The session event queue.
 	 * @return A Level instance.
 	 */
-	public static Level createLevel(long seed, int depth) {
+	public static Level createLevel(long seed, int depth, SessionEventQueue sessionEventQueue) {
 		// Create the spatial grid that will be used to process collisions between level entities.
 		SpatialGrid<ICollidableEntity> levelSpatialGrid = new SpatialGrid<ICollidableEntity>(Constants.LEVEL_SPATIAL_GRID_CELL_SIZE);
 		
@@ -48,7 +50,7 @@ public class LevelFactory {
 		Enemies enemies = createLevelEnemies(dungeon, levelSpatialGrid);
 		
 		// Create and return the actual level.
-		return new Level(tiles, enemies, levelSpatialGrid);
+		return new Level(sessionEventQueue, tiles, enemies, levelSpatialGrid, depth);
 	}
 	
 	/**
