@@ -1,21 +1,25 @@
 package com.dumbpug.dungeony.server;
 
 import com.dumbpug.dungeony.Constants;
+import com.dumbpug.dungeony.server.lobby.Lobby;
+import com.dumbpug.dungeony.session.Session;
 
 /**
  * The server that hosts dungeony game sessions.
  */
 public class Server {
 	/**
+	 * The server lobby.
+	 */
+	private Lobby lobby;
+	/**
 	 * The server state.
 	 */
 	private ServerState state = ServerState.LOBBY;
-	
-	// TODO Add list of ConnectedClient instances.
-	
-	// TODO Add the active session
-	
-	// TODO Add the server state (lobby/session)
+	/**
+	 * The active session.
+	 */
+	private Session session = null;
 	
 	/**
 	 * Create a new instance of the Server class.
@@ -26,6 +30,12 @@ public class Server {
 		System.out.println("##############################################################");
 		System.out.println("version: " + Constants.VERSION);
 		System.out.println("##############################################################");
+		
+		// Create a lobby to host any connecting clients.
+		this.lobby = new Lobby();
+		
+		// Start the lobby listening for connecting clients.
+		this.lobby.startListeningForConnections(port);
 		
 		// Create a server clock and pass it a new instance of Server.
 		ServerClock serverClock = new ServerClock(this);
