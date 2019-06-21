@@ -4,6 +4,8 @@ package com.dumbpug.dungeony;
  * Any game constants.
  */
 public class Constants {
+	// The application version.
+	public static final String VERSION = "0.0.1";
 	
 	// *********************************************************************
 	// NETWORKING

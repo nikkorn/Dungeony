@@ -1,11 +1,11 @@
-package com.dumbpug.dungeony;
+package com.dumbpug.dungeony.utilities;
 
 import com.dumbpug.dungeony.session.level.Position;
 
 /**
  * Holder of game utility methods.
  */
-public class Utility {
+public class Maths {
 	
 	/**
      * Get the position at angle and distance from an origin.
