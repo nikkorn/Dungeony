@@ -1,11 +1,13 @@
 package com.dumbpug.dungeony.desktop;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import com.dumbpug.dungeony.dungen.DunGen;
 import com.dumbpug.dungeony.dungen.DunGenConfiguration;
 import com.dumbpug.dungeony.dungen.DunGenPrinter;
 import com.dumbpug.dungeony.dungen.Dungeon;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Test for DunGen.

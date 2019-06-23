@@ -2,9 +2,9 @@ package com.dumbpug.dungeony.dungen.room;
 
 import java.util.ArrayList;
 import java.util.Random;
-import org.json.JSONArray;
 import com.dumbpug.dungeony.dungen.Direction;
 import com.dumbpug.dungeony.dungen.Position;
+import org.json.JSONArray;
 
 /**
  * Represents a cell in a room.
