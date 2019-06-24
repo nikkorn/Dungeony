@@ -1,6 +1,6 @@
 package com.dumbpug.dungeony.networking.messaging;
 
-import gaia.utils.Queue;
+import com.dumbpug.dungeony.utilities.Queue;
 
 /**
  * A queue of messages.

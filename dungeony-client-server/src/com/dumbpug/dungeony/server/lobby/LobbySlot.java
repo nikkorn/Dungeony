@@ -18,6 +18,10 @@ public class LobbySlot {
 	 * Whether the client is ready to join a session.
 	 */
 	private boolean isReady = false;
+	/**
+	 * The colour of the lobby slot.
+	 */
+	private Colour colour = Colour.NOT_SET;
 	
 	/**
 	 * Creates a new instance of the LobbySlot class.
@@ -65,5 +69,21 @@ public class LobbySlot {
 	 */
 	public void setReady(boolean isReady) {
 		this.isReady = isReady;
+	}
+
+	/**
+	 * Gets the slot colour.
+	 * @return The slot colour.
+	 */
+	public Colour getColour() {
+		return colour;
+	}
+
+	/**
+	 * Sets the slot colour.
+	 * @param colour The slot colour.
+	 */
+	public void setColour(Colour colour) {
+		this.colour = colour;
 	}
 }
