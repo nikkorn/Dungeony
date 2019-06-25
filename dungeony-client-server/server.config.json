@@ -1,5 +1,5 @@
 {
-	"port": 23445,
+	"port": 23344,
 	"debug_to_console": true,
 	"blacklist": ["voldemort"]
 }

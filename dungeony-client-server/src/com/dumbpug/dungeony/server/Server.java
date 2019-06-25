@@ -60,7 +60,7 @@ public class Server {
 	 * The server tick.
 	 */
 	public void tick() {
-		System.out.println("Server Tick!");
+		// System.out.println("Server Tick!");
 		
 		// Tick the lobby, passing the active session (which will be null if there is no active session).
 		this.lobby.tick(this.session);

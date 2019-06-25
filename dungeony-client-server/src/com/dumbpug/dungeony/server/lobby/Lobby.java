@@ -73,6 +73,8 @@ public class Lobby {
 							// Block and wait for a client socket.
 							Socket clientSocket = serverSocket.accept();
 							
+							System.out.println("Connection to lobby was made!");
+							
 							// Create the message marshaller provider for our message stream.
 							MessageMarshallerProvider marshallerProvider = DungeonyMarshallerProviderFactory.create();
 							
@@ -196,7 +198,7 @@ public class Lobby {
 			// If the lobby state has changed we will need to send a lobby state update to all clients.
 			if (hasLobbyStateChanged) {
 				// TODO Send a lobby state update to all clients.
-				System.out.println("Send a lobby state update to all clients");
+				System.out.println("LEAVE: Send a lobby state update to all clients");
 			}
 		}
 	}
@@ -218,6 +220,9 @@ public class Lobby {
 					// Send a lobby join success message to the client.
 					clientInSlot.sendMessage(new JoinSuccess());
 					
+					// Update the client status to reflect the fact that they have actually joined the lobby.
+					clientInSlot.setStatus(ConnectedClientStatus.CONNECTED);
+					
 					// We will need to send a lobby state update to all clients.
 					hasLobbyStateChanged = true;
 				}
@@ -226,7 +231,7 @@ public class Lobby {
 			// If the lobby state has changed we will need to send a lobby state update to all clients.
 			if (hasLobbyStateChanged) {
 				// TODO Send a lobby state update to all clients.
-				System.out.println("Send a lobby state update to all clients");
+				System.out.println("JOIN: Send a lobby state update to all clients");
 			}
 		}
 	}
