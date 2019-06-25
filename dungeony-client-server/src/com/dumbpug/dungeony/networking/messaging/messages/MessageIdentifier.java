@@ -8,7 +8,7 @@ public class MessageIdentifier {
 	/**
 	 * Client -> Server
 	 */
-	public static final int MOVE_PLAYER                        = 1;
+	public static final int CLIENT_INPUT_STATE_CHANGED         = 1;
 
 	/**
 	 * Server -> Client
