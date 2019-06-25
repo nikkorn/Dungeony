@@ -86,4 +86,12 @@ public class LobbySlot {
 	public void setColour(Colour colour) {
 		this.colour = colour;
 	}
+	
+	/**
+	 * Reset the lobby slot.
+	 */
+	public void reset() {
+		this.client = null;
+		this.colour = Colour.NOT_SET;
+	}
 }

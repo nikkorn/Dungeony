@@ -78,6 +78,15 @@ public class ConnectedClient {
 	}
 	
 	/**
+	 * Get whether the client is still connected.
+	 * @return Whether the client is still connected.
+	 */
+	public boolean isConnected() {
+		// For now, we will check whether the client is connected by checking if our reader is still connected.
+		return this.queuedMessageReader.isConnected();
+	}
+	
+	/**
 	 * Get a queue of any messages received from the client.
 	 * @return A queue of any messages received from the client.
 	 */

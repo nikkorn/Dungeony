@@ -14,17 +14,11 @@ public class JoinSuccessMarshaller implements IMessageMarshaller<JoinSuccess> {
 
 	@Override
 	public JoinSuccess read(DataInputStream dataInputStream) throws IOException {
-		// Read the server seed.
-		long seed = dataInputStream.readLong();
-		// Return the message.
-		return new JoinSuccess(seed);
+		return new JoinSuccess();
 	}
 
 	@Override
-	public void write(JoinSuccess message, DataOutputStream dataOutputStream) throws IOException {
-		// Write the world seed.
-		dataOutputStream.writeLong(message.getSeed());
-	}
+	public void write(JoinSuccess message, DataOutputStream dataOutputStream) throws IOException {}
 
 	@Override
 	public int getMessageTypeId() {

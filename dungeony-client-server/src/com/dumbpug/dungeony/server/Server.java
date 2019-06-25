@@ -60,16 +60,18 @@ public class Server {
 	 * The server tick.
 	 */
 	public void tick() {
-		System.out.println("Tick!");
+		System.out.println("Server Tick!");
 		
-		// TODO Handle any ConnectedClient instances that have disconnected.
+		// Tick the lobby, passing the active session (which will be null if there is no active session).
+		this.lobby.tick(this.session);
 		
-		// TODO Check for and handle queued requests by clients to join the server.
-		
-		// TODO Process input messages from clients, some of which will update server-side representation of client control input.
-		
-		// TODO Tick the session.
-		
-		// TODO Process session output event queue.
+		// If in session, do session specific stuff.
+		if (this.state == ServerState.SESSION) {
+			// TODO Process input messages from clients (not lobby messages), some of which will update server-side representation of client control input.
+			
+			// TODO Tick the session.
+			
+			// TODO Process session output event queue.
+		}
 	}
 }
