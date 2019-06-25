@@ -30,7 +30,7 @@ public class DungeonyMarshallerProviderFactory {
 		 * The marshallers relating to client -> server messages.
 		 */
 		// Add the marshaller used for reading/writing move player messages.
-		provider.addMarshaller(new ClientInputStateChangedMarshaller());
+		provider.addMarshaller(new ClientKeyInputStateChangedMarshaller());
 
 		// Return the provider.
 		return provider;
