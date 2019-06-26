@@ -3,8 +3,10 @@ package com.dumbpug.dungeony.test;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import com.dumbpug.dungeony.client.Client;
+import com.dumbpug.dungeony.client.ClientFactory;
 import com.dumbpug.dungeony.client.ServerJoinRequestRejectedException;
 import com.dumbpug.dungeony.input.ClientKeyInputState;
 
@@ -15,17 +17,21 @@ public class SimpleClientConnection {
 	
 	public static void main(String[] args) {
 		try {
-			Client client = Client.connect("localhost", 23344, "Nikolas");
-			
-			final ClientKeyInputState clientKeyInputState = new ClientKeyInputState();
+			Client client = ClientFactory.create("localhost", 23344, "Nikolas");
 			
 			JFrame frame = new JFrame();
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);
 			frame.setSize(100, 100);
+			
+			// Add a way to track user keybaord input.
+			final ClientKeyInputState clientKeyInputState = new ClientKeyInputState();
+			final ArrayList<Character> typedCharacters = new ArrayList<Character>();
 			frame.addKeyListener(new KeyListener() {
 				@Override
-				public void keyTyped(KeyEvent e) {}
+				public void keyTyped(KeyEvent e) {
+					typedCharacters.add(e.getKeyChar());
+				}
 
 				@Override
 				public void keyPressed(KeyEvent e) {
@@ -64,10 +70,27 @@ public class SimpleClientConnection {
 					e1.printStackTrace();
 				}
 				
-				// Update the clients key input state.
-				client.updateKeyInputState(false, false, false, clientKeyInputState.isUpKeyDown(), clientKeyInputState.isDownKeyDown(), clientKeyInputState.isLeftKeyDown(), clientKeyInputState.isRightKeyDown());
+				// Refresh the client and process any messages sent by the server.
+				client.refresh();
 				
-				// TODO Get a fresh snapshot of the server state and draw it somewhere.
+				// Determine whether the client is currently taking part in an active session on the server.
+				if (client.isInSession()) {
+					// Update the clients key input state.
+					client.updateKeyInputState(false, false, false, clientKeyInputState.isUpKeyDown(), clientKeyInputState.isDownKeyDown(), clientKeyInputState.isLeftKeyDown(), clientKeyInputState.isRightKeyDown());
+					
+					// ...
+					
+					// TODO Get a fresh snapshot of the SESSION state and draw it somewhere.
+				} else {
+					// TODO client.setSlotColour(Colour.RED);
+					
+					// TODO client.setReady(true);
+					
+					// TODO Get a fresh snapshot of the LOBBY state and draw it somewhere.
+				}
+				
+				// Clear the recorder user keys.
+				typedCharacters.clear();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
