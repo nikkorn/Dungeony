@@ -9,6 +9,7 @@ import com.dumbpug.dungeony.networking.messaging.IMessage;
 import com.dumbpug.dungeony.networking.messaging.MessageInputStream;
 import com.dumbpug.dungeony.networking.messaging.MessageMarshallerProvider;
 import com.dumbpug.dungeony.networking.messaging.MessageOutputStream;
+import com.dumbpug.dungeony.networking.messaging.messages.ClientKeyInputStateChanged;
 import com.dumbpug.dungeony.networking.messaging.messages.JoinFailure;
 import com.dumbpug.dungeony.networking.messaging.messages.MessageIdentifier;
 
@@ -115,7 +116,7 @@ public class Client {
 	 * Refresh the client, processing any messages received from the server since the last refresh.
 	 */
 	public void refresh() {
-		
+		// TODO Should this be replace with a getServerState()???
 	}
 	
 	/**
@@ -152,9 +153,21 @@ public class Client {
 		// Get the new client input state as a packed integer.
 		int newPackedInputState = this.clientInputState.toPackedInt();
 		
-		// If the input state has chnaged then we will need to notify the server.
+		// If the input state has changed then we will need to notify the server.
 		if (oldPackedInputState != newPackedInputState) {
-			
+			sendMessage(new ClientKeyInputStateChanged(this.clientInputState));
 		}
+	}
+	
+	/**
+	 * Send a message to the server.
+	 * @param message The message to send.
+	 */
+	private void sendMessage(IMessage message) {
+		try {
+			messageOutputStream.writeMessage(message);
+		} catch (IOException e) {
+			System.out.println("failed to send message with id '" + message.getTypeId() + "' to server.");
+		}	
 	}
 }

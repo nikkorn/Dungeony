@@ -1,4 +1,4 @@
-Potions can be crafted from other raw materials at cauldrons.
+Tonics can be crafted from other raw materials at cauldrons.
 
 There is a percentage of a chance to fail in making an item and wasting the resources, a better alchemy skill lessens that chance.
 Better items will have a much higher chance to fail.
