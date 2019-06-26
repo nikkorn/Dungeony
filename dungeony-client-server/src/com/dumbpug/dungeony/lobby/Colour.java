@@ -1,4 +1,4 @@
-package com.dumbpug.dungeony.server.lobby;
+package com.dumbpug.dungeony.lobby;
 
 /**
  * Enumeration of colur types.

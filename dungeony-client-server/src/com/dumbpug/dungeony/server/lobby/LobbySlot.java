@@ -1,5 +1,6 @@
 package com.dumbpug.dungeony.server.lobby;
 
+import com.dumbpug.dungeony.lobby.Colour;
 import com.dumbpug.dungeony.server.networking.ConnectedClient;
 
 /**

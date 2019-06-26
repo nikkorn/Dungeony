@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import com.dumbpug.dungeony.networking.messaging.DungeonyMarshallerProviderFactory;
 import com.dumbpug.dungeony.networking.messaging.MessageInputStream;
 import com.dumbpug.dungeony.networking.messaging.MessageMarshallerProvider;
@@ -21,15 +20,9 @@ import com.dumbpug.dungeony.session.Session;
  */
 public class Lobby {
 	/**
-	 * The lobby slots.
+	 * The collection of lobby slots.
 	 */
-	@SuppressWarnings("serial")
-	private ArrayList<LobbySlot> slots = new ArrayList<LobbySlot>() {{
-		add(new LobbySlot(1));
-		add(new LobbySlot(2));
-		add(new LobbySlot(3));
-		add(new LobbySlot(4));
-	}};
+	private LobbySlots slots = new LobbySlots();
 	
 	/**
 	 * Tick the lobby.
@@ -134,7 +127,7 @@ public class Lobby {
 			
 			synchronized (this.slots) {
 				// Firstly, try to get a free lobby slot.
-				LobbySlot nextFreeSlot = getNextFreeSlot();
+				LobbySlot nextFreeSlot = slots.getNextFreeSlot();
 				
 				// If we have no free slot then we need to send the player a join rejection message.
 				if (nextFreeSlot == null) {
@@ -156,21 +149,6 @@ public class Lobby {
 		} catch (IOException exception) {
 			// Any IO exception caught here means that the client connection failed and there is nothing to do.
 		}
-	}
-	
-	/**
-	 * Gets the next free lobby slot, or null if there isn't one.
-	 * @return The next free lobby slot, or null if there isn't one.
-	 */
-	private LobbySlot getNextFreeSlot() {
-		for (LobbySlot slot : this.slots) {
-			if (slot.getClient() == null) {
-				return slot;
-			}
-		}
-		
-		// There was no free slot.
-		return null;
 	}
 	
 	/**
