@@ -16,6 +16,7 @@ public class ClientKeyInputStateChangedMarshaller implements IMessageMarshaller<
 	@Override
 	public ClientKeyInputStateChanged read(DataInputStream dataInputStream) throws IOException {
 		int packedInputState = dataInputStream.readInt();
+		System.out.println("KEY STATE CHANGED: " + packedInputState);
 		return new ClientKeyInputStateChanged(ClientKeyInputState.fromPackedInt(packedInputState));
 	}
 

@@ -22,7 +22,7 @@ public class SimpleClientConnection {
 			JFrame frame = new JFrame();
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);
-			frame.setSize(10, 10);
+			frame.setSize(100, 100);
 			frame.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) {}

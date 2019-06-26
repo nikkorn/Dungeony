@@ -9,9 +9,7 @@ import com.dumbpug.dungeony.networking.messaging.MessageInputStream;
 import com.dumbpug.dungeony.networking.messaging.MessageMarshallerProvider;
 import com.dumbpug.dungeony.networking.messaging.MessageOutputStream;
 import com.dumbpug.dungeony.networking.messaging.messages.JoinFailure;
-import com.dumbpug.dungeony.networking.messaging.messages.JoinSuccess;
 import com.dumbpug.dungeony.server.networking.ConnectedClient;
-import com.dumbpug.dungeony.server.networking.ConnectedClientStatus;
 import com.dumbpug.dungeony.session.Session;
 
 /**
@@ -29,21 +27,39 @@ public class Lobby {
 	 * @param activeSession The active session, or null if no session is active. 
 	 */
 	public void tick(Session activeSession) {
-		// Handle any ConnectedClient instances that have disconnected.
-		processClientDisconnections();
-		
-		// If there is an active session then ...
-		if (activeSession != null) {
-			// ... do some stuff, like maybe if any clients are waiting to join just send them a message to tell them to wait.
-		} else {
-			// There is no active session!
+		// Lock on the slots collection as slots can be updated by the thread that processes joining clients.
+		synchronized (this.slots) {
+			// Create a flag that will be set in the event of any lobby slot state changes.
+			boolean hasLobbyStateChanged = false;
 			
-			// Handle any client requests to join the lobby as there is no active session that they have to wait to finish.
-			processClientJoinRequests();
+			// We will need to reset any slots that are populated by disconnected clients.
+			if (this.slots.resetDisconnectedSlots()) {
+				// A lobby slot was reset as a result of a client disconnecting.
+				hasLobbyStateChanged = true;
+			}
 			
-			// TODO Process any messages from any clients that relate ONLY to the lobby, such as:
-			//  - Changes to the client 'ready' state.
-			//  - Changes to the select client colour.
+			// If there is an active session then ...
+			if (activeSession != null) {
+				// ... do some stuff, like maybe if any clients are waiting to join just send them a message to tell them to wait.
+			} else {
+				// There is no active session!
+				
+				// Handle any client requests to join the lobby as there is no active session that they have to wait to finish.
+				if (this.slots.processJoinRequests()) {
+					// A lobby slot was updated as a result of a client joining the lobby.
+					hasLobbyStateChanged = true;
+				}
+				
+				// TODO Process any messages from any clients that relate ONLY to the lobby, such as:
+				//  - Changes to the client 'ready' state.
+				//  - Changes to the select client colour.
+			}
+			
+			// If thje state of the lobby has changed in any way as part of this tick then we will have to notify the connected clients. 
+			if (hasLobbyStateChanged) {
+				// TODO Send a lobby state update to all clients.
+				System.out.println("Send a lobby state update to all clients");
+			}
 		}
 	}
 	
@@ -148,69 +164,6 @@ public class Lobby {
 			}
 		} catch (IOException exception) {
 			// Any IO exception caught here means that the client connection failed and there is nothing to do.
-		}
-	}
-	
-	/**
-	 * Process any client disconnections.
-	 */
-	private void processClientDisconnections() {
-		synchronized (this.slots) {
-			// Create a flag to set if the lobby state has changed as a result of a client disconnecting.
-			boolean hasLobbyStateChanged = false;
-			
-			for (LobbySlot slot : this.slots) {
-				// Try to get the client in this slot.
-				ConnectedClient clientInSlot = slot.getClient();
-				
-				// Is there a client in the slot and are they waiting to join the lobby?
-				if (clientInSlot != null && !clientInSlot.isConnected()) {
-					// Reset the current slot so thta it can be allocated to any future clients.
-					slot.reset();
-					
-					// We will need to send a lobby state update to all clients.
-					hasLobbyStateChanged = true;
-				}
-			}
-			
-			// If the lobby state has changed we will need to send a lobby state update to all clients.
-			if (hasLobbyStateChanged) {
-				// TODO Send a lobby state update to all clients.
-				System.out.println("LEAVE: Send a lobby state update to all clients");
-			}
-		}
-	}
-
-	/**
-	 * Process any client join requests.
-	 */
-	private void processClientJoinRequests() {
-		synchronized (this.slots) {
-			// Create a flag to set if the lobby state has changed as a result of a client disconnecting.
-			boolean hasLobbyStateChanged = false;
-						
-			for (LobbySlot slot : this.slots) {
-				// Try to get the client in this slot.
-				ConnectedClient clientInSlot = slot.getClient();
-				
-				// Is there a client in the slot and are they waiting to join the lobby?
-				if (clientInSlot != null && clientInSlot.getStatus() == ConnectedClientStatus.WAITING_TO_JOIN) {
-					// Send a lobby join success message to the client.
-					clientInSlot.sendMessage(new JoinSuccess());
-					
-					// Update the client status to reflect the fact that they have actually joined the lobby.
-					clientInSlot.setStatus(ConnectedClientStatus.CONNECTED);
-					
-					// We will need to send a lobby state update to all clients.
-					hasLobbyStateChanged = true;
-				}
-			}
-			
-			// If the lobby state has changed we will need to send a lobby state update to all clients.
-			if (hasLobbyStateChanged) {
-				// TODO Send a lobby state update to all clients.
-				System.out.println("JOIN: Send a lobby state update to all clients");
-			}
 		}
 	}
 }
