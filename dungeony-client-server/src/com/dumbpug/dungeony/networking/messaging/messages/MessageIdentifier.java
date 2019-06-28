@@ -9,6 +9,8 @@ public class MessageIdentifier {
 	 * Client -> Server
 	 */
 	public static final int CLIENT_KEY_INPUT_STATE_CHANGED     = 1;
+	public static final int LOBBY_SET_SLOT_READY               = 2;
+	public static final int LOBBY_SET_SLOT_COLOUR              = 3;
 
 	/**
 	 * Server -> Client

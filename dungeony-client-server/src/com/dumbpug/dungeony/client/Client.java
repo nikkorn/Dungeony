@@ -4,10 +4,13 @@ import java.io.IOException;
 import com.dumbpug.dungeony.client.lobby.LobbyState;
 import com.dumbpug.dungeony.client.session.SessionState;
 import com.dumbpug.dungeony.input.ClientKeyInputState;
+import com.dumbpug.dungeony.lobby.Colour;
 import com.dumbpug.dungeony.networking.QueuedMessageReader;
 import com.dumbpug.dungeony.networking.messaging.IMessage;
 import com.dumbpug.dungeony.networking.messaging.MessageOutputStream;
 import com.dumbpug.dungeony.networking.messaging.messages.ClientKeyInputStateChanged;
+import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotColour;
+import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotReady;
 
 /**
  * A client-side representation of a Dungeony server client.
@@ -88,11 +91,19 @@ public class Client {
 	}
 	
 	/**
-	 * Refresh the client with the connected server instance, processing any messages received from the server since the last refresh.
+	 * Sets whether the client is ready to join an active session.
+	 * @param isReady Whether the client is ready to join an active session.
 	 */
-	public void refresh() {
-		// TODO Check for any pending messages in the input message queue and do nothing if there are none.
-		// TODO Process every message in the input message queue.
+	public void setReady(boolean isReady) {
+		sendMessage(new LobbySetSlotReady(isReady));
+	}
+	
+	/**
+	 * Sets the colour for the client lobby slot.
+	 * @param colour The colour for the client lobby slot.
+	 */
+	public void setSlotColour(Colour colour) {
+		sendMessage(new LobbySetSlotColour(colour));
 	}
 	
 	/**
@@ -128,6 +139,14 @@ public class Client {
 		if (keyInputStateChanged) {
 			sendMessage(new ClientKeyInputStateChanged(this.clientKeyInputState));
 		}
+	}
+	
+	/**
+	 * Refresh the client with the connected server instance, processing any messages received from the server since the last refresh.
+	 */
+	public void refresh() {
+		// TODO Check for any pending messages in the input message queue and do nothing if there are none.
+		// TODO Process every message in the input message queue.
 	}
 	
 	/**
