@@ -100,6 +100,42 @@ public class ClientKeyInputState {
 	}
 	
 	/**
+	 * Update the client input state.
+	 * @param isPrimaryKeyDown
+	 * @param isSecondaryKeyDown
+	 * @param isTertiaryKeyDown
+	 * @param isUpKeyDown
+	 * @param isDownKeyDown
+	 * @param isLeftKeyDown
+	 * @param isRightKeyDown
+	 * @return Whether any key state has changed as part of this update.
+	 */
+	public boolean update(
+		boolean isPrimaryKeyDown, 
+		boolean isSecondaryKeyDown, 
+		boolean isTertiaryKeyDown,
+		boolean isUpKeyDown,
+		boolean isDownKeyDown,
+		boolean isLeftKeyDown,
+		boolean isRightKeyDown
+	) {
+		// Get the client key input state as a packed integer.
+		int oldPackedInputState = this.toPackedInt();
+		
+		// Update the client input state.
+		this.setPrimaryKeyDown(isPrimaryKeyDown);
+		this.setSecondaryKeyDown(isSecondaryKeyDown);
+		this.setTertiaryKeyDown(isTertiaryKeyDown);
+		this.setUpKeyDown(isUpKeyDown);
+		this.setDownKeyDown(isDownKeyDown);
+		this.setLeftKeyDown(isLeftKeyDown);
+		this.setRightKeyDown(isRightKeyDown);
+		
+		// Return whether the input state has changed.
+		return oldPackedInputState != this.toPackedInt();
+	}
+	
+	/**
 	 * Convert the input state to an integer value.
 	 * @return An integer value representing the input state.
 	 */

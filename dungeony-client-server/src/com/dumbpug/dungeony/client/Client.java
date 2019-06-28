@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.client;
 
 import java.io.IOException;
+import com.dumbpug.dungeony.client.lobby.LobbyState;
 import com.dumbpug.dungeony.client.session.SessionState;
 import com.dumbpug.dungeony.input.ClientKeyInputState;
 import com.dumbpug.dungeony.networking.QueuedMessageReader;
@@ -23,7 +24,11 @@ public class Client {
 	/**
 	 * The client key input state.
 	 */
-	private ClientKeyInputState clientInputState = new ClientKeyInputState();
+	private ClientKeyInputState clientKeyInputState = new ClientKeyInputState();
+	/**
+	 * The state of the active session, or null if the client is not in an active session.
+	 */
+	private LobbyState lobbyState = new LobbyState();
 	/**
 	 * The state of the active session, or null if the client is not in an active session.
 	 */
@@ -37,6 +42,28 @@ public class Client {
 	public Client(QueuedMessageReader queuedMessageReader, MessageOutputStream messageOutputStream) {
 		this.queuedMessageReader = queuedMessageReader;
 		this.messageOutputStream = messageOutputStream;
+	}
+	
+	/**
+	 * Gets the lobby state.
+	 * @return the lobby state.
+	 */
+	public LobbyState getLobbyState() {
+		// Call refresh to ensure we can provide a fresh value.
+		this.refresh();
+				
+		return lobbyState;
+	}
+	
+	/**
+	 * Gets the active session state.
+	 * @return The lobby state, or null if there is no active session
+	 */
+	public SessionState getActiveSessionState() {
+		// Call refresh to ensure we can provide a fresh value.
+		this.refresh();
+				
+		return this.sessionState;
 	}
 	
 	/**
@@ -87,24 +114,19 @@ public class Client {
 		boolean isLeftKeyDown,
 		boolean isRightKeyDown
 	) {
-		// Get the last known client input state as a packed integer.
-		int oldPackedInputState = this.clientInputState.toPackedInt();
-		
-		// Update the client input state.
-		this.clientInputState.setPrimaryKeyDown(isPrimaryKeyDown);
-		this.clientInputState.setSecondaryKeyDown(isSecondaryKeyDown);
-		this.clientInputState.setTertiaryKeyDown(isTertiaryKeyDown);
-		this.clientInputState.setUpKeyDown(isUpKeyDown);
-		this.clientInputState.setDownKeyDown(isDownKeyDown);
-		this.clientInputState.setLeftKeyDown(isLeftKeyDown);
-		this.clientInputState.setRightKeyDown(isRightKeyDown);
-		
-		// Get the new client input state as a packed integer.
-		int newPackedInputState = this.clientInputState.toPackedInt();
+		// Update the key input state and get whether the state has actually changed.
+		boolean keyInputStateChanged = this.clientKeyInputState.update(
+				isPrimaryKeyDown, 
+				isSecondaryKeyDown, 
+				isTertiaryKeyDown, 
+				isUpKeyDown, 
+				isDownKeyDown, 
+				isLeftKeyDown, 
+				isRightKeyDown);
 		
 		// If the input state has changed then we will need to notify the server.
-		if (oldPackedInputState != newPackedInputState) {
-			sendMessage(new ClientKeyInputStateChanged(this.clientInputState));
+		if (keyInputStateChanged) {
+			sendMessage(new ClientKeyInputStateChanged(this.clientKeyInputState));
 		}
 	}
 	
