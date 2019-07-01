@@ -12,11 +12,12 @@ public class DungeonyMarshallerProviderFactory {
 	 * @return A MessageMarshallerProvider for client/server messaging.
 	 */
 	public static MessageMarshallerProvider create() {
+		// Create the marshaller provider.
+		MessageMarshallerProvider provider = new MessageMarshallerProvider();
+
 		/**
 		 * The marshallers relating to server -> client messages.
 		 */
-		// Create the marshaller provider.
-		MessageMarshallerProvider provider = new MessageMarshallerProvider();
 		// Add the marshaller used for reading/writing join success messages.
 		provider.addMarshaller(new JoinSuccessMarshaller());
 		// Add the marshaller used for reading/writing join failure messages.
@@ -31,6 +32,10 @@ public class DungeonyMarshallerProviderFactory {
 		 */
 		// Add the marshaller used for reading/writing move player messages.
 		provider.addMarshaller(new ClientKeyInputStateChangedMarshaller());
+		// Add the marshaller used for reading/writing lobby set slot colour messages.
+		provider.addMarshaller(new LobbySetSlotColourMarshaller());
+		// Add the marshaller used for reading/writing lobby set slot ready messages.
+		provider.addMarshaller(new LobbySetSlotReadyMarshaller());
 
 		// Return the provider.
 		return provider;
