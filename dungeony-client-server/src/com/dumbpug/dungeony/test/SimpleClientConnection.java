@@ -9,6 +9,7 @@ import com.dumbpug.dungeony.client.Client;
 import com.dumbpug.dungeony.client.ClientFactory;
 import com.dumbpug.dungeony.client.ServerJoinRequestRejectedException;
 import com.dumbpug.dungeony.input.ClientKeyInputState;
+import com.dumbpug.dungeony.lobby.Colour;
 
 /**
  * A simple client connection test.
@@ -82,9 +83,24 @@ public class SimpleClientConnection {
 					
 					// TODO Get a fresh snapshot of the SESSION state and draw it somewhere.
 				} else {
-					// TODO client.setSlotColour(Colour.RED);
+					// The 1,2 keys map to ready/not ready.
+					if (typedCharacters.contains('1')) {
+						 client.setReady(true);
+					}
+					if (typedCharacters.contains('2')) {
+						 client.setReady(false);
+					}
 					
-					// TODO client.setReady(true);
+					// The 3,4,5 keys map to red,blue,green.
+					if (typedCharacters.contains('3')) {
+						 client.setSlotColour(Colour.RED);
+					}
+					if (typedCharacters.contains('4')) {
+						client.setSlotColour(Colour.BLUE);
+					}
+					if (typedCharacters.contains('5')) {
+						client.setSlotColour(Colour.GREEN);
+					}
 					
 					// TODO Get a fresh snapshot of the LOBBY state and draw it somewhere.
 				}

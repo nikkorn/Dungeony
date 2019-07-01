@@ -5,10 +5,12 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import com.dumbpug.dungeony.networking.messaging.DungeonyMarshallerProviderFactory;
+import com.dumbpug.dungeony.networking.messaging.IMessage;
 import com.dumbpug.dungeony.networking.messaging.MessageInputStream;
 import com.dumbpug.dungeony.networking.messaging.MessageMarshallerProvider;
 import com.dumbpug.dungeony.networking.messaging.MessageOutputStream;
 import com.dumbpug.dungeony.networking.messaging.messages.JoinFailure;
+import com.dumbpug.dungeony.networking.messaging.messages.LobbyStateUpdate;
 import com.dumbpug.dungeony.server.networking.ConnectedClient;
 import com.dumbpug.dungeony.session.Session;
 
@@ -42,24 +44,53 @@ public class Lobby {
 			if (activeSession != null) {
 				// ... do some stuff, like maybe if any clients are waiting to join just send them a message to tell them to wait.
 			} else {
-				// There is no active session!
-				
 				// Handle any client requests to join the lobby as there is no active session that they have to wait to finish.
 				if (this.slots.processJoinRequests()) {
 					// A lobby slot was updated as a result of a client joining the lobby.
 					hasLobbyStateChanged = true;
 				}
 				
-				// TODO Process any messages from any clients that relate ONLY to the lobby, such as:
+				// Process any messages from any clients that relate ONLY to the lobby, such as:
 				//  - Changes to the client 'ready' state.
 				//  - Changes to the select client colour.
+				if (this.slots.processLobbyTargetedMessages()) {
+					// The lobby state was updated.
+					hasLobbyStateChanged = true;
+				}
 			}
 			
-			// If thje state of the lobby has changed in any way as part of this tick then we will have to notify the connected clients. 
+			// If the state of the lobby has changed in any way as part of this tick then we will have to notify the connected clients. 
 			if (hasLobbyStateChanged) {
-				// TODO Send a lobby state update to all clients.
-				System.out.println("Send a lobby state update to all clients");
+				sendMessage(new LobbyStateUpdate(this.slots.getSnapShot()));
 			}
+		}
+	}
+	
+	/**
+	 * Send the specified message to all clients.
+	 * @param message The message to send to all clients.
+	 */
+	public void sendMessage(IMessage message) {
+		for (int slotNumber = 1; slotNumber <= 4; slotNumber++) {
+			sendMessage(message, slotNumber);
+		}
+	}
+	
+	/**
+	 * Send a message to the client (if there is one) in the slot with the specified slot number.
+	 * @param message The message to send.
+	 * @param slotNumber The slot number.
+	 */
+	public void sendMessage(IMessage message, int slotNumber) {
+		// Get the slot.
+		LobbySlot slot = this.slots.getSlot(slotNumber);
+		
+		// Get the client for the slot.
+		ConnectedClient client = slot.getClient();
+		
+		// Send the message to the client in the slot, if there is one.
+		if (client != null) {
+			client.sendMessage(message);
 		}
 	}
 	

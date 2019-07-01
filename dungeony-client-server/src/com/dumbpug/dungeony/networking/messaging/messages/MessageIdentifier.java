@@ -17,6 +17,7 @@ public class MessageIdentifier {
 	 */
 	public static final int JOIN_SUCCESS                       = 100;
 	public static final int JOIN_FAIL                          = 101;
-	public static final int PLAYER_SPAWNED                     = 102;
-	public static final int PLAYER_POSITION_UPDATE             = 103;
+	public static final int LOBBY_STATE_UPDATE                 = 102;
+	public static final int PLAYER_SPAWNED                     = 103;
+	public static final int PLAYER_POSITION_UPDATE             = 104;
 }

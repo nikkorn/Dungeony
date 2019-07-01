@@ -2,8 +2,14 @@ package com.dumbpug.dungeony.server.lobby;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import com.dumbpug.dungeony.lobby.Colour;
 import com.dumbpug.dungeony.lobby.LobbySlotState;
+import com.dumbpug.dungeony.networking.messaging.IMessage;
+import com.dumbpug.dungeony.networking.messaging.MessageQueue;
 import com.dumbpug.dungeony.networking.messaging.messages.JoinSuccess;
+import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotColour;
+import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotReady;
+import com.dumbpug.dungeony.networking.messaging.messages.MessageIdentifier;
 import com.dumbpug.dungeony.server.networking.ConnectedClient;
 import com.dumbpug.dungeony.server.networking.ConnectedClientStatus;
 
@@ -27,6 +33,15 @@ public class LobbySlots implements Iterable<LobbySlot> {
 	}
 	
 	/**
+	 * Gets the slot with the givent number.
+	 * @param number The slot number.
+	 * @return The slot with the givent number.
+	 */
+	public LobbySlot getSlot(int number) {
+		return this.slots.get(number - 1);
+	}
+	
+	/**
 	 * Gets a snapshot of this list.
 	 * @return A snapshot of this list.
 	 */
@@ -34,15 +49,15 @@ public class LobbySlots implements Iterable<LobbySlot> {
 		// Create the snapshot list.
 		ArrayList<LobbySlotState> snapshot = new ArrayList<LobbySlotState>();
 		
-		for (int slotIndex = 1; slotIndex <= 4; slotIndex++) {
+		for (int slotNumber = 1; slotNumber <= 4; slotNumber++) {
 			// Get the lobby slot at the current index.
-			LobbySlot current = this.slots.get(slotIndex);
+			LobbySlot current = this.slots.get(slotNumber - 1);
 			
 			// Try to get the player id of the client in the current slot.
 			String currentSlotPlayerId = current.getClient() != null ? current.getClient().getPlayerId() : null;
 			
 			// Add a snapshot of the current slot state to the list of other states.
-			snapshot.add(new LobbySlotState(slotIndex, currentSlotPlayerId, current.isReady(), current.getColour()));
+			snapshot.add(new LobbySlotState(slotNumber, currentSlotPlayerId, current.isReady(), current.getColour()));
 		}
 		
 		// Return the snapshot list.
@@ -117,6 +132,73 @@ public class LobbySlots implements Iterable<LobbySlot> {
 		}
 		
 		return hasClientJoined;
+	}
+	
+	/**
+	 * Process any queued messages from clients that relate to modifying the state of the lobby.
+	 * @return Whether the lobby state was modified.
+	 */
+	public boolean processLobbyTargetedMessages() {
+		boolean hasLobbyStateChanged = false;
+		
+		for (LobbySlot slot : this.slots) {
+			// Try to get the client in this slot.
+			ConnectedClient clientInSlot = slot.getClient();
+			
+			// If there is no client in this slot then just move on to the next one.
+			if (clientInSlot == null) {
+				continue;
+			}
+			
+			// Get the queue of messages set from the current client.
+			MessageQueue messageQueue = clientInSlot.getReceivedMessageQueue();
+			
+			// Process every message in the queue.
+			while (messageQueue.hasNext()) {
+				// Get the next message in the queue.
+				IMessage message = messageQueue.next();
+				
+				switch (message.getTypeId()) {
+					case MessageIdentifier.LOBBY_SET_SLOT_READY:
+						slot.setReady(((LobbySetSlotReady)message).isReady());
+						hasLobbyStateChanged = true;
+						break;
+						
+					case MessageIdentifier.LOBBY_SET_SLOT_COLOUR:
+						// Get the colour that the client wishes to assign to their slot.
+						Colour colour = ((LobbySetSlotColour)message).getColour();
+						
+						// Apply the requested colour to the slot if it is available.
+						if (isSlotColourAvailable(colour)) {
+							slot.setColour(colour);
+							hasLobbyStateChanged = true;
+						}
+						break;
+						
+					default:
+						// The current message has nothing to do with the lobby, just throw it away.
+				}
+			}
+		}
+		
+		return hasLobbyStateChanged;
+	}
+	
+	/**
+	 * Gets whether the specified colour is available for use.
+	 * @param colour The colour to check.
+	 * @return Whether the specified colour is available for use.
+	 */
+	private boolean isSlotColourAvailable(Colour colour) {
+		for (LobbySlot slot : this.slots) {
+			if (slot.getColour() == colour) {
+				// There is a slot using this colour already.
+				return false;
+			}
+		}
+		
+		// No slot is using the specified colour.
+		return true;
 	}
 
 	@Override
