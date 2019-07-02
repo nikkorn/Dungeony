@@ -81,6 +81,35 @@ public class LobbySlots implements Iterable<LobbySlot> {
 	}
 	
 	/**
+	 * Gets whether all populated slots are in the 'ready' state.
+	 * @return Whether all populated slots are in the 'ready' state.
+	 */
+	public boolean areAllReady() {
+		for (LobbySlot slot : this.slots) {
+			if (slot.getClient() != null && !slot.isReady()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Gets whether all slots are not populated.
+	 * @return Whether all slots are not populated.
+	 */
+	public boolean areAllEmpty() {
+		for (LobbySlot slot : this.slots) {
+			if (slot.getClient() != null) {
+				return false;
+			} 
+		}
+		
+		return true;
+	}
+	
+	
+	/**
 	 * Process any disconnections for slots that have clients.
 	 * @return Whether any client disconnections were processed.
 	 */
@@ -161,6 +190,7 @@ public class LobbySlots implements Iterable<LobbySlot> {
 				switch (message.getTypeId()) {
 					case MessageIdentifier.LOBBY_SET_SLOT_READY:
 						slot.setReady(((LobbySetSlotReady)message).isReady());
+						System.out.println("client '" + slot.getClient().getPlayerId() + "' is " + (slot.isReady() ? "" : "not") + " ready!");
 						hasLobbyStateChanged = true;
 						break;
 						
@@ -171,6 +201,7 @@ public class LobbySlots implements Iterable<LobbySlot> {
 						// Apply the requested colour to the slot if it is available.
 						if (isSlotColourAvailable(colour)) {
 							slot.setColour(colour);
+							System.out.println("client '" + slot.getClient().getPlayerId() + "' is now colour '" + colour + "'");
 							hasLobbyStateChanged = true;
 						}
 						break;

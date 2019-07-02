@@ -63,9 +63,18 @@ public class Lobby {
 				}
 			}
 			
+			// Get the last known lobby timer coutndown and the current one.
+			Integer lastCountdown = this.timer.getLastCountdown();
+			Integer countdown     = this.timer.getCountdown(this.slots.areAllReady() && !this.slots.areAllEmpty());
+			
+			// Check whether the lobby time value has changed.
+			if (lastCountdown != countdown) {
+				hasLobbyStateChanged = true;
+			}
+			
 			// If the state of the lobby has changed in any way as part of this tick then we will have to notify the connected clients. 
 			if (hasLobbyStateChanged) {
-				sendMessage(new LobbyStateUpdate(this.slots.getSnapShot(), this.timer.getCountdown()));
+				sendMessage(new LobbyStateUpdate(this.slots.getSnapShot(), countdown));
 			}
 		}
 	}
