@@ -23,6 +23,10 @@ public class Lobby {
 	 * The collection of lobby slots.
 	 */
 	private LobbySlots slots = new LobbySlots();
+	/**
+	 * The lobby timer.
+	 */
+	private LobbyTimer timer = new LobbyTimer();
 	
 	/**
 	 * Tick the lobby.
@@ -61,7 +65,7 @@ public class Lobby {
 			
 			// If the state of the lobby has changed in any way as part of this tick then we will have to notify the connected clients. 
 			if (hasLobbyStateChanged) {
-				sendMessage(new LobbyStateUpdate(this.slots.getSnapShot()));
+				sendMessage(new LobbyStateUpdate(this.slots.getSnapShot(), this.timer.getCountdown()));
 			}
 		}
 	}

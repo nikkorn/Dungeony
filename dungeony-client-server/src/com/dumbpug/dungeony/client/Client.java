@@ -8,6 +8,7 @@ import com.dumbpug.dungeony.lobby.Colour;
 import com.dumbpug.dungeony.networking.QueuedMessageReader;
 import com.dumbpug.dungeony.networking.messaging.IMessage;
 import com.dumbpug.dungeony.networking.messaging.MessageOutputStream;
+import com.dumbpug.dungeony.networking.messaging.MessageQueue;
 import com.dumbpug.dungeony.networking.messaging.messages.ClientKeyInputStateChanged;
 import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotColour;
 import com.dumbpug.dungeony.networking.messaging.messages.LobbySetSlotReady;
@@ -24,6 +25,10 @@ public class Client {
 	 * The message output stream for the client to use in sending messages to the server.
 	 */
 	private MessageOutputStream messageOutputStream;
+	/**
+	 * The processor of messages sent to the client.
+	 */
+	private ClientMessageProcessor clientMessageProcessor = new ClientMessageProcessor(this);
 	/**
 	 * The client key input state.
 	 */
@@ -145,8 +150,18 @@ public class Client {
 	 * Refresh the client with the connected server instance, processing any messages received from the server since the last refresh.
 	 */
 	public void refresh() {
-		// TODO Check for any pending messages in the input message queue and do nothing if there are none.
-		// TODO Process every message in the input message queue.
+		// There is nothing to do if there are no pending messages queued.
+		if (!queuedMessageReader.hasQueuedMessages()) {
+			return;
+		}
+		
+		// Get the pending messages in the input queue.
+		MessageQueue queue = queuedMessageReader.getQueuedMessages();
+
+		// Process every message in the input message queue.
+		while (queue.hasNext()) {
+			this.clientMessageProcessor.process(queue.next());
+		}
 	}
 	
 	/**

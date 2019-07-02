@@ -26,6 +26,8 @@ public class DungeonyMarshallerProviderFactory {
 		provider.addMarshaller(new PlayerPositionUpdateMarshaller());
 		// Add the marshaller used for reading/writing player spawn messages.
 		provider.addMarshaller(new PlayerSpawnedMarshaller());
+		// Add the marshaller used for reading/writing lobby state update messages.
+		provider.addMarshaller(new LobbyStateUpdateMarshaller());
 
 		/**
 		 * The marshallers relating to client -> server messages.

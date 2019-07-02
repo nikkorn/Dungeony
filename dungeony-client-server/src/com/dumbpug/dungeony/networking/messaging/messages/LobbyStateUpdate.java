@@ -12,13 +12,19 @@ public class LobbyStateUpdate implements IMessage {
 	 * The list of lobby slot states.
 	 */
 	private ArrayList<LobbySlotState> lobbySlotStates;
+	/**
+	 * The session start countdown.
+	 */
+	private Integer countdown;
 	
 	/**
 	 * Creates a new instance of the LobbyStateUpdate class.
 	 * @param lobbySlotStates The list of lobby slot states.
+	 * @param countdown The session start countdown.
 	 */
-	public LobbyStateUpdate(ArrayList<LobbySlotState> lobbySlotStates) {
+	public LobbyStateUpdate(ArrayList<LobbySlotState> lobbySlotStates, Integer countdown) {
 		this.lobbySlotStates = lobbySlotStates;
+		this.countdown       = countdown;
 	}
 	
 	/**
@@ -27,6 +33,14 @@ public class LobbyStateUpdate implements IMessage {
 	 */
 	public ArrayList<LobbySlotState> getLobbySlotStates() {
 		return lobbySlotStates;
+	}
+	
+	/**
+	 * Gets the session start countdown.
+	 * @return The session start countdown.
+	 */
+	public Integer getCountdown() {
+		return countdown;
 	}
 
 	@Override
