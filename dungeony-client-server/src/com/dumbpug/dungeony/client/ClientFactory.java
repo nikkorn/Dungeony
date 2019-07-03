@@ -45,6 +45,9 @@ public class ClientFactory {
 		// Send the client player id.
 		messageOutputStream.writeUTF(playerId);
 		
+		// Flush the handshake and client player id.
+		messageOutputStream.flush();
+		
 		// Read the server response message. This operation blocks until we get it.
 		IMessage response = messageInputStream.readMessage();
 		

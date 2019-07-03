@@ -1,5 +1,6 @@
 package com.dumbpug.dungeony.networking.messaging;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,7 +20,7 @@ public class MessageOutputStream extends DataOutputStream {
 	 * @param messageMarshallerProvider The provider of message marshallers.
 	 */
 	public MessageOutputStream(OutputStream outputStream, MessageMarshallerProvider messageMarshallerProvider) {
-		super(outputStream);
+		super(new BufferedOutputStream(outputStream));
 		this.messageMarshallerProvider = messageMarshallerProvider;
 	}
 	
