@@ -14,4 +14,11 @@ public abstract class Enemy extends LevelCharacter {
 	public Enemy(Position position) {
 		super(position);
 	}
+	
+	/**
+	 * Tick the enemy.
+	 */
+	public void onTick() {
+		// TODO Do some scary stuff!!!
+	}
 }

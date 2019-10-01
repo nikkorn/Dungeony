@@ -23,6 +23,9 @@ public class Tiles {
      * Tick any tick-able tiles.
      */
     public void tick() {
-        // TODO ...
+        // Tick every tile!
+    	for (Tile tile : this.tiles) {
+    		tile.onTick();
+    	}
     }
 }

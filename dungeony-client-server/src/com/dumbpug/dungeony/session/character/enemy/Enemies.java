@@ -26,6 +26,9 @@ public class Enemies {
      * @param spatialGrid The spatial grid used to handle collisions between level entities.
      */
     public void tick(SpatialGrid<ICollidableEntity> spatialGrid) {
-        // TODO ...
+        // Tick every enemy!
+    	for (Enemy enemy : this.enemies) {
+    		enemy.onTick();
+    	}
     }
 }

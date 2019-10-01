@@ -1,7 +1,6 @@
 package com.dumbpug.dungeony.session.level;
 
 import com.dumbpug.dungeony.session.SessionParticipant;
-import com.dumbpug.dungeony.session.SessionParticipants;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.player.Player;
 import com.dumbpug.dungeony.session.character.player.Players;
@@ -92,7 +91,7 @@ public class Level {
 	
 	/**
 	 * Tick the level.
-	 * @param participants The list of participants.
+	 * @param playerInputStateProvider The player input state provider.
 	 */
 	public void tick(IPlayerInputStateProvider playerInputStateProvider) {
 		// Tick all of the players, processing any movements and actions in the process.
