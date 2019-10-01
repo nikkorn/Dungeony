@@ -30,7 +30,7 @@ public class SessionParticipants {
 				return participant;
 			}
 		}
-		throw new RuntimeException("could not find participant with id of '" + id + "'");
+		return null;
 	}
 	
 	/**

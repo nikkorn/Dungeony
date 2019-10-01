@@ -1,12 +1,14 @@
 package com.dumbpug.dungeony.session.level;
 
 import com.dumbpug.dungeony.session.SessionParticipant;
+import com.dumbpug.dungeony.session.SessionParticipants;
 import com.dumbpug.dungeony.session.character.enemy.Enemies;
 import com.dumbpug.dungeony.session.character.player.Player;
 import com.dumbpug.dungeony.session.character.player.Players;
 import com.dumbpug.dungeony.session.events.PlayerDespawnEvent;
 import com.dumbpug.dungeony.session.events.PlayerSpawnEvent;
 import com.dumbpug.dungeony.session.events.SessionEventQueue;
+import com.dumbpug.dungeony.session.input.IPlayerInputStateProvider;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 import com.dumbpug.dungeony.session.level.tile.Tiles;
 
@@ -90,10 +92,11 @@ public class Level {
 	
 	/**
 	 * Tick the level.
+	 * @param participants The list of participants.
 	 */
-	public void tick() {
+	public void tick(IPlayerInputStateProvider playerInputStateProvider) {
 		// Tick all of the players, processing any movements and actions in the process.
-		this.players.tick(this.spatialGrid);
+		this.players.tick(this.spatialGrid, playerInputStateProvider);
 
 		// Tick all of the enemies.
 		this.enemies.tick(this.spatialGrid);
@@ -111,7 +114,7 @@ public class Level {
 		Position safeSpawnPosition = getSafePlayerSpawnPosition();
 		
 		// Create a new player for the participant and position them at the safe spawn in the level.
-		Player player = new Player(participant, safeSpawnPosition);
+		Player player = new Player(participant.getId(), safeSpawnPosition);
 		
 		// Add a 'PlayerSpawn' event to the session event queue.
 		this.sessionEventQueue.add(new PlayerSpawnEvent(participant.getId(), this.depth, safeSpawnPosition.copy()));
@@ -129,7 +132,7 @@ public class Level {
 	 */
 	public void removePlayer(SessionParticipant participant) {
 		// Get the player in the level fro the given participant.
-		Player player = this.players.getPlayerForParticipant(participant);
+		Player player = this.players.getPlayerForParticipant(participant.getId());
 		
 		// Add a 'PlayerDespawn' event to the session event queue.
 		this.sessionEventQueue.add(new PlayerDespawnEvent(participant.getId(), this.depth));

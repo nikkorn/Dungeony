@@ -7,7 +7,7 @@ import com.dumbpug.dungeony.session.input.IPlayerInputState;
  */
 public class SessionParticipant {
 	/**
-	 * The client id of the participant.
+	 * The id of the participant.
 	 */
 	private int id;
 	/**
@@ -21,7 +21,7 @@ public class SessionParticipant {
 	
 	/**
 	 * Creates a new instance of the 
-	 * @param id The client id of the participant.
+	 * @param id The id of the participant.
 	 * @param playerName The player name of the participant.
 	 * @param playerInputState The player input state of the participant.
 	 */

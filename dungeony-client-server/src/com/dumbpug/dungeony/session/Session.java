@@ -2,6 +2,8 @@ package com.dumbpug.dungeony.session;
 
 import java.util.ArrayList;
 import com.dumbpug.dungeony.session.events.SessionEventQueue;
+import com.dumbpug.dungeony.session.input.IPlayerInputState;
+import com.dumbpug.dungeony.session.input.IPlayerInputStateProvider;
 import com.dumbpug.dungeony.session.level.Level;
 import com.dumbpug.dungeony.session.level.LevelFactory;
 
@@ -22,9 +24,13 @@ public class Session {
 	 */
 	private long seed;
 	/**
-	 * The session event queue.
+	 * The session event queue populated with even information to be consumed by a session observer.
 	 */
 	private SessionEventQueue sessionEventQueue = new SessionEventQueue();
+	/**
+	 * The player input state provider to be used as part of the session update.
+	 */
+	private IPlayerInputStateProvider playerInputStateProvider;
 	
 	/**
 	 * Creates a new instance of the Session class.
@@ -34,14 +40,18 @@ public class Session {
 	public Session(SessionParticipants participants, long seed) {
 		this.participants = participants;
 		this.seed         = seed;
-	}
-	
-	/**
-	 * Gets the session event queue.
-	 * @return The session event queue.
-	 */
-	public SessionEventQueue getSessionEventQueue() {
-		return this.sessionEventQueue;
+		
+		// Create the player input state provider to be used as part of the session update.
+		this.playerInputStateProvider = new IPlayerInputStateProvider(){
+			@Override
+			public IPlayerInputState getState(int participantId) {
+				// Get the participant.
+				SessionParticipant participant = participants.getParticipant(participantId);
+				
+				// Return the player input state for the participant if they exist, otherwise return null.
+				return participant != null ? participant.getPlayerInputState() : null;
+			}			
+		};
 	}
 	
 	/**
@@ -64,10 +74,11 @@ public class Session {
 	 * Tick the session.
 	 */
 	public void tick() {		
-		// Tick every active level. 
+		// Tick every active level.
 		for (Level level : this.levels) {
 			if (level.isActive()) {
-				level.tick();
+				// Tick the active level, passing a player input provider with which to update players.
+				level.tick(playerInputStateProvider);
 			}
 		}
 		

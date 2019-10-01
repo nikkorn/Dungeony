@@ -1,7 +1,6 @@
 package com.dumbpug.dungeony.session.character.player;
 
 import com.dumbpug.dungeony.Constants;
-import com.dumbpug.dungeony.session.SessionParticipant;
 import com.dumbpug.dungeony.session.character.LevelCharacter;
 import com.dumbpug.dungeony.session.level.LevelTransition;
 import com.dumbpug.dungeony.session.level.Position;
@@ -11,9 +10,9 @@ import com.dumbpug.dungeony.session.level.Position;
  */
 public class Player extends LevelCharacter {
 	/**
-	 * The session participant that the player represents.
+	 * The id of the participant that the player represents.
 	 */
-	private SessionParticipant participant;
+	private int participantId;
 	/**
 	 * The level transition for the player.
 	 */
@@ -21,21 +20,20 @@ public class Player extends LevelCharacter {
 
 	/**
 	 * Creates a new instance of the Player class.
-	 * @param participant The session participant that the player represents.
+	 * @param participantId The id of the participant that the player represents.
 	 * @param position The initial player position.
-	 * @param playerId The player id.
 	 */
-	public Player(SessionParticipant participant, Position position) {
+	public Player(int participantId, Position position) {
 		super(position);
-		this.participant = participant;
+		this.participantId = participantId;
 	}
 	
 	/**
-	 * Gets the session participant that the player represents.
-	 * @return The session participant that the player represents.
+	 * Gets the participant id.
+	 * @return The participant id.
 	 */
-	public SessionParticipant getParticipant() {
-		return this.participant;
+	public int getParticipantId() {
+		return participantId;
 	}
 
 	@Override

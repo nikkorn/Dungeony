@@ -2,8 +2,8 @@ package com.dumbpug.dungeony.session.character.player;
 
 import java.util.ArrayList;
 import com.dumbpug.dungeony.session.level.ICollidableEntity;
-import com.dumbpug.dungeony.session.SessionParticipant;
 import com.dumbpug.dungeony.session.input.IPlayerInputState;
+import com.dumbpug.dungeony.session.input.IPlayerInputStateProvider;
 import com.dumbpug.dungeony.session.level.grid.SpatialGrid;
 
 /**
@@ -17,12 +17,12 @@ public class Players {
 
 	/**
 	 * Tick the players.
-	 * @param playersInputProvider The provider of input for all available players.
-	 * @param spatialGrid The spatial grid used to handle collisions between level entites.
+	 * @param spatialGrid The spatial grid used to handle collisions between level entities.
+	 * @param playerInputStateProvider The provider of input state for participants.
 	 */
-	public void tick(SpatialGrid<ICollidableEntity> spatialGrid) {
+	public void tick(SpatialGrid<ICollidableEntity> spatialGrid, IPlayerInputStateProvider playerInputStateProvider) {
 		// Update the positions and angles of view for the players.
-		this.updatePlayerPositions(spatialGrid);
+		this.updatePlayerPositions(spatialGrid, playerInputStateProvider);
 
 		// Process any player requests to carry out an action.
 		this.processPlayerActions();
@@ -30,12 +30,12 @@ public class Players {
 	
 	/**
 	 * Get the player for the given participant.
-	 * @param participant The participant.
+	 * @param participantId The participant id.
 	 * @return The player for the given participant.
 	 */
-	public Player getPlayerForParticipant(SessionParticipant participant) {
+	public Player getPlayerForParticipant(int participantId) {
 		for (Player player : this.players) {
-			if (player.getParticipant() == participant) {
+			if (player.getParticipantId() == participantId) {
 				return player;
 			}
 		}
@@ -71,11 +71,17 @@ public class Players {
 	 * Update player positions based on player input.
 	 * @param playersInputProvider The provider of input for all available players.
 	 * @param spatialGrid The spatial grid used to handle collisions between level entites.
+	 * @param playerInputStateProvider The provider of input state for participants.
 	 */
-	private void updatePlayerPositions(SpatialGrid<ICollidableEntity> spatialGrid) {
+	private void updatePlayerPositions(SpatialGrid<ICollidableEntity> spatialGrid, IPlayerInputStateProvider playerInputStateProvider) {
 		for (Player player : this.players) {
-			// Get the input state for the current player.
-			IPlayerInputState playerInputState =  player.getParticipant().getPlayerInputState();
+			// Attempt to get the player input state for the current player.
+			IPlayerInputState playerInputState = playerInputStateProvider.getState(player.getParticipantId());
+			
+			// There is nothing to do if there was no input state available fro the player.
+			if (playerInputState == null) {
+				continue;
+			}
 
 			// Update the players current angle of view based on the input state.
 			player.setAngleOfView(playerInputState.getAngleOfView());
