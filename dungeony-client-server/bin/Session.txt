@@ -2,12 +2,9 @@ A session represents a running game.
 
 Composition
 ===========
-- The levels that are inhabited by players.
+- The level that is inhabited by all players.
 
-Each session can have multiple active levels at one time, and players can be spread across different levels.
-
-Each level will have an exit that is a ladder down (in boss room) and an entrance that is a ladder up (not on first floor)
-Interacting with either of these will move a player into a previous level or an upcoming level.
+Each session will have a single large level that players will have to escape.
 
 If at any point a players health reaches 0 then they are kicked from the session.
 
@@ -15,5 +12,4 @@ If at any point a players health reaches 0 then they are kicked from the session
 Tick
 ====
 Ticking a session will:
-1. Tick each active level and consume input for players in them.
-2. Return a queue of session events to be processed and potentaiily forwarded to players.
+1. Tick the level and consume input for players in them.
