@@ -1,6 +1,5 @@
 package com.dumbpug.dungeony.session;
 
-import java.util.ArrayList;
 import com.dumbpug.dungeony.session.events.SessionEventQueue;
 import com.dumbpug.dungeony.session.input.IPlayerInputState;
 import com.dumbpug.dungeony.session.input.IPlayerInputStateProvider;
@@ -16,9 +15,9 @@ public class Session {
 	 */
 	private SessionParticipants participants;
 	/**
-	 * The active levels in the session. 
+	 * The session level.
 	 */
-	private ArrayList<Level> levels = new ArrayList<Level>();
+	private Level level;
 	/**
 	 * The session seed.
 	 */
@@ -58,15 +57,13 @@ public class Session {
 	 * Initialise the session.
 	 */
 	public void initialise() {
-		// Create the initial level.
-		Level initialLevel = LevelFactory.createLevel(this.seed, 0, this.sessionEventQueue);
+		// Create the level!
+		// TODO This will take a little while, potentially a long while, eventually have this in another thread.
+		this.level = LevelFactory.createLevel(this.seed, this.sessionEventQueue);
 		
-		// Add the initial level to the list of active levels.
-		levels.add(initialLevel);
-		
-		// Add each participant to the initial level.
+		// Add each participant to the level as a player.
 		for (SessionParticipant participant : participants.getAll()) {
-			initialLevel.addPlayer(participant);
+			this.level.addPlayer(participant);
 		}
 	}
 	
@@ -74,15 +71,10 @@ public class Session {
 	 * Tick the session.
 	 */
 	public void tick() {		
-		// Tick every active level.
-		for (Level level : this.levels) {
-			if (level.isActive()) {
-				// Tick the active level, passing a player input provider with which to update players.
-				level.tick(playerInputStateProvider);
-			}
-		}
+		// Tick the active level, passing a player input provider with which to update players.
+		level.tick(playerInputStateProvider);
 		
-		// TODO Process any players that should be despawning from their current level and spawn them in the next.
+		// TODO Process any players that should be spawning/despawning.
 	}
 	
 	/**

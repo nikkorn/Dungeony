@@ -35,10 +35,6 @@ public class Level {
 	 * The collection of all players in the level.
 	 */
 	private Players players = new Players();
-	/**
-	 * The depth of the level.
-	 */
-	private int depth;
 	
 	/**
 	 * Creates a new instance of the Level class.
@@ -46,14 +42,12 @@ public class Level {
 	 * @param tiles The tiles that the level is composed of.
 	 * @param enemies The enemies in the level.
 	 * @param spatialGrid The spatial grid used to handle collisions between level entities.
-	 * @param depth The depth of the level.
 	 */
-	public Level(SessionEventQueue sessionEventQueue, Tiles tiles, Enemies enemies, SpatialGrid<ICollidableEntity> spatialGrid, int depth) {
+	public Level(SessionEventQueue sessionEventQueue, Tiles tiles, Enemies enemies, SpatialGrid<ICollidableEntity> spatialGrid) {
 		this.sessionEventQueue = sessionEventQueue;
 		this.tiles             = tiles;
 		this.enemies           = enemies;
 		this.spatialGrid       = spatialGrid;
-		this.depth             = depth;
 	}
 	
 	/**
@@ -62,31 +56,6 @@ public class Level {
 	 */
 	public Tiles getTiles() {
 		return this.tiles;
-	}
-	
-	/**
-	 * Gets the players in the level.
-	 * @return The players in the level.
-	 */
-	public Players getPlayers() {
-		return this.players;
-	}
-	
-	/**
-	 * Gets the level depth.
-	 * @return The level depth.
-	 */
-	public int getDepth() {
-		return this.depth;
-	}
-	
-	/**
-	 * Gets whether the level is active.
-	 * @return Whether the level is active.
-	 */
-	public boolean isActive() {
-		// A level is only active if there are participating players in it.
-		return this.players.any();
 	}
 	
 	/**
@@ -116,7 +85,7 @@ public class Level {
 		Player player = new Player(participant.getId(), safeSpawnPosition);
 		
 		// Add a 'PlayerSpawn' event to the session event queue.
-		this.sessionEventQueue.add(new PlayerSpawnEvent(participant.getId(), this.depth, safeSpawnPosition.copy()));
+		this.sessionEventQueue.add(new PlayerSpawnEvent(participant.getId(), safeSpawnPosition.copy()));
 		
 		// Add the player to the spatial grid used to handle collisions between level entities.
 		this.spatialGrid.add(player);
@@ -134,7 +103,7 @@ public class Level {
 		Player player = this.players.getPlayerForParticipant(participant.getId());
 		
 		// Add a 'PlayerDespawn' event to the session event queue.
-		this.sessionEventQueue.add(new PlayerDespawnEvent(participant.getId(), this.depth));
+		this.sessionEventQueue.add(new PlayerDespawnEvent(participant.getId()));
 		
 		// Remove the player from the spatial grid used to handle collisions between level entities.
 		this.spatialGrid.remove(player);

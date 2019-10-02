@@ -8,19 +8,13 @@ public class PlayerDespawnEvent implements ISessionEvent {
 	 * The id of the client represented by the despawning player.
 	 */
 	private int clientId;
-	/**
-	 * The depth of the level at which the player is despawning.
-	 */
-	private int depth;
 	
 	/**
 	 * Creates a new instance of the PlayerDespawnEvent class.
 	 * @param id The id of the client represented by the despawning player.
-	 * @param depth The depth of the level at which the player is despawning.
 	 */
-	public PlayerDespawnEvent(int clientId, int depth) {
+	public PlayerDespawnEvent(int clientId) {
 		this.clientId = clientId;
-		this.depth    = depth;
 	}
 	
 	/**
@@ -29,14 +23,6 @@ public class PlayerDespawnEvent implements ISessionEvent {
 	 */
 	public int getClientId() {
 		return this.clientId;
-	}
-	
-	/**
-	 * Gets the level depth.
-	 * @return The level depth.
-	 */
-	public int getDepth() {
-		return this.depth;
 	}
 
 	@Override

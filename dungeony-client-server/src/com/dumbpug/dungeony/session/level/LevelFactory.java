@@ -25,11 +25,10 @@ public class LevelFactory {
 	/**
 	 * Create a Level instance.
 	 * @param seed The seed to use in level generation.
-	 * @param depth The level depth.
 	 * @param sessionEventQueue The session event queue.
 	 * @return A Level instance.
 	 */
-	public static Level createLevel(long seed, int depth, SessionEventQueue sessionEventQueue) {
+	public static Level createLevel(long seed, SessionEventQueue sessionEventQueue) {
 		// Create the spatial grid that will be used to process collisions between level entities.
 		SpatialGrid<ICollidableEntity> levelSpatialGrid = new SpatialGrid<ICollidableEntity>(Constants.LEVEL_SPATIAL_GRID_CELL_SIZE);
 		
@@ -37,11 +36,8 @@ public class LevelFactory {
 		DunGenConfiguration configuration = new dungen.DunGenConfiguration();
 		configuration.seed                = seed;
 		
-		// Get the room resources directory to use in generating a dungeon based on the level depth.
-		String roomResourcesDirectory = getRoomResourcesDirectoryForDepth(depth);
-		
 		// Generate the dungeon!
-		Dungeon dungeon = DunGen.generate(roomResourcesDirectory, configuration);
+		Dungeon dungeon = DunGen.generate("rooms/first", configuration);
 		
 		// Create the level tiles.
 		Tiles tiles = createLevelTiles(dungeon, levelSpatialGrid);
@@ -50,7 +46,7 @@ public class LevelFactory {
 		Enemies enemies = createLevelEnemies(dungeon, levelSpatialGrid);
 		
 		// Create and return the actual level.
-		return new Level(sessionEventQueue, tiles, enemies, levelSpatialGrid, depth);
+		return new Level(sessionEventQueue, tiles, enemies, levelSpatialGrid);
 	}
 	
 	/**
@@ -71,7 +67,7 @@ public class LevelFactory {
 			// Add the tile to the level spatial grid.
 			levelSpatialGrid.add(tile);
 			
-			// Add the tiel to the list of level tiles.
+			// Add the tile to the list of level tiles.
 			levelTiles.add(tile);
 		}
 		
@@ -111,29 +107,6 @@ public class LevelFactory {
 		
 		// Return the enemies collection.
 		return new Enemies(levelEnemies);
-	}
-	
-	/**
-	 * Gets the room resources directory to use based on the level depth.
-	 * @param depth The level depth
-	 * @return The room resources directory to use based on the level depth.
-	 */
-	private static String getRoomResourcesDirectoryForDepth(int depth) {
-		if (depth == 0) {
-			return "rooms/first";
-		} else if (depth <= 3) {
-			return "rooms/very_easy";
-		} else if (depth <= 6) {
-			return "rooms/easy";
-		} else if (depth <= 10) {
-			return "rooms/normal";
-		} else if (depth <= 14) {
-			return "rooms/hard";
-		} else if (depth <= 18) {
-			return "rooms/very_hard";
-		} else {
-			return "rooms/super_hard";
-		}
 	}
 	
 	/**
