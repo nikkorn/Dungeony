@@ -23,30 +23,48 @@ import dungen.tile.ITileDetails;
 public class LevelFactory {
 	
 	/**
-	 * Create a Level instance.
+	 * Attempt to asynchronously create a Level instance.
 	 * @param seed The seed to use in level generation.
 	 * @param sessionEventQueue The session event queue.
-	 * @return A Level instance.
+	 * @return The level creation result.
 	 */
-	public static Level createLevel(long seed, SessionEventQueue sessionEventQueue) {
-		// Create the spatial grid that will be used to process collisions between level entities.
-		SpatialGrid<ICollidableEntity> levelSpatialGrid = new SpatialGrid<ICollidableEntity>(Constants.LEVEL_SPATIAL_GRID_CELL_SIZE);
+	public static LevelCreationResult createLevel(long seed, SessionEventQueue sessionEventQueue) {
+		// Create the level creation result.
+		LevelCreationResult result = new LevelCreationResult();
 		
-		// Create a new DunGen configuration and set the provided seed.
-		DunGenConfiguration configuration = new dungen.DunGenConfiguration();
-		configuration.seed                = seed;
+		// Create a thread in which to attempt the generation ouf our level.
+		// This is an expensive operation and can take a considerable amount of time.
+		Thread generatorThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// Create the spatial grid that will be used to process collisions between level entities.
+				SpatialGrid<ICollidableEntity> levelSpatialGrid = new SpatialGrid<ICollidableEntity>(Constants.LEVEL_SPATIAL_GRID_CELL_SIZE);
+				
+				// Create a new DunGen configuration and set the provided seed.
+				DunGenConfiguration configuration = new dungen.DunGenConfiguration();
+				configuration.seed                = seed;
+				
+				// Generate the dungeon!
+				Dungeon dungeon = DunGen.generate("rooms/first", configuration);
+				
+				// Create the level tiles.
+				Tiles tiles = createLevelTiles(dungeon, levelSpatialGrid);
+				
+				// Create the level enemies.
+				Enemies enemies = createLevelEnemies(dungeon, levelSpatialGrid);
+				
+				// Set the level in the level creation result.
+				result.setLevel(new Level(sessionEventQueue, tiles, enemies, levelSpatialGrid));
+			}
+		});
 		
-		// Generate the dungeon!
-		Dungeon dungeon = DunGen.generate("rooms/first", configuration);
+		// The level generation thread should not prevent the main application thread from terminating.
+		generatorThread.setDaemon(true);
 		
-		// Create the level tiles.
-		Tiles tiles = createLevelTiles(dungeon, levelSpatialGrid);
+		// Lets attempt to generate a level!
+		generatorThread.start();
 		
-		// Create the level enemies.
-		Enemies enemies = createLevelEnemies(dungeon, levelSpatialGrid);
-		
-		// Create and return the actual level.
-		return new Level(sessionEventQueue, tiles, enemies, levelSpatialGrid);
+		return result;
 	}
 	
 	/**

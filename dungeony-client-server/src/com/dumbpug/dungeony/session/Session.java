@@ -4,6 +4,7 @@ import com.dumbpug.dungeony.session.events.SessionEventQueue;
 import com.dumbpug.dungeony.session.input.IPlayerInputState;
 import com.dumbpug.dungeony.session.input.IPlayerInputStateProvider;
 import com.dumbpug.dungeony.session.level.Level;
+import com.dumbpug.dungeony.session.level.LevelCreationResult;
 import com.dumbpug.dungeony.session.level.LevelFactory;
 
 /**
@@ -19,9 +20,9 @@ public class Session {
 	 */
 	private Level level;
 	/**
-	 * The session seed.
+	 * The result of the level generation attempt made on creating this session.
 	 */
-	private long seed;
+	private LevelCreationResult levelCreationResult;
 	/**
 	 * The session event queue populated with even information to be consumed by a session observer.
 	 */
@@ -34,14 +35,13 @@ public class Session {
 	/**
 	 * Creates a new instance of the Session class.
 	 * @param participant The session participants.
-	 * @param seed The seed to use throughout the session.
+	 * @param seed The session seed to use.
 	 */
 	public Session(SessionParticipants participants, long seed) {
 		this.participants = participants;
-		this.seed         = seed;
 		
 		// Create the player input state provider to be used as part of the session update.
-		this.playerInputStateProvider = new IPlayerInputStateProvider(){
+		this.playerInputStateProvider = new IPlayerInputStateProvider() {
 			@Override
 			public IPlayerInputState getState(int participantId) {
 				// Get the participant.
@@ -51,26 +51,30 @@ public class Session {
 				return participant != null ? participant.getPlayerInputState() : null;
 			}			
 		};
-	}
-	
-	/**
-	 * Initialise the session.
-	 */
-	public void initialise() {
-		// Create the level!
-		// TODO This will take a little while, potentially a long while, eventually have this in another thread.
-		this.level = LevelFactory.createLevel(this.seed, this.sessionEventQueue);
 		
-		// Add each participant to the level as a player.
-		for (SessionParticipant participant : participants.getAll()) {
-			this.level.addPlayer(participant);
-		}
+		// Attempt to create a level to use as part of this session.
+		this.levelCreationResult = LevelFactory.createLevel(seed, this.sessionEventQueue);
 	}
 	
 	/**
 	 * Tick the session.
 	 */
-	public void tick() {		
+	public void tick() {
+		// Has the level not been loaded yet?
+		if (this.level == null) {
+			// Has the level generation finished?
+			if (this.levelCreationResult.hasFinished()) {
+				// We have just finished creating a level!
+				this.level = this.levelCreationResult.getLevel();
+				
+				// Do stuff we need to do now that the session has a level.
+				onLevelCreated();
+			} else {
+				// We are still waiting for our level to be generated! Don't bother doing a session tick.
+				return;
+			}
+		}
+		
 		// Tick the active level, passing a player input provider with which to update players.
 		level.tick(playerInputStateProvider);
 		
@@ -84,6 +88,16 @@ public class Session {
 	public void consumeSessionEvents(ISessionEventConsumer eventConsumer) {
 		while (sessionEventQueue.hasNext()) {
 			eventConsumer.consume(sessionEventQueue.next());
+		}
+	}
+	
+	/**
+	 * Handle the eventual completion of a level being generated for this session.
+	 */
+	private void onLevelCreated() {
+		// Add each participant to the level as a player.
+		for (SessionParticipant participant : participants.getAll()) {
+			this.level.addPlayer(participant);
 		}
 	}
 }
