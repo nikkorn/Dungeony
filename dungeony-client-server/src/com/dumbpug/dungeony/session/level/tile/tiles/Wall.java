@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.Tile;
+import com.dumbpug.dungeony.session.level.tile.TileCategory;
 import com.dumbpug.dungeony.session.level.tile.TileType;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
@@ -24,8 +25,8 @@ public class Wall extends Tile {
 	}
 
 	@Override
-	public TileType getType() {
-		return TileType.WALL;
+	public TileCategory getCategory() {
+		return TileCategory.WALL;
 	}
 
 	@Override
@@ -40,4 +41,10 @@ public class Wall extends Tile {
 
 	@Override
 	public void onTick() {}
+	
+	@Override
+	public TileType getType() {
+		// TODO Figure this out based on other state!
+		return TileType.STONE_WALL;
+	}
 }

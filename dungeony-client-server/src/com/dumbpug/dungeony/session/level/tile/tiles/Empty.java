@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.Tile;
+import com.dumbpug.dungeony.session.level.tile.TileCategory;
 import com.dumbpug.dungeony.session.level.tile.TileType;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
@@ -24,8 +25,8 @@ public class Empty extends Tile {
 	}
 
 	@Override
-	public TileType getType() {
-		return TileType.EMPTY;
+	public TileCategory getCategory() {
+		return TileCategory.EMPTY;
 	}
 
 	@Override
@@ -40,4 +41,11 @@ public class Empty extends Tile {
 
 	@Override
 	public void onTick() {}
+	
+	@Override
+	public TileType getType() {
+		// TODO Figure out if we ever want tile types that represent something other than just an empty tile.
+		// This could be something like a hole, lava, water etc.
+		return TileType.EMPTY;
+	}
 }

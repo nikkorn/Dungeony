@@ -4,6 +4,22 @@ Message Pipeline
 ====================================================================================================
 Client -> Server
 ====================================================================================================
+name        : LOBBY_SLOT_COLOUR_CHANGE
+frequency   : Once whenever the player request a change of lobby colour.
+protocol    : TCP
+composition :
+- (1 byte) The colour id
+
+
+
+name        : LOBBY_SLOT_READY_CHANGE
+frequency   : Once whenever the player toggles whether they are ready to begin a session.
+protocol    : TCP
+composition :
+- (1 bit) IsReady
+
+
+
 name        : INPUT_STATE_CHANGED
 frequency   : Any time any of the buttons are pressed/depressed
 protocol    : TCP
@@ -64,6 +80,26 @@ composition :
 
 
 
+name        : PLAYER_SPAWN
+frequency   : Once when a player spawns into the level.
+protocol    : TCP
+composition :
+- (1 byte) The Player ID
+- (1 byte) The Player Colour ID
+- (2 bytes) X
+- (2 bytes) Y
+- (1 byte) The angle as a value to map to 360 degrees
+
+
+
+name        : PLAYER_DESPAWN
+frequency   : Once when a player despawns from the level.
+protocol    : TCP
+composition :
+- (1 byte) The Player ID
+
+
+
 name        : PLAYER_POSITION_UPDATE
 frequency   : Constantly
 protocol    : UDP
@@ -80,4 +116,23 @@ protocol    : UDP
 composition :
 - (1 byte) The Player ID
 - (1 byte) The angle as a value to map to 360 degrees
+
+
+
+name        : LEVEL_GENERATION
+frequency   : Once when the level is generated on session begin.
+protocol    : TCP
+composition :
+- (4 bytes) The number of tiles in the level.
+
+For Each Tile:
+	- (2 bytes) The type.
+	- (1 byte) The direction.
+	- (2 bytes) The x position.
+	- (2 bytes) The y position.
+	- (1 byte) The number of decorations on the tile.
+	
+	For Each Decoration:
+		- (2 bytes) The type.
+		- (1 byte) The direction.
 ====================================================================================================

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dumbpug.dungeony.session.item.ItemType;
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.Tile;
+import com.dumbpug.dungeony.session.level.tile.TileCategory;
 import com.dumbpug.dungeony.session.level.tile.TileType;
 import com.dumbpug.dungeony.session.level.tile.decoration.Decoration;
 
@@ -40,7 +41,7 @@ public class Door extends Tile {
 	public DoorType getDoorType() { return this.doorType; }
 
 	@Override
-	public TileType getType() { return TileType.DOOR; }
+	public TileCategory getCategory() { return TileCategory.DOOR; }
 
 	@Override
 	public boolean isWalkable() {
@@ -55,4 +56,10 @@ public class Door extends Tile {
 
 	@Override
 	public void onTick() {}
+
+	@Override
+	public TileType getType() {
+		// TODO Figure this out based on other door state!
+		return TileType.DOOR_NOLOCK_CLOSED;
+	}
 }

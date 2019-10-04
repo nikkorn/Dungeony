@@ -125,6 +125,12 @@ public abstract class Tile implements ICollidableEntity {
 	}
 	
 	/**
+	 * Gets the category of the tile.
+	 * @return The category of the tile.
+	 */
+	public abstract TileCategory getCategory();
+	
+	/**
 	 * Gets the type of the tile.
 	 * @return The type of the tile.
 	 */
