@@ -1,7 +1,6 @@
 package com.dumbpug.dungeony.session.level.tile;
 
 import java.util.ArrayList;
-
 import com.dumbpug.dungeony.session.level.Direction;
 import com.dumbpug.dungeony.session.level.tile.decoration.DecorationState;
 
@@ -9,6 +8,10 @@ import com.dumbpug.dungeony.session.level.tile.decoration.DecorationState;
  * The client-side representation of an updatable server-side tile.
  */
 public class TileState {
+	/**
+	 * The tile type.
+	 */
+	private TileType type;
 	/**
 	 * The tile-based x/y position.
 	 */
@@ -30,10 +33,19 @@ public class TileState {
 	 * @param decorations The decorations attached to the tile.
 	 */
 	public TileState(TileType type, int x, int y, Direction direction, ArrayList<DecorationState> decorations) {
+		this.type        = type;
 		this.x           = x;
 		this.y           = y;
 		this.direction   = direction;
 		this.decorations = decorations;
+	}
+	
+	/**
+	 * Gets the tile type.
+	 * @return The tile type.
+	 */
+	public TileType getType() {
+		return this.type;
 	}
 	
 	/**
@@ -52,7 +64,6 @@ public class TileState {
     	return this.y;
     }
     
-	
 	/**
 	 * Gets the direction of the tile.
 	 * @return The direction fo the tile.

@@ -1,0 +1,11 @@
+A swipe in a cardinal direction means walk one tile in the swiped direction if not blocked.
+
+Depending on what inventory slot is selected, tiles will be highlighted that the player can perform an action on. 
+E.g. If the selected item is a dagger then every enemy/interactable within a tile radius (N,S,E,W) will be highlighted and the player can click on one to use the item on it.
+E.g. If the selected item is a bow AND the ammo slot contains some valid ammo then every enemy/interactable within a range (mabe based on bow/ammo quality) (N,S,E,W) will be highlighted and the player can click on one to shoot at it.
+
+Consumable items are used by selecting them, maybe twice? or maybe the player will be highlighted if one is selected and the player has to click on them?
+
+whole inventory is shown in box at bottom of display. Either:
+-- helmet, armour, ammo, trinket slots.
+-- 12 selectable (only one at a time) slots on which items can be equipped and unequipped to helmet, armour, ammo, trinket slots or used as part of a swipe. Weapons are equipped simply by making them the selected item.
