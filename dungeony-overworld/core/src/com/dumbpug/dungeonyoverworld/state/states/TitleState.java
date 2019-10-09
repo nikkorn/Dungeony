@@ -15,7 +15,10 @@ public class TitleState extends State {
     public void onExit() {}
 
     @Override
-    public void update() {}
+    public void update() {
+        // Go straight to the game state for now.
+        this.changeState("GAME");
+    }
 
     @Override
     public void render(SpriteBatch batch) {}

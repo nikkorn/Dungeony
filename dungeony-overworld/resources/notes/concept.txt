@@ -1,3 +1,7 @@
+==================================================
+OVERVIEW
+==================================================
+
 A swipe in a cardinal direction means walk one tile in the swiped direction if not blocked.
 
 Depending on what inventory slot is selected, tiles will be highlighted that the player can perform an action on. 
@@ -9,3 +13,35 @@ Consumable items are used by selecting them, maybe twice? or maybe the player wi
 whole inventory is shown in box at bottom of display. Either:
 -- helmet, armour, ammo, trinket slots.
 -- 12 selectable (only one at a time) slots on which items can be equipped and unequipped to helmet, armour, ammo, trinket slots or used as part of a swipe. Weapons are equipped simply by making them the selected item.
+
+
+==================================================
+AREA
+==================================================
+
+An area consists of 10*15??? tiles.
+
+Each tile, for example a door, has:
+- A type. (e.g. door)
+- A description which might show when the tile is selected.
+- A getSprite() method that returns the tile sprite which can change based on internal tile state. (e.g. open, locked, smashed)
+- An isWalkable() method that returns whether entities can walk over the tile. (e.g. returns true if open or false if locked)
+- An isInteractable(Item item) method that gets whether the tile is interactable with the give item. (e.g. using a shield on the door would return true and the app could give a negative beep or something)
+- An onInteraction(Item item) method that is called when an item is used on the tile and returns a flag defining whether the item was consumed. (e.g. using an approproate key item will update the door to be unlocked and returns true because a key was used up.)
+- An onWalkedOn(Entity entity) method that is called when an entity first moves onto the tile when it is walkable.
+- A getAreaLink() method that returns an optional area link object that refers to another area and position that would have a corresponding area link that moves the player to the linked area when the tile is talked on.
+- A getContainer() method that optionally gets a container of takable items.
+
+Area Difficulty
+===============
+The difficulty of an area can increase (more likely) or descrease (less likely) based on the parent area that it is linked to.
+
+The colour of tiles in an area will be between green and red and will depend on the relative difference of difficulty with the previous (parent) area.
+e.g. 
+ - moving to an area 3 or more levels higher that the previous one will have a red theme.
+ - moving to an area 2 levels higher that the previous one will have an orange theme.
+ - moving to an area 1 level higher that the previous one will have a yellow theme.
+ - moving to an area with the same level as the previous one will have a blue theme.
+ - moving to an area with a lower level that the previous one will have a green theme.
+ 
+
