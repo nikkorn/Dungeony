@@ -8,6 +8,8 @@ Depending on what inventory slot is selected, tiles will be highlighted that the
 E.g. If the selected item is a dagger then every enemy/interactable within a tile radius (N,S,E,W) will be highlighted and the player can click on one to use the item on it.
 E.g. If the selected item is a bow AND the ammo slot contains some valid ammo then every enemy/interactable within a range (mabe based on bow/ammo quality) (N,S,E,W) will be highlighted and the player can click on one to shoot at it.
 
+Moving a tile, using a consumable or attacking all count as a player action, in response to which every other entity in the area can also do an action (e.g. move, attack player).
+
 Consumable items are used by selecting them, maybe twice? or maybe the player will be highlighted if one is selected and the player has to click on them?
 
 whole inventory is shown in box at bottom of display. Either:
@@ -23,6 +25,7 @@ An area consists of 10*15??? tiles.
 
 Each tile, for example a door, has:
 - A type. (e.g. door)
+- A variation which is a string defining a subtype, e.g. a stone wall variation may be "VERTICAL", "HORIZONTAL", "TOP_LEFT_CORNER", which will most likely just be used to determine sprites.
 - A description which might show when the tile is selected.
 - A getSprite() method that returns the tile sprite which can change based on internal tile state. (e.g. open, locked, smashed)
 - An isWalkable() method that returns whether entities can walk over the tile. (e.g. returns true if open or false if locked)
@@ -31,6 +34,16 @@ Each tile, for example a door, has:
 - An onWalkedOn(Entity entity) method that is called when an entity first moves onto the tile when it is walkable.
 - A getAreaLink() method that returns an optional area link object that refers to another area and position that would have a corresponding area link that moves the player to the linked area when the tile is talked on.
 - A getContainer() method that optionally gets a container of takable items.
+
+==================================================
+WORLD
+==================================================
+The world consists of many generated areas that are positioned in an x/y grid.
+
+There can be many x/y grids interconnected via area links attached to tiles within areas.
+
+Being at the edge of an area and attempting to move the off of the area will move the player into the adjoining area.
+TODO How do we link up free edge tiles between areas? Do we have always have an optional set 2 per side? 
 
 Area Difficulty
 ===============
