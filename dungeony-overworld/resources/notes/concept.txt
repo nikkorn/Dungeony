@@ -44,6 +44,13 @@ There can be many x/y grids interconnected via area links attached to tiles with
 
 Being at the edge of an area and attempting to move the off of the area will move the player into the adjoining area.
 TODO How do we link up free edge tiles between areas? Do we have always have an optional set 2 per side? 
+- The way we can do this is that some tiles around the edge of an area can be left walkable which means that they have to connect to walkable tiles in the adjoining area. But, tiles 
+  around the edge of an area can be not walkable (e.g. tree) BUT be marked as replacable with walkable tiles if it means that it can be linked to another area. For example tile A with 2 walkable tiles
+	on its east side can connect to a tile with no walkable tiles on its west side IF the 2 non-walkable tile positions are replacable.
+	
+In order for an area to be attacked to another, the touching walkable tiles on both areas MUST be the same tile type? Thi swould be good for enforcing
+that connecting areas are kind of similar. 
+
 
 Area Difficulty
 ===============
