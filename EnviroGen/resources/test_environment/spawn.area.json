@@ -1,0 +1,102 @@
+{
+	"name": "spawn",
+	"transitional": {
+		"out": [
+			{
+				"x": 2,
+				"y": 1,
+				"edge": "RIGHT",
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+            },
+            {
+				"x": 1,
+				"y": 0,
+				"edge": "TOP",
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+            },
+            {
+				"x": 1,
+				"y": 2,
+				"edge": "BOTTOM",
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+            },
+            {
+				"x": 0,
+				"y": 1,
+				"edge": "LEFT",
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+			}
+		]
+	},
+	"tiles": [
+		{
+			"x": 0,
+			"y": 0,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 1,
+			"y": 0,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 2,
+			"y": 0,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 0,
+			"y": 1,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 1,
+			"y": 1,
+			"type": "GRASS",
+			"variation": 2,
+			"entity": { 
+				"id": "SPAWN_POINT"
+			}
+		},
+		{
+			"x": 2,
+			"y": 1,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 0,
+			"y": 2,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 1,
+			"y": 2,
+			"type": "TREE",
+			"variation": 2
+		},
+		{
+			"x": 2,
+			"y": 2,
+			"type": "TREE",
+			"variation": 2
+		}
+	]
+}

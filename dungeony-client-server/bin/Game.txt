@@ -1,0 +1,4 @@
+The aim of the game is to either:
+
+- Work as a team to all escape the dungeon, aiming to get a high score in doing so.
+- Work as part of a team against other teams to escape the dungeon first.

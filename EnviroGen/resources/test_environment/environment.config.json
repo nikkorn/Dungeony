@@ -1,0 +1,9 @@
+{
+    "version": "0.0.1",
+    "initial_area_name": "spawn",
+    "area_tiles_wide": 3,
+    "area_tiles_high": 3,
+    "area_min_count": 4,
+    "area_max_count": 10,
+    "generation_retries": 500
+}

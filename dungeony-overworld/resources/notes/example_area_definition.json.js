@@ -18,9 +18,8 @@ const definition = {
 	
 	// The 'transitional' object defines the tiles around the edge of the area that can touch transitional tiles in an adjoining area.
 	//
-	// The 'in' object will always represent tiles on the side attached inwards (to an area closer to the initial area) to another area and its tiles should ALWAYS be walkable.
-	// For example, this example area MUST be attached below an area with a transitional tile in the same X position on the bottom row of tiles.
-	// An area MUST have an 'in' object defined, otherwise it simply cannot be attached to an inward area.
+	// The 'in' object will always represent tiles on the side attached inwards (to an area closer to the initial area) to another area and its tiles.
+	// An area MUST have an 'in' object defined if it is not the initial area, otherwise it simply cannot be attached to an inward area.
 	//
 	// The 'out' array defines all other transitional tiles that outward areas can attach to.
 	// They CANNOT be on the inward edge.
