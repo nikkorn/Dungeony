@@ -18,28 +18,21 @@ const definition = {
 	
 	// The 'transitional' object defines the tiles around the edge of the area that can touch transitional tiles in an adjoining area.
 	//
-	// The 'in' object will always represent tiles on the side attached inwards (to an area closer to the initial area) to another area and its tiles.
-	// An area MUST have an 'in' object defined if it is not the initial area, otherwise it simply cannot be attached to an inward area.
-	//
-	// The 'out' array defines all other transitional tiles that outward areas can attach to.
-	// They CANNOT be on the inward edge.
-	// It is preferable to have 'out' tiles as non-walkable tiles that are cleared and replaced with walkable tiles whenever an outwards area is attached.
-	// Any 'out' tiles can still reference already walkable tiles, but it makes it harder to generate an x/y grid of areas when you have more potential for un-closable edges.
+	// It is preferable to have tiles as non-walkable tiles that are cleared and replaced with walkable tiles whenever an outwards area is attached.
+	// Any tiles can still reference already walkable tiles, but it makes it harder to generate an x/y grid of areas when you have more potential for un-closable edges.
 	"transitional": {
-		"in": {
-			"edge": "TOP",
-			"tiles": [
-				{
-					"x": 1,
-					"y": 0
-				}
-			]
-		},
-		"out": [
+		"top": [
 			{
-				"x": 2,
-				"y": 1,
-				"edge": "RIGHT",
+				// Position is 'x' when TOP/BOTTOM.
+				"position": 1
+			}
+		],
+		"bottom": [],
+		"left": [],
+		"right": [
+			{
+				// Position is 'y' when RIGHT/LEFT.
+				"position": 1,
 				"cleared": { 
 					"type": "GRASS",
 					"variation": 2 
@@ -47,6 +40,9 @@ const definition = {
 			}
 		]
 	},
+	
+	// We can optionally define a whole IN edge if we require an area to be entered from a particular direction, otherwise it can be attached on any side as long as transitional tiles match up.
+	"entry": "TOP",
 
 	// The 'tiles' array represent ALL tiles within an area, regardless of whether they are transitional.
 	// Each has a unique x/y position within the area as well as a required type and optional variation (defaults to 0).

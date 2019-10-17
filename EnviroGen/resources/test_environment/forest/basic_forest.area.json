@@ -7,20 +7,36 @@
 		"max": 6
 	},
 	"transitional": {
-		"in": {
-			"edge": "TOP",
-			"tiles": [
-				{
-					"x": 1,
-					"y": 0
-				}
-			]
-		},
-		"out": [
+		"top": [
 			{
-				"x": 2,
-				"y": 1,
-				"edge": "RIGHT",
+				"position": 1,
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+			}
+		],
+		"bottom": [
+			{
+				"position": 1,
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+			}
+		],
+		"left": [
+			{
+				"position": 1,
+				"cleared": { 
+					"type": "GRASS",
+					"variation": 2 
+				}
+			}
+		],
+		"right": [
+			{
+				"position": 1,
 				"cleared": { 
 					"type": "GRASS",
 					"variation": 2 
@@ -38,7 +54,7 @@
 		{
 			"x": 1,
 			"y": 0,
-			"type": "GRASS",
+			"type": "TREE",
 			"variation": 2
 		},
 		{

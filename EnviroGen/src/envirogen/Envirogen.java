@@ -1,6 +1,8 @@
 package envirogen;
 
+import java.io.File;
 import java.util.Random;
+import envirogen.area.AreaBlueprintResourceReader;
 import envirogen.area.AreaBlueprints;
 import envirogen.generated.Environment;
 
@@ -16,14 +18,18 @@ public class Envirogen {
 	 * @return An environemnt.
 	 */
 	public static Environment generate(String configFilePath, long seed) {
+		// Get a handle for the 'environment.config.json' file.
+		File configurationFile = new File(configFilePath);
+		
 		// Create a Configuration instance based on 'environment.config.json'.
-		Configuration configuration = Configuration.fromFile(configFilePath);
+		Configuration configuration = Configuration.fromFile(configurationFile);
 		
 		// Create the RNG to use in generating the environemnt.
 		Random random = new Random(seed);
 		
-		// Create the collection of area blueprints to use in creating an environment.
-		AreaBlueprints areaBlueprints = createAreaBlueprints(configFilePath);
+		// Create the collection of area blueprints to use in creating an environment based on area resource
+		// files that share the same directory as the 'environment.config.json' configuration file.
+		AreaBlueprints areaBlueprints = AreaBlueprintResourceReader.getAreaBlueprints(configurationFile.getParentFile());
 		
 		// Keep track of the number of times we have attempted to create the environment and failed.
 		int generationFailureCount = 0;
@@ -49,29 +55,11 @@ public class Envirogen {
 	/**
 	 * Attempt the generation of an environment.
 	 * @param areaBlueprints The area blueprints.
-	 * @param configuration The generation configuration.
+	 * @param configuration \ generation configuration.
 	 * @param random The RNG to use.
 	 * @return The result of the attempt, null if failed.
 	 */
 	private static Environment attemptGeneration(AreaBlueprints areaBlueprints, Configuration configuration, Random random) {
-		
-		
-		
-		return null;
-	}
-	
-
-	/**
-	 * Creates the collection of area blueprints to use in creating an environment.
-	 * @param configFilePath
-	 * @return The collection of area blueprints to use in creating an environment.
-	 */
-	private static AreaBlueprints createAreaBlueprints(String configFilePath) {
-		
-		// TODO
-		// 1. Get all '*.area.json' files from the 'environment.config.json' directory down.
-		// 2. For each '*.area.json' file create an AreaBlueprint instance.
-		
 		return null;
 	}
 }
