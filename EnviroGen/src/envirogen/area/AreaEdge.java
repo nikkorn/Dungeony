@@ -4,6 +4,7 @@ package envirogen.area;
  * Enumeration of area edge types.
  */
 public enum AreaEdge {
+	UNDEFINED,
 	TOP,
 	BOTTOM,
 	LEFT,
@@ -24,7 +25,7 @@ public enum AreaEdge {
 			case RIGHT:
 				return AreaEdge.LEFT;
 			default:
-				throw new RuntimeException("cant find adjoining edge for " + this);
+				return AreaEdge.UNDEFINED;
 		}
 	}
 }

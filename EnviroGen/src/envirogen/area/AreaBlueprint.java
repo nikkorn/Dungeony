@@ -30,7 +30,7 @@ public class AreaBlueprint {
 	 * @return The edge of this area that can be attached to an already attached inward area.
 	 */
 	public AreaEdge getAttachingEdge() {
-		// TODO This is determined by which area edge our 'in' transitional tiles are on.
+		// TODO This is determined by which area edge our 'in' is on, or AreaEdge.UNDEFINED.
 		return AreaEdge.LEFT;
 	}
 	

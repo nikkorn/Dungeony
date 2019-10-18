@@ -98,12 +98,6 @@ const definition = {
 			"y": 2,
 			"type": "TREE",
 			"variation": 2
-		},
-		{
-			"x": 2,
-			"y": 2,
-			"type": "TREE",
-			"variation": 2
 		}
 	]
 };

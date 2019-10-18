@@ -1,11 +1,11 @@
 package envirogen.area;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import org.json.JSONObject;
+
+import envirogen.Configuration;
+import envirogen.Utility;
 
 public class AreaBlueprintResourceReader {
 	/**
@@ -15,10 +15,11 @@ public class AreaBlueprintResourceReader {
 	
 	/**
 	 * Get all area blueprints from the given directory.
+	 * @param configuration The application configuration.
 	 * @param resourceDirectory The area resource directory.
 	 * @return All area blueprints from the given directory.
 	 */
-	public static AreaBlueprints getAreaBlueprints(File resourceDirectory) {
+	public static AreaBlueprints getAreaBlueprints(Configuration configuration, File resourceDirectory) {
 		// The file must exist and be a directory for us to continue.
 		if (!resourceDirectory.exists() || !resourceDirectory.isDirectory()) {
 			throw new RuntimeException("area resource directory '" + resourceDirectory.getAbsolutePath() + "' does not exist or is a file");
@@ -32,7 +33,7 @@ public class AreaBlueprintResourceReader {
 		
 		// Get the contents of every area definition file and convert it to an actual AreaBlueprint.
 		for (File areaResourceFile : areaResourceFiles) {
-			blueprints.add(AreaBlueprintFactory.create(new JSONObject(getFileContents(areaResourceFile))));
+			blueprints.add(AreaBlueprintFactory.create(new JSONObject(Utility.getFileContents(areaResourceFile)), configuration));
 		}
 		
 		return new AreaBlueprints(blueprints);
@@ -69,19 +70,6 @@ public class AreaBlueprintResourceReader {
 					found.add(file);
 				}
 			}
-		}
-	}
-	
-	/**
-	 * Get the contents of the specified file.
-	 * @param file The file to read from.
-	 * @return The contents of the specified file.
-	 */
-	private static String getFileContents(File file) {
-		try {
-			return new String(Files.readAllBytes(Paths.get(file.getPath())));
-		} catch (IOException e) {
-			throw new RuntimeException("cannot read test from file: " + file.getAbsolutePath());
 		}
 	}
 }

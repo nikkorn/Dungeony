@@ -21,6 +21,11 @@ public class Envirogen {
 		// Get a handle for the 'environment.config.json' file.
 		File configurationFile = new File(configFilePath);
 		
+		// Our config file better exist otherwise there will be trouble.
+		if (!configurationFile.getName().toLowerCase().equals("environment.config.json") || !configurationFile.exists()) {
+			throw new RuntimeException("the file '" + configFilePath + "' is not a valid 'environment.config.json' file");
+		}
+		
 		// Create a Configuration instance based on 'environment.config.json'.
 		Configuration configuration = Configuration.fromFile(configurationFile);
 		
@@ -29,7 +34,7 @@ public class Envirogen {
 		
 		// Create the collection of area blueprints to use in creating an environment based on area resource
 		// files that share the same directory as the 'environment.config.json' configuration file.
-		AreaBlueprints areaBlueprints = AreaBlueprintResourceReader.getAreaBlueprints(configurationFile.getParentFile());
+		AreaBlueprints areaBlueprints = AreaBlueprintResourceReader.getAreaBlueprints(configuration, configurationFile.getParentFile());
 		
 		// Keep track of the number of times we have attempted to create the environment and failed.
 		int generationFailureCount = 0;
