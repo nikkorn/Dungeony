@@ -3,7 +3,6 @@ package envirogen.area;
 import java.io.File;
 import java.util.ArrayList;
 import org.json.JSONObject;
-
 import envirogen.Configuration;
 import envirogen.Utility;
 
@@ -33,7 +32,7 @@ public class AreaBlueprintResourceReader {
 		
 		// Get the contents of every area definition file and convert it to an actual AreaBlueprint.
 		for (File areaResourceFile : areaResourceFiles) {
-			blueprints.add(AreaBlueprintFactory.create(new JSONObject(Utility.getFileContents(areaResourceFile)), configuration));
+			blueprints.add(AreaBlueprintFactory.createAreaBlueprint(new JSONObject(Utility.getFileContents(areaResourceFile)), configuration));
 		}
 		
 		return new AreaBlueprints(blueprints);

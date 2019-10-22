@@ -12,6 +12,10 @@ public class AreaBlueprints {
 	 * The list of area blueprints.
 	 */
 	private ArrayList<AreaBlueprint> blueprints;
+	/**
+	 * The blueprint of the initial area.
+	 */
+	private AreaBlueprint initialAreaBlueprint;
 	
 	/**
 	 * Creates a new instance of the AreaBlueprints class.
@@ -22,6 +26,17 @@ public class AreaBlueprints {
 		
 		// Check for duplicate area names and throw an exception if one is found.
 		checkForAreaDuplicates();
+		
+		// Verify and set the initial area blueprint.
+		setInitialAreaBlueprint();
+	}
+	
+	/**
+	 * Gets the blueprint of the initial area.
+	 * @return The blueprint of the initial area.
+	 */
+	public AreaBlueprint getInitialAreaBlueprint() {
+		return initialAreaBlueprint;
 	}
 	
 	/**
@@ -37,5 +52,25 @@ public class AreaBlueprints {
 			
 			areaNames.add(blueprint.getName());
 		}
+	}
+	
+	/**
+	 * Verify and set the initial area blueprint.
+	 */
+	private void setInitialAreaBlueprint() {
+		ArrayList<AreaBlueprint> initialAreaBlueprints = new ArrayList<AreaBlueprint>();
+		
+		for (AreaBlueprint blueprint : this.blueprints) {
+			if (blueprint.isInitialArea()) {
+				initialAreaBlueprints.add(blueprint);
+			}
+		}
+		
+		// We should only ever have a single initial area blueprint.
+		if (initialAreaBlueprints.size() != 1) {
+			throw new RuntimeException("single initial area should be defined but '" + initialAreaBlueprints.size() + "' were found!" );
+		}
+		
+		initialAreaBlueprint = initialAreaBlueprints.get(0);
 	}
 }

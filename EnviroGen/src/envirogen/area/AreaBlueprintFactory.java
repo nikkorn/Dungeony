@@ -14,7 +14,7 @@ public class AreaBlueprintFactory {
 	 * @param configuration The application configuration.
 	 * @return An area blueprint based on a JSON definition.
 	 */
-	public static AreaBlueprint create(JSONObject definition, Configuration configuration) {
+	public static AreaBlueprint createAreaBlueprint(JSONObject definition, Configuration configuration) {
 		// Check that we have the required properties.
 		if (!definition.has("name")) {
 			throw new RuntimeException("expected 'name' to be defined for area");
@@ -27,12 +27,25 @@ public class AreaBlueprintFactory {
 		if (!definition.has("tiles") || definition.getJSONArray("tiles").length() != configuration.getAreaTilesCount()) {
 			throw new RuntimeException("expected 'tiles' for area '" + name + "' to be defined and have a length of '" + configuration.getAreaTilesCount() + "'");
 		}
+				
+		// Get whether this area is the initial one.
+		boolean isInitialArea = name.toLowerCase().equals(configuration.getInitialAreaName().toLowerCase());
 		
 		// Get the edge of entry for the area if it is defined.
 		AreaEdge entryEdge = definition.has("entry") ? 
 				AreaEdge.valueOf(definition.getString("entry").toUpperCase()) : 
 				AreaEdge.UNDEFINED;
 		
-		return new AreaBlueprint(name);
+		return new AreaBlueprint(name, isInitialArea, entryEdge);
+	}
+	
+	/**
+	 * Create a tile based on a JSON definition.
+	 * @param definition The JSON definition of the tile.
+	 * @return A tile based on a JSON definition.
+	 */
+	public static AreaBlueprint createTile(JSONObject definition, Configuration configuration) {
+		
+		return null;
 	}
 }
