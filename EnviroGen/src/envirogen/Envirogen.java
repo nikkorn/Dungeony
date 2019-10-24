@@ -65,6 +65,21 @@ public class Envirogen {
 	 * @return The result of the attempt, null if failed.
 	 */
 	private static Environment attemptGeneration(AreaBlueprints areaBlueprints, Configuration configuration, Random random) {
-		return null;
+		// Create the buildable environment.
+		BuildableEnvironment buildableEnvironment = new BuildableEnvironment(areaBlueprints.getInitialAreaBlueprint(), configuration);
+		
+		// Keep trying to attach new areas to the buildable environemnt until the environment is complete.
+		while (!buildableEnvironment.isComplete()) {
+			// Try to attach a new area and get whether we were able to do so.
+			boolean attachmentMade = buildableEnvironment.attach(areaBlueprints);
+			
+			// If we werent able to make any attachment then we cannot move formward with the current attempt.
+			if (!attachmentMade) {
+				return null;
+			}
+		}
+		
+		// We have completed building a complete environment, return it now.
+		return buildableEnvironment.toEnvironment();
 	}
 }
