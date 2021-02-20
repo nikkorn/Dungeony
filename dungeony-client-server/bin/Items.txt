@@ -1,9 +1,0 @@
-Items can be in one of two states:
-1. Stacked in one of 10 player inventory slots.
-2. Stacked as a dropped item floating just above the ground which can be picked up.
-
-
-Items can be dropped by:
-1. Players holding an item and pressing the 'drop' button.
-2. Enemies on being killed.
-3. Objects either being destroyed or interacted with.

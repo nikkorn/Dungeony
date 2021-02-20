@@ -1,7 +1,0 @@
-Items can be crafted from other items at anvils.
-
-There is a percentage of a chance to fail in making an item and wasting the resources, a better crafting skill lessens that chances.
-Better items will have a much higher chance to fail.
-
-On succesfully crafting an item, a hammer sound and sparks should spring up from the anvil.
-On failing to craft an item, a dull hammer sound will play without sparks.

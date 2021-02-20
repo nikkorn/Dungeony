@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<body>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="js/constants.js"></script>
+<script src="js/utility.js"></script>
+<script src="js/lotto.js"></script>
+<script src="js/anchor.js"></script>
+<script src="js/cell.js"></script>
+<script src="js/rooms.js"></script>
+<script src="js/entityProcessor.js"></script>
+<script src="js/generator.js"></script>
+
+<svg id="dungeon" width="1000" height="1000" class="element-vertical">
+  <rect width="1000" height="1000" style="fill:rgb(0,0,0)" />
+</svg>
+ 
+</body>
+<script>
+
+/**
+ * Set a space in the dungeon.
+ */
+function setSpace(x, y, colour)
+{
+  // Draw the space on the dungeon area SVG.
+  var rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+  rect.setAttributeNS(null, 'x', (x * 3) + 500);
+  rect.setAttributeNS(null, 'y', (y * 3) + 500);
+  rect.setAttributeNS(null, 'height', 3);
+  rect.setAttributeNS(null, 'width', 3);
+  rect.setAttributeNS(null, 'fill', colour);
+  document.getElementById('dungeon').appendChild(rect);
+};
+
+const ENTITY_COLOUR = {
+  // Misc
+  "spawn_panel": "#e1ffd6",
+
+  // Containers
+  "pot": "#8c5a19",
+  "ultra_rare_chest": "#f4f1c1",
+  "rare_chest": "#fff65b",
+  "common_chest": "#ede010",
+
+  // Enemies
+  "bat": "#FF0000",
+  "bat_strong": "#FF0000",
+  "zombie": "#FF0000",
+  "zombie_strong": "#FF0000",
+  "ghost": "#FF0000",
+  "ghost_strong": "#FF0000",
+  "boss": "#FF0000"
+};
+
+const ROOM_CATEGORY_COLOUR = {
+  "boss": "#7d7f76",
+  "shop": "#ad42f4"
+};
+
+const DEPTH_COLOUR = [
+  "#0069E5",
+  "#00A7E2",
+  "#00DFDB",
+  "#00DC9A",
+  "#00DA5B",
+  "#00D71E",
+  "#1DD400",
+  "#58D200",
+  "#91CF00",
+  "#C8CC00",
+  "#C99500",
+  "#C75B00",
+  "#C42300",
+  "#C10013",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048",
+  "#BF0048"
+];
+
+const tileColourProviders = {
+  [TILE.WALL]: (tile) => "#FFFFFF",
+  [TILE.DOOR]: (tile) => DEPTH_COLOUR[tile.depth],
+  [TILE.ROOM]: (tile) => ENTITY_COLOUR[(tile.entity || {}).id] || ROOM_CATEGORY_COLOUR[tile.room.category] || DEPTH_COLOUR[tile.depth]
+}
+
+const tiles = new Generator().generate();
+
+tiles.forEach(tile => setSpace(tile.x, tile.y, tileColourProviders[tile.type](tile)));
+
+</script>
+</html>

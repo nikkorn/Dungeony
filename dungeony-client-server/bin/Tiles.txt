@@ -1,6 +1,0 @@
-Generation
-==========
-
-Level tiles will be generated using DunGen.
-
-The tiles that DunGen produces will be coerced into actual tiles/decorator models that the level expects.

@@ -1,0 +1,288 @@
+Generation happens by placing pre-made rooms made up of multiples of 7*7 tiles, where 7*7 tiles is 1 dungeon grid cell.
+
+All rooms will hang of the player spawn room which will be at cell position 0/0.
+
+Each room will be represented by an array of 7*7 dungeon grid cells, where each cell has:
+    - Whether the cell is the entrance cell (links up to an existing room)
+    - If the entrance cell, the direction at which it attaches to an existing room.
+    - If the entrance cell, the type of door that is generated at which it attaches to an existing room.
+    - A x/y dungeon grid cell positions relative to the entrance cell where the entrance cell has a dungeon cell position of 0/0.
+    - relative x/y positioned contents.
+    - The type of door that is made between it and the existing dungeon grid cell that it attaches to.
+
+Rooms have an optional range, which defines the range at which it can be generated, based on its entracne cell position.
+
+Rooms will have am optional spawn chance, which will be evaluated once per generation.
+
+Example:
+
+{
+    name: "empty_3*1_room",
+    cells: {
+        {
+            position: { x: 0, y: 0 },
+            entrance: Direction.EAST,
+            door: Door.THREE_KEYS,
+            contents: []
+        },
+        {
+            position: { x: -1, y: 0 },
+            contents: []
+        },
+        {
+            position: { x: -2, y: 0 },
+            blocked: [
+                Direction.EAST
+            ],
+            contents: []
+        }
+    }
+}
+
+ENTITY GENERATION
+
+The entties array contains a nested structure of objects which expose either:
+- ID if the object represents an entity to generate.
+- PARTICIPANTS with an array of other objects which MUST have a ticket count each.
+- ENTITIES Multiple objects of any of these three types.
+
+Example: A 1 in 4 chance to generate a ultra rare chest at 2/2.
+entities: [
+    {
+        participants: [
+            {
+                tickets: 1,
+                x: 2,
+                y: 2,
+                id: "ultra_rare_chest", 
+                direction: DIRECTION.EAST 
+            },
+            {
+                tickets: 3,
+                x: 2,
+                y: 2,
+                id: "rare_chest", 
+                direction: DIRECTION.EAST 
+            }
+        ]
+    }
+]
+
+Example: 
+    A 1 in 4 chance to get a 'pot' as 2/2.
+    OR
+    A 3 in 4 chance to get:
+        A 1 in 2 chance to get a box at 4/4
+        OR
+        A 1 in 2 chance to get:
+            A box at 3/3
+            AND
+            A 1 in 4 chance to get:
+                nothing
+                OR
+                A 3 in 4 chance to get a pickle at 2/2
+
+entities: [
+    {
+        participants: [
+            { 
+                tickets: 1,
+                x: 2,
+                y: 2,
+                id: "pot", 
+                direction: DIRECTION.EAST 
+            },
+            { 
+                tickets: 3, 
+                participants: [
+                    { 
+                        tickets: 1,
+                        x: 4,
+                        y: 4,
+                        id: "box", 
+                        direction: DIRECTION.EAST 
+                    },
+                    { 
+                        tickets: 1, 
+                        entities: [
+                            { 
+                                x: 3,
+                                y: 3,
+                                id: "box", 
+                                direction: DIRECTION.EAST 
+                            },
+                            { 
+                                participants: [
+                                    {
+                                        tickets: 1
+                                    },
+                                    {
+                                        tickets: 3,
+                                        x: 2,
+                                        y: 2,
+                                        id: "pickle", 
+                                        direction: DIRECTION.EAST 
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
+
+TERMINOLOGY
+
+CELL
+A cell is tile-based position in a dungeon that can be empty or be made up of a square collection of tiles that represent all or part of a room.
+
+ANCHOR
+An empty cell at which an entrance cell of a room can be placed, it also defines in which direction this link happens.
+
+CONTENTS
+Each cell will define its contents. This is a relative x/y tile positioned entity with either:
+     - An id (required), 
+     - A facing direction (optional, random if not defined)
+     - A spawn chance (optional)
+
+     OR
+
+     An array of participants from which one will be randomly picked based on a lotto, each with:
+     - An id (optional, if not provided then if this is the winner then nothing will be generated), 
+     - A facing direction (optional, random if not defined)
+     - The number of tickets held (required)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Simple with possible doors on each side, if an adjacent room is not generated then the door wont exist.
+### ###
+#     #
+#     #
+
+#     #
+#     #
+### ###
+
+Room with only one door, good for restricting access.
+### ###
+#     #
+#     #
+#     # 
+#     #
+#     #
+#######
+
+Coridoor.
+### ###
+#     #
+#     #
+#     # 
+#     #
+#     #
+### ###
+
+Double room 14*7 with a few possible doors
+### ##########
+#            #
+#            #
+#             
+#            #
+#            #
+########## ###
+

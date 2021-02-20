@@ -1,7 +1,0 @@
-Potions can be crafted from other raw materials at cauldrons.
-
-There is a percentage of a chance to fail in making an item and wasting the resources, a better alchemy skill lessens that chance.
-Better items will have a much higher chance to fail.
-
-On crafting an item, a splash sound and smoke should rise up from the cauldron.
-On failing to craft an item, a dull sizzle sound will play without smoke.

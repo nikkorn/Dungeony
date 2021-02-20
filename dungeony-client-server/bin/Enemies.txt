@@ -1,9 +1,0 @@
-Enemies will spawn on tiles throughout each level.
-
-The level depth will impact the enemy stats, which are:
-1. Speed
-2. Perception (how easily they can spot a player)
-3. Health
-4. Attack
-
-Enemies can have a number of categories (e.g. beast, magical, poison).
