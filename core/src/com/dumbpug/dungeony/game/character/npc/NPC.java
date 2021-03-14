@@ -73,7 +73,7 @@ public abstract class NPC extends GameCharacter {
         if (this.behaviour != null) {
             this.behaviour.setUp(this, environment, delta);
             this.behaviour.onBeforeTick();
-            this.behaviour.onTick();
+            this.behaviour.onTick(delta);
             this.behaviour.onAfterTick();
         }
     }

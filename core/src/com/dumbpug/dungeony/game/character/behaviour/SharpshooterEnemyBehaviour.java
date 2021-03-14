@@ -5,7 +5,7 @@ import com.dumbpug.dungeony.game.character.npc.NPC;
 
 public class SharpshooterEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC>  {
     @Override
-    public void onTick() {
+    public void onTick(float delta) {
         // There is nothing to do if the enemy is dead.
         if (inState(GameCharacterState.DEAD)) {
             return;

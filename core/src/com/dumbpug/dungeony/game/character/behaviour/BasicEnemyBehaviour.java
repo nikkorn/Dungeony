@@ -29,7 +29,7 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
     /**
      * Tick the NPC behaviour.
      */
-    public void onTick() {
+    public void onTick(float delta) {
         // There is nothing to do if the enemy is dead.
         if (inState(GameCharacterState.DEAD)) {
             return;
@@ -102,9 +102,11 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
             // Attempt to walk towards the target position.
             walkTowards(this.targetPosition);
 
-            // If we tried to walk towards the target position but we didn't actually move then we can assume we are stuck and should give up on reaching the target.
-            // TODO This should include some small number check as we also don't want to be slowly dragging across walls.
-            if (subject.getX() == initialXPosition && subject.getY() == initialYPosition) {
+            boolean isXMovementNegligible = Math.abs(subject.getX() - initialXPosition) < (Constants.ENEMY_AI_PLAYER_TRACKING_NEGLIGIBLE_MOVEMENT_PS * delta);
+            boolean isYMovementNegligible = Math.abs(subject.getY() - initialYPosition) < (Constants.ENEMY_AI_PLAYER_TRACKING_NEGLIGIBLE_MOVEMENT_PS * delta);
+
+            // If we tried to walk towards the target position but we didn't actually move, or our movement was negligible, then we can assume we are stuck and should give up on reaching the target.
+            if (isXMovementNegligible && isYMovementNegligible) {
                 this.targetPosition = null;
             }
         }

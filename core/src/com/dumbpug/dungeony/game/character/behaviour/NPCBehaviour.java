@@ -370,5 +370,5 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * Tick the NPC behaviour.
      */
-    public abstract void onTick();
+    public abstract void onTick(float delta);
 }
