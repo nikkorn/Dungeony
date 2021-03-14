@@ -71,29 +71,32 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
                 }
             }
 
-            // If we are too far away from the player then we should try to get closer.
-            // If we are too close then maybe we want to move away.
-            // If we already have a target position then we don't really want to do anything.
-            // TODO Make this be based on weapon type.
-            if (this.targetPosition != null) {
-                // We are currently moving towards a target position so there is no reason to set another one for now.
-            } else if (this.movementCooldown > 0l) {
-                // We cannot set a target position at the moment asa we have a movement cooldown to wait for.
-            } else if (distanceTo(this.targetPlayer) > Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MAXIMUM) {
-                // Get the angle to follow towards the target player.
-                float angleToFollow = angleTo(this.targetPlayer);
+            // We should try to pick a target position to walk to if we don't have one already or we are waiting for a movement cooldown.
+            if (this.targetPosition == null && this.movementCooldown == 0l) {
+                float angleToFollow  = 0f;
+                float targetDistance = 0f;
 
-                // Tweak the angle so that the enemy isn't going in an exact straight line to the player.
-                angleToFollow += (this.rng.nextFloat() * Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE) - (Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE / 2f);
+                // Check whether the subject is actually too close to the player and should move away.
+                // TODO This should eventually take the weapon type into account. E.g. we can get too close if we are using melee.
+                if (distanceTo(this.targetPlayer) <= Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM) {
+                    // If we want the subject to move away from the target player then we should take the angle from the player to the subject.
+                    angleToFollow = this.targetPlayer.angleTo(subject);
 
-                // Work out the distance that the subject would have to move in order to reach the minimum distance allowed. This doesn't take the angle deviation into account.
-                float targetDistance = distanceTo(this.targetPlayer) - Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+                    // The subject should move a safe distance away.
+                    targetDistance = Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+                } else {
+                    // If we want the subject to move towards the player then we should take the angle from the subject to the player.
+                    angleToFollow = angleTo(this.targetPlayer);
+
+                    // Tweak the angle so that the enemy isn't going in an exact straight line to the player.
+                    angleToFollow += (this.rng.nextFloat() * Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE) - (Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE / 2f);
+
+                    // Work out the distance that the subject would have to move in order to reach the minimum distance allowed. This doesn't take the angle deviation into account.
+                    targetDistance = distanceTo(this.targetPlayer) - Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+                }
 
                 // Set the target position where the target is somewhere closer to the player, depending on angle deviation.
                 this.targetPosition = GameMath.getPositionForAngle(subject.getOrigin().getX(), subject.getOrigin().getY(), angleToFollow, targetDistance);
-            } else if (distanceTo(this.targetPlayer) < Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM) {
-                // TODO Actually move away for the player?
-                // This should not always happen as we want the player to have a change to get in close with melee.
             }
         }
 
