@@ -72,9 +72,9 @@ public abstract class NPC extends GameCharacter {
         // Tick the enemy behaviour if any has been defined.
         if (this.behaviour != null) {
             this.behaviour.setUp(this, environment, delta);
-            this.behaviour.onBeforeTick();
+            this.behaviour.onBeforeTick(delta);
             this.behaviour.onTick(delta);
-            this.behaviour.onAfterTick();
+            this.behaviour.onAfterTick(delta);
         }
     }
 

@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.game.character.behaviour;
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.engine.utilities.GameMath;
+import com.dumbpug.dungeony.engine.utilities.lotto.Lotto;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.npc.NPC;
 import com.dumbpug.dungeony.game.character.player.Player;
@@ -22,9 +23,20 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
      */
     private Position targetPosition = null;
     /**
+     * The amount of cooldown left before the subject can pick another targte position.
+     */
+    private long movementCooldown = 0l;
+    /**
      * The time at which the current target player was targeted.
      */
     private long lastPlayerTargetTime = 0l;
+
+    /**
+     * Called just before 'tick'.
+     */
+    public void onBeforeTick(float delta) {
+        updateMovementCooldown(delta);
+    }
 
     /**
      * Tick the NPC behaviour.
@@ -65,6 +77,8 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
             // TODO Make this be based on weapon type.
             if (this.targetPosition != null) {
                 // We are currently moving towards a target position so there is no reason to set another one for now.
+            } else if (this.movementCooldown > 0l) {
+                // We cannot set a target position at the moment asa we have a movement cooldown to wait for.
             } else if (distanceTo(this.targetPlayer) > Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MAXIMUM) {
                 // Get the angle to follow towards the target player.
                 float angleToFollow = angleTo(this.targetPlayer);
@@ -91,7 +105,8 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
             // TODO Check if we are close enough to the target and remove.
             // TODO Eventually this should be worked out based on the subject movement speed and delta otherwise we might get some weird bugs.
             if (subject.distanceTo(this.targetPosition) < Constants.LEVEL_TILE_SIZE * 0.4f) {
-                this.targetPosition = null;
+                this.targetPosition   = null;
+                this.movementCooldown = getMovementCooldown();
                 return;
             }
 
@@ -107,7 +122,8 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
 
             // If we tried to walk towards the target position but we didn't actually move, or our movement was negligible, then we can assume we are stuck and should give up on reaching the target.
             if (isXMovementNegligible && isYMovementNegligible) {
-                this.targetPosition = null;
+                this.targetPosition   = null;
+                this.movementCooldown = getMovementCooldown();
             }
         }
     }
@@ -149,5 +165,25 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
                 this.lastPlayerTargetTime = System.currentTimeMillis();
             }
         }
+    }
+
+    /**
+     * Update the movement cooldown.
+     */
+    private void updateMovementCooldown(float delta) {
+        this.movementCooldown = Math.max(this.movementCooldown - (long)(delta * 1000), 0l);
+    }
+
+    /**
+     * Gets a random movement cooldown.
+     * @return A random movement cooldown.
+     */
+    private long getMovementCooldown() {
+        return new Lotto<Long>(this.rng)
+                .add(new Long(2000), 10)
+                .add(new Long(2000), 5)
+                .add(new Long(2000), 3)
+                .add(new Long(2000), 2)
+                .draw();
     }
 }

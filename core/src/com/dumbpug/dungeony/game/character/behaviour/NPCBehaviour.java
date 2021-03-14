@@ -120,14 +120,14 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * Called just before 'tick'.
      */
-    public void onBeforeTick() {
+    public void onBeforeTick(float delta) {
         // ...
     }
 
     /**
      * Called just after 'tick'.
      */
-    public void onAfterTick() {
+    public void onAfterTick(float delta) {
         // ...
     }
 
@@ -177,13 +177,9 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     protected boolean canSee(Entity target) {
 
 
-
-
         // TODO Remove and complete proper check below. For now this just checks whether the target is in the subject view range.
         if (1 == 1)
             return distanceTo(target) < subject.getMaxVisibilityDistance();
-
-
 
 
         // Initially, get the distance between thw two entities.
