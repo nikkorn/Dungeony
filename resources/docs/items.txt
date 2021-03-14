@@ -81,3 +81,12 @@ Gems
 =========================================================================================================================================================================
 Gems are items that can give players or weapons buffs. They can be equipped/unequipped to player gem slots with the help of a Mage at camp,
 or can be equipped/unequipped to weapon gem slots with the help of a WeaponSmith at camp.
+
+
+=========================================================================================================================================================================
+Masks
+=========================================================================================================================================================================
+Masks are equippable items that are shown on the player sprite and can:
+- Offer positive/negative buffs
+- Have additional gem slots.
+- Can be fragile (breaks after a hit)
