@@ -73,8 +73,8 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
 
             // We should try to pick a target position to walk to if we don't have one already or we are waiting for a movement cooldown.
             if (this.targetPosition == null && this.movementCooldown == 0l) {
-                float angleToFollow  = 0f;
-                float targetDistance = 0f;
+                float angleToFollow    = 0f;
+                float distanceToTarget = 0f;
 
                 // Check whether the subject is actually too close to the player and should move away.
                 // TODO This should eventually take the weapon type into account. E.g. we can get too close if we are using melee.
@@ -82,8 +82,11 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
                     // If we want the subject to move away from the target player then we should take the angle from the player to the subject.
                     angleToFollow = this.targetPlayer.angleTo(subject);
 
-                    // The subject should move a safe distance away.
-                    targetDistance = Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+                    // Tweak the angle so that the enemy isn't going in an exact straight line away from the player.
+                    angleToFollow += (this.rng.nextFloat() * 20) - (20 / 2f);
+
+                    // The subject should move just outside the minimum distance.
+                    distanceToTarget = Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
                 } else {
                     // If we want the subject to move towards the player then we should take the angle from the subject to the player.
                     angleToFollow = angleTo(this.targetPlayer);
@@ -91,12 +94,17 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
                     // Tweak the angle so that the enemy isn't going in an exact straight line to the player.
                     angleToFollow += (this.rng.nextFloat() * Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE) - (Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE / 2f);
 
-                    // Work out the distance that the subject would have to move in order to reach the minimum distance allowed. This doesn't take the angle deviation into account.
-                    targetDistance = distanceTo(this.targetPlayer) - Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+                    // The subject should move a good amount when the player is further away and smaller distances when up close.
+                    distanceToTarget = distanceTo(this.targetPlayer);
                 }
 
-                // Set the target position where the target is somewhere closer to the player, depending on angle deviation.
-                this.targetPosition = GameMath.getPositionForAngle(subject.getOrigin().getX(), subject.getOrigin().getY(), angleToFollow, targetDistance);
+                // Get the next potential target position for the subject.
+                Position potentialTargetPosition = GameMath.getPositionForAngle(subject.getOrigin().getX(), subject.getOrigin().getY(), angleToFollow, distanceToTarget);
+
+                // We only want to set a target position that doesn't put us too close to the target player.
+                if (this.targetPlayer.distanceTo(potentialTargetPosition) > Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM) {
+                    this.targetPosition = potentialTargetPosition;
+                }
             }
         }
 
@@ -183,10 +191,10 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
      */
     private long getMovementCooldown() {
         return new Lotto<Long>(this.rng)
-                .add(new Long(2000), 10)
-                .add(new Long(2000), 5)
-                .add(new Long(2000), 3)
-                .add(new Long(2000), 2)
+                .add(new Long(0), 10)
+                .add(new Long(1000), 4)
+                .add(new Long(3000), 4)
+                .add(new Long(6000), 2)
                 .draw();
     }
 }
