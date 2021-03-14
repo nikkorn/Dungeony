@@ -1,6 +1,8 @@
 package com.dumbpug.dungeony.game.character.behaviour;
 
 import com.dumbpug.dungeony.Constants;
+import com.dumbpug.dungeony.engine.Position;
+import com.dumbpug.dungeony.engine.utilities.GameMath;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.npc.NPC;
 import com.dumbpug.dungeony.game.character.player.Player;
@@ -15,6 +17,10 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
      * The current target player.
      */
     private Player targetPlayer = null;
+    /**
+     * The current target position.
+     */
+    private Position targetPosition = null;
     /**
      * The time at which the current target player was targeted.
      */
@@ -53,19 +59,55 @@ public class BasicEnemyBehaviour<TNPC extends NPC> extends NPCBehaviour<TNPC> {
                 }
             }
 
-            // Walk towards the player if we aren't already too close, otherwise just be idle.
+            // If we are too far away from the player then we should try to get closer.
+            // If we are too close then maybe we want to move away.
+            // If we already have a target position then we don't really want to do anything.
             // TODO Make this be based on weapon type.
-            if (distanceTo(this.targetPlayer) > Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM) {
-                walkTowards(this.targetPlayer);
-            } else {
-                setState(GameCharacterState.IDLE);
-            }
+            if (this.targetPosition != null) {
+                // We are currently moving towards a target position so there is no reason to set another one for now.
+            } else if (distanceTo(this.targetPlayer) > Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MAXIMUM) {
+                // Get the angle to follow towards the target player.
+                float angleToFollow = angleTo(this.targetPlayer);
 
-            return;
+                // Tweak the angle so that the enemy isn't going in an exact straight line to the player.
+                angleToFollow += (this.rng.nextFloat() * Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE) - (Constants.ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE / 2f);
+
+                // Work out the distance that the subject would have to move in order to reach the minimum distance allowed. This doesn't take the angle deviation into account.
+                float targetDistance = distanceTo(this.targetPlayer) - Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM;
+
+                // Set the target position where the target is somewhere closer to the player, depending on angle deviation.
+                this.targetPosition = GameMath.getPositionForAngle(subject.getOrigin().getX(), subject.getOrigin().getY(), angleToFollow, targetDistance);
+            } else if (distanceTo(this.targetPlayer) < Constants.ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM) {
+                // TODO Actually move away for the player?
+                // This should not always happen as we want the player to have a change to get in close with melee.
+            }
         }
 
         // We fall back to the IDLE state.
         setState(GameCharacterState.IDLE);
+
+        // Walk towards a target position if one is defined.
+        if (this.targetPosition != null) {
+            // TODO Check if we are close enough to the target and remove.
+            // TODO Eventually this should be worked out based on the subject movement speed and delta otherwise we might get some weird bugs.
+            if (subject.distanceTo(this.targetPosition) < Constants.LEVEL_TILE_SIZE * 0.4f) {
+                this.targetPosition = null;
+                return;
+            }
+
+            // Get the position of the subject before we attempt to walk in the direction of the target position.
+            float initialXPosition = subject.getX();
+            float initialYPosition = subject.getY();
+
+            // Attempt to walk towards the target position.
+            walkTowards(this.targetPosition);
+
+            // If we tried to walk towards the target position but we didn't actually move then we can assume we are stuck and should give up on reaching the target.
+            // TODO This should include some small number check as we also don't want to be slowly dragging across walls.
+            if (subject.getX() == initialXPosition && subject.getY() == initialYPosition) {
+                this.targetPosition = null;
+            }
+        }
     }
 
     /**

@@ -70,10 +70,14 @@ public class Constants {
     public static final float ENEMY_AI_MELEE_PLAYER_DISTANCE_MINIMUM             = LEVEL_TILE_SIZE * 0.2f;
 
     // The minimum distance that a ranged enemy should try to get to a player.
-    public static final float ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM            = LEVEL_TILE_SIZE * 2f;
+    public static final float ENEMY_AI_RANGED_PLAYER_DISTANCE_MINIMUM            = LEVEL_TILE_SIZE * 1.2f;
+    public static final float ENEMY_AI_RANGED_PLAYER_DISTANCE_MAXIMUM            = LEVEL_TILE_SIZE * 3f;
 
     // The minimum distance that a long ranged enemy should try to get to a player.
     public static final float ENEMY_AI_LONG_RANGED_PLAYER_DISTANCE_MINIMUM       = LEVEL_TILE_SIZE * 4f;
+
+    // The angle range deviation that can be applied when setting a target position.
+    public static final float ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE               = 180f;
 
     //==============================================================================================
     // PLAYER

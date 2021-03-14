@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.game.character.behaviour;
 import com.dumbpug.dungeony.engine.Area;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
+import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.engine.utilities.GameMath;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.npc.NPC;
@@ -31,7 +32,7 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * The RNG to use in generating random attack cool-downs.
      */
-    private Random rng = new Random();
+    protected Random rng = new Random();
     /**
      * The time in millis from which the NPC can carry out another attack.
      */
@@ -310,6 +311,14 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
      */
     protected void walkTowards(Entity target) {
         walk(subject.angleTo(target));
+    }
+
+    /**
+     * Walk the subject towards the specified position.
+     * @param position The position.
+     */
+    protected void walkTowards(Position position) {
+        walk(subject.angleTo(position));
     }
 
     /**

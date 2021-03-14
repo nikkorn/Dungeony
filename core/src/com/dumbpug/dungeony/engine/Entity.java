@@ -147,6 +147,17 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     }
 
     /**
+     * Gets the distance between this entity and the target position.
+     * @param position The target position.
+     * @return The distance between this entity and the target position.
+     */
+    public float distanceTo(Position position) {
+        // Get the distance between the two origins of the two entities.
+        // TODO Eventually this should be between the two closest edges of the entities.
+        return GameMath.getLength(this.getOrigin().getX(), this.getOrigin().getY(), position.getX(), position.getY());
+    }
+
+    /**
      * Gets the angle between this entity and the target entity.
      * @param target The target entity.
      * @return The angle between this entity and the target entity.
@@ -154,6 +165,16 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     public float angleTo(Entity target) {
         // Get the angle between the two origins of the two entities.
         return GameMath.getAngle(this.getOrigin().getX(), this.getOrigin().getY(), target.getOrigin().getX(), target.getOrigin().getY());
+    }
+
+    /**
+     * Gets the angle between this entity and the target position.
+     * @param position The target position.
+     * @return The angle between this entity and the target position.
+     */
+    public float angleTo(Position position) {
+        // Get the angle between the two origins of the two entities.
+        return GameMath.getAngle(this.getOrigin().getX(), this.getOrigin().getY(), position.getX(), position.getY());
     }
 
     /**
