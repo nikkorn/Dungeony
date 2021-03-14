@@ -6,8 +6,8 @@ import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.utilities.GameMath;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.npc.NPC;
+import com.dumbpug.dungeony.game.character.player.Player;
 import com.dumbpug.dungeony.game.weapon.AmmunitionWeapon;
-import com.dumbpug.dungeony.game.weapon.MeleeWeapon;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import java.util.ArrayList;
 import java.util.Random;
@@ -134,13 +134,23 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
      * Get the closest player entity to the subject.
      * @return The closest player entity to the subject.
      */
-    protected Entity getClosestPlayerEntity() {
+    protected Player getClosestVisiblePlayerEntity() {
         // Get all of the player entities.
         ArrayList<Entity> players = environment.getEntitiesInGroup("player");
 
         Entity closest = null;
 
         for (Entity currentPlayer : players) {
+            // We don't want dead players.
+            if (((Player)currentPlayer).getHealth().isHealthDepleted()) {
+                continue;
+            }
+
+            // We don't want players that the subject cant see.
+            if (!canSee(currentPlayer)) {
+                continue;
+            }
+
             if (closest == null) {
                 closest = currentPlayer;
                 continue;
@@ -155,7 +165,7 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
             }
         }
 
-        return closest;
+        return (Player)closest;
     }
 
     /**
