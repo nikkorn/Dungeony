@@ -77,7 +77,7 @@ public class Constants {
     public static final float ENEMY_AI_LONG_RANGED_PLAYER_DISTANCE_MINIMUM       = LEVEL_TILE_SIZE * 4f;
 
     // The angle range deviation that can be applied when setting a target position.
-    public static final float ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE               = 180f;
+    public static final float ENEMY_AI_PLAYER_TRACKING_ANGLE_RANGE               = 80f;
 
     // The amount of movement made by an enemy that we can deem to be negligible.
     public static final float ENEMY_AI_PLAYER_TRACKING_NEGLIGIBLE_MOVEMENT_PS    = LEVEL_TILE_SIZE * 0.3f;
