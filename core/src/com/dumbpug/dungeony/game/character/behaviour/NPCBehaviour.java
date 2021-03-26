@@ -3,11 +3,12 @@ package com.dumbpug.dungeony.game.character.behaviour;
 import com.dumbpug.dungeony.engine.Area;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
+import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.engine.utilities.GameMath;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.npc.NPC;
+import com.dumbpug.dungeony.game.character.player.Player;
 import com.dumbpug.dungeony.game.weapon.AmmunitionWeapon;
-import com.dumbpug.dungeony.game.weapon.MeleeWeapon;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,7 +32,7 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * The RNG to use in generating random attack cool-downs.
      */
-    private Random rng = new Random();
+    protected Random rng = new Random();
     /**
      * The time in millis from which the NPC can carry out another attack.
      */
@@ -119,14 +120,14 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * Called just before 'tick'.
      */
-    public void onBeforeTick() {
+    public void onBeforeTick(float delta) {
         // ...
     }
 
     /**
      * Called just after 'tick'.
      */
-    public void onAfterTick() {
+    public void onAfterTick(float delta) {
         // ...
     }
 
@@ -134,13 +135,23 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
      * Get the closest player entity to the subject.
      * @return The closest player entity to the subject.
      */
-    protected Entity getClosestPlayerEntity() {
+    protected Player getClosestVisiblePlayerEntity() {
         // Get all of the player entities.
         ArrayList<Entity> players = environment.getEntitiesInGroup("player");
 
         Entity closest = null;
 
         for (Entity currentPlayer : players) {
+            // We don't want dead players.
+            if (((Player)currentPlayer).getHealth().isHealthDepleted()) {
+                continue;
+            }
+
+            // We don't want players that the subject cant see.
+            if (!canSee(currentPlayer)) {
+                continue;
+            }
+
             if (closest == null) {
                 closest = currentPlayer;
                 continue;
@@ -155,7 +166,7 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
             }
         }
 
-        return closest;
+        return (Player)closest;
     }
 
     /**
@@ -166,13 +177,9 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     protected boolean canSee(Entity target) {
 
 
-
-
         // TODO Remove and complete proper check below. For now this just checks whether the target is in the subject view range.
         if (1 == 1)
             return distanceTo(target) < subject.getMaxVisibilityDistance();
-
-
 
 
         // Initially, get the distance between thw two entities.
@@ -303,6 +310,14 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     }
 
     /**
+     * Walk the subject towards the specified position.
+     * @param position The position.
+     */
+    protected void walkTowards(Position position) {
+        walk(subject.angleTo(position));
+    }
+
+    /**
      * Gets the attack cool-down to use based on the the equipped subject weapon.
      * This differs from the actual weapon cool-down as NPC attacking isn't trigger based.
      * @return The cool-down to use for the equipped subject weapon.
@@ -351,5 +366,5 @@ public abstract class NPCBehaviour<TNPC extends NPC> {
     /**
      * Tick the NPC behaviour.
      */
-    public abstract void onTick();
+    public abstract void onTick(float delta);
 }

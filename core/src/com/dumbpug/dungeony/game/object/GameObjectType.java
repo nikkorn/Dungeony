@@ -6,7 +6,8 @@ package com.dumbpug.dungeony.game.object;
 public enum GameObjectType {
     PLAYER_SPAWN,
     CHEST,
-    VENDOR;
+    VENDOR,
+    DOOR;
 
     /**
      * Gets whether the string value is a valid enum value.

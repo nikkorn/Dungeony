@@ -16,6 +16,11 @@ public class SimpleLevelGenerator implements ILevelGenerator {
         // Create a few tile definitions.
         ArrayList<TileDefinition> tiles = createTiles();
 
+        // Add a door game object.
+        EntityDefinition door = new EntityDefinition("DOOR", EntityOffset.TOP);
+        door.setProperty("target", "shop");
+        addTileEntity(tiles, door, 3, 18);
+
         // Add a vendor game object.
         EntityDefinition vendor = new EntityDefinition("VENDOR", EntityOffset.TOP);
         vendor.setProperty("item_rarity", "0");

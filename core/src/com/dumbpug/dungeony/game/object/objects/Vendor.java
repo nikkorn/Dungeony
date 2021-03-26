@@ -8,6 +8,7 @@ import com.dumbpug.dungeony.engine.Area;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
+import com.dumbpug.dungeony.game.character.player.Player;
 import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.object.GameObject;
 import com.dumbpug.dungeony.game.object.GameObjectType;
@@ -26,6 +27,7 @@ public class Vendor extends GameObject {
      */
     private Area areaOfInteraction;
 
+    Player usingPlayer = null;
     BitmapFont font;
 
     /**
@@ -74,13 +76,15 @@ public class Vendor extends GameObject {
 
     @Override
     public void update(InteractiveEnvironment environment, float delta) {
+        usingPlayer = null;
+
         // TODO Find all players that are in front of the machine.
         for (Entity entity : environment.getEntitiesInArea(this.areaOfInteraction)) {
             // Get the group that the current entity is in.
             String group = environment.getEntityGroup(entity);
 
             if (group != null && group.equalsIgnoreCase("player")) {
-                System.out.println(entity.getClass().getName());
+                usingPlayer = (Player)entity;
             }
         }
     }
@@ -93,7 +97,10 @@ public class Vendor extends GameObject {
     public void render(SpriteBatch batch) {
         super.render(batch);
 
-        font.draw(batch, "I'm a vendor bitch!", this.getX(), this.getY(), Gdx.graphics.getWidth(), Align.left, true);
+        if (usingPlayer != null)
+        {
+            font.draw(batch, "HELLO!", this.getX(), this.getY() + this.getLengthZ(), Gdx.graphics.getWidth(), Align.left, true);
+        }
     }
 
     @Override

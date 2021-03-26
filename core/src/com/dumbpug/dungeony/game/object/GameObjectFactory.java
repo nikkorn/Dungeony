@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.game.object;
 
 import com.dumbpug.dungeony.engine.Position;
+import com.dumbpug.dungeony.game.object.objects.Door;
 import com.dumbpug.dungeony.game.object.objects.Vendor;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
@@ -19,6 +20,8 @@ public class GameObjectFactory {
         switch (type) {
             case VENDOR:
                 return new Vendor(position, properties);
+            case DOOR:
+                return new Door(position, properties);
             default:
                 throw new RuntimeException("cannot create GameObject instance for unknown type: " + type);
         }
