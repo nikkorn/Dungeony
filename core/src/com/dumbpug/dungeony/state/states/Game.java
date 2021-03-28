@@ -1,9 +1,8 @@
 package com.dumbpug.dungeony.state.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dumbpug.dungeony.ApplicationModel;
 import com.dumbpug.dungeony.Constants;
