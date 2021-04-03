@@ -119,11 +119,11 @@ public class Game extends State {
      * @return A game HUD for the given level.
      */
     private static Hud createHud(Level level) {
-        Hud hud = new Hud(Gdx.graphics.getWidth() * ((float)Constants.HUD_VIEWPORT_HEIGHT / Gdx.graphics.getHeight()), Constants.HUD_VIEWPORT_HEIGHT);
+        Hud hud = new Hud(Gdx.graphics.getWidth() * ((float)Constants.HUD_VIEWPORT_HEIGHT / Gdx.graphics.getHeight()), Constants.HUD_VIEWPORT_HEIGHT, Constants.HUD_PANEL_MARGIN);
 
         switch (level.getPlayers().size()) {
             case 1:
-                hud.addPanel(PanelPosition.TOP_LEFT, new SinglePlayerPanel(level.getPlayers().get(0), Constants.HUD_PANEL_MARGIN));
+                hud.addPanel(PanelPosition.TOP_LEFT, new SinglePlayerPanel(level.getPlayers().get(0)));
                 break;
 
             case 2:

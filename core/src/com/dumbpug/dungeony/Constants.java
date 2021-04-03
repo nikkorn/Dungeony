@@ -45,8 +45,8 @@ public class Constants {
     //==============================================================================================
     // HUD
     //==============================================================================================
-    public static final int HUD_VIEWPORT_HEIGHT                                  = 240;
-    public static final float HUD_PANEL_MARGIN                                   = 10f;
+    public static final int HUD_VIEWPORT_HEIGHT                                  = 260;
+    public static final float HUD_PANEL_MARGIN                                   = 3f;
 
     //==============================================================================================
     // CHARACTER

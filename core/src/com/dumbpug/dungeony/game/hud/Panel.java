@@ -7,21 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public abstract class Panel {
     /**
-     * The margin between the panel and the HUD.
-     */
-    private float margin;
-    /**
      * Whether the panel is visible.
      */
     private boolean isVisible = true;
-
-    /**
-     * Creates a new instance of the Panel class.
-     * @param margin The panel margin.
-     */
-    public Panel(float margin) {
-        this.margin   = margin;
-    }
 
     public boolean isVisible() {
         return isVisible;

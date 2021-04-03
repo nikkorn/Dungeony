@@ -21,10 +21,8 @@ public class SinglePlayerPanel extends Panel {
     /**
      * Creates a new instance of the SinglePlayerPanel class.
      * @param player The player.
-     * @param margin The panel margin.
      */
-    public SinglePlayerPanel(Player player,  float margin) {
-        super(margin);
+    public SinglePlayerPanel(Player player) {
         this.player     = player;
         this.background = new Sprite(new Texture("images/hud/player/SINGLE_PLAYER_PANEL.png"));
     }
