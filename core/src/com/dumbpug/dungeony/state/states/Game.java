@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dumbpug.dungeony.ApplicationModel;
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.game.hud.Hud;
+import com.dumbpug.dungeony.game.hud.PanelPosition;
+import com.dumbpug.dungeony.game.hud.SinglePlayerPanel;
 import com.dumbpug.dungeony.game.level.Level;
 import com.dumbpug.dungeony.game.level.LevelEnvironmentCamera;
 import com.dumbpug.dungeony.game.level.LevelFactory;
@@ -67,9 +69,7 @@ public class Game extends State {
         this.level.onBegin();
 
         // Create the game HUD.
-        this.hud = new Hud();
-
-        // TODO Add panels for each player in the game to the HUD.
+        this.hud = createHud(this.level);
     }
 
     @Override
@@ -103,10 +103,38 @@ public class Game extends State {
     @Override
     public void onResize(int width, int height) {
         this.levelViewport.update(width, height);
+
+        if (this.hud != null)
+            this.hud.setSize(Gdx.graphics.getWidth() * ((float)Constants.HUD_VIEWPORT_HEIGHT / Gdx.graphics.getHeight()), Constants.HUD_VIEWPORT_HEIGHT);
     }
 
     @Override
     public String getStateName() {
         return "GAME";
+    }
+
+    /**
+     * Creates a game HUD for the given level.
+     * @param level The level.
+     * @return A game HUD for the given level.
+     */
+    private static Hud createHud(Level level) {
+        Hud hud = new Hud(Gdx.graphics.getWidth() * ((float)Constants.HUD_VIEWPORT_HEIGHT / Gdx.graphics.getHeight()), Constants.HUD_VIEWPORT_HEIGHT);
+
+        switch (level.getPlayers().size()) {
+            case 1:
+                hud.addPanel(PanelPosition.TOP_LEFT, new SinglePlayerPanel(level.getPlayers().get(0), Constants.HUD_PANEL_MARGIN));
+                break;
+
+            case 2:
+                // hud.addPanel(PanelPosition.TOP_LEFT, new CoopPlayerPanel(new SinglePlayerPanel(level.getPlayers().get(0), 1));
+                // hud.addPanel(PanelPosition.TOP_RIGHT, new CoopPlayerPanel(new SinglePlayerPanel(level.getPlayers().get(1), 2));
+                break;
+
+            default:
+                throw new RuntimeException("cannot create game hud for player count of " + level.getPlayers().size());
+        }
+
+        return hud;
     }
 }

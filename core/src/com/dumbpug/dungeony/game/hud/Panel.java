@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public abstract class Panel {
     /**
-     * The panel position.
+     * The margin between the panel and the HUD.
      */
-    private PanelPosition position;
+    private float margin;
     /**
      * Whether the panel is visible.
      */
@@ -17,14 +17,10 @@ public abstract class Panel {
 
     /**
      * Creates a new instance of the Panel class.
-     * @param position The panel position.
+     * @param margin The panel margin.
      */
-    public Panel(PanelPosition position) {
-        this.position = position;
-    }
-
-    public PanelPosition getPosition() {
-        return position;
+    public Panel(float margin) {
+        this.margin   = margin;
     }
 
     public boolean isVisible() {
@@ -35,6 +31,18 @@ public abstract class Panel {
         isVisible = visible;
     }
 
+    /**
+     * Update the panel.
+     * @param delta The delta time.
+     */
+    public abstract void update(float delta);
+
+    /**
+     * Render the panel.
+     * @param batch The sprite batch.
+     * @param x
+     * @param y
+     */
     public abstract void render(SpriteBatch batch, float x, float y);
 
     /**

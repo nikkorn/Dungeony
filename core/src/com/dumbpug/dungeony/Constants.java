@@ -43,6 +43,12 @@ public class Constants {
     public static final float LEVEL_CAMERA_SHAKE_POWER                           = 1;
 
     //==============================================================================================
+    // HUD
+    //==============================================================================================
+    public static final int HUD_VIEWPORT_HEIGHT                                  = 240;
+    public static final float HUD_PANEL_MARGIN                                   = 10f;
+
+    //==============================================================================================
     // CHARACTER
     //==============================================================================================
     public static final int CHARACTER_DEFAULT_HEALTH_SLOTS                       = 5;

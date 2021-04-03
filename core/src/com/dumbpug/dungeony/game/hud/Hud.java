@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The complete game overview HUD.
@@ -14,7 +14,7 @@ public class Hud {
     /**
      * The panels to display within the HUD.
      */
-    private ArrayList<Panel> panels = new ArrayList<Panel>();
+    private HashMap<PanelPosition, Panel> panels = new HashMap<PanelPosition, Panel>();
     /**
      * The orthographic game camera.
      */
@@ -23,6 +23,11 @@ public class Hud {
      * The sprite batch to use in rendering the HUD.
      */
     private SpriteBatch batch = new SpriteBatch();
+    /**
+     * The width/height of the HUD.
+     */
+    private float width, height;
+
 
     private static Sprite testSquare;
     static {
@@ -30,35 +35,63 @@ public class Hud {
     }
 
     /**
+     * Creates a new instance of the Hud class.
+     * @param width The width of the HUD.
+     * @param height The height of the HUD.
+     */
+    public Hud(float width, float height) {
+        this.width  = width;
+        this.height = height;
+    }
+
+    /**
+     * Set the size of the HUD.
+     * @param width The width.
+     * @param height The height.
+     */
+    public void setSize(float width, float height) {
+        this.width  = width;
+        this.height = height;
+    }
+
+    /**
      * Adds a panel to the HUD.
+     * @param position The position of the panel.
      * @param panel The panel to add.
      */
-    public void AddPanel(Panel panel) {
-        if (!this.panels.contains(panel)) {
-            this.panels.add(panel);
-        }
+    public void addPanel(PanelPosition position, Panel panel) {
+        this.panels.put(position, panel);
     }
 
     /**
      * Update the HUD.
      */
-    public void update() { }
+    public void update() {
+        float delta = Gdx.graphics.getDeltaTime();
+        for (Panel panel : this.panels.values()) {
+            panel.update(delta);
+        }
+    }
 
     /**
      * Render the HUD.
      */
     public void render() {
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, this.width, this.height);
 
         batch.setProjectionMatrix(this.camera.combined);
 
         // Start drawing the level to the sprite batch.
         batch.begin();
 
-        // TODO Render the panels!
-
-        testSquare.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        testSquare.setSize(this.width, this.height);
         testSquare.draw(batch);
+
+        // Render the panels!
+        for (Panel panel : this.panels.values()) {
+            // TODO: Move the camera position to match the panel position/size/margin/hud zoom.
+            panel.render(batch, 0, 0);
+        }
 
         batch.end();
     }
