@@ -25,6 +25,7 @@ public class SinglePlayerPanel extends Panel {
     public SinglePlayerPanel(Player player) {
         this.player     = player;
         this.background = new Sprite(new Texture("images/hud/player/SINGLE_PLAYER_PANEL.png"));
+        this.background.setSize(getWidth(), getHeight());
     }
 
     @Override
@@ -32,17 +33,16 @@ public class SinglePlayerPanel extends Panel {
 
     @Override
     public void render(SpriteBatch batch, float x, float y) {
-        this.background.setSize(getWidth(), getHeight());
         this.background.draw(batch);
     }
 
     @Override
     public float getWidth() {
-        return 108f;
+        return 216f;
     }
 
     @Override
     public float getHeight() {
-        return 27f;
+        return 54f;
     }
 }
