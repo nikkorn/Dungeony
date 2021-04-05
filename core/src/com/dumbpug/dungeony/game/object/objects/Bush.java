@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.object.GameObject;
 import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
@@ -12,21 +11,22 @@ import com.dumbpug.dungeony.game.rendering.Resources;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
 /**
- * A door used to leave the level.
+ * A destructable bush.
  */
-public class Door extends GameObject {
+public class Bush extends GameObject {
     /**
-     * The door sprite.
+     * The door sprites.
      */
-    private Sprite sprite;
+    private Sprite sprite, destroyedSprite;
 
     /**
-     * Creates a new instance of the Door class.
-     * @param origin The initial origin of the Door.
+     * Creates a new instance of the Bush class.
+     * @param origin The initial origin of the Bush.
      */
-    public Door(Position origin, IEntityProperties properties) {
+    public Bush(Position origin, IEntityProperties properties) {
         super(origin, properties);
-        sprite = Resources.getSprite(GameObjectSprite.DOOR);
+        sprite          = Resources.getSprite(GameObjectSprite.BUSH);
+        destroyedSprite = Resources.getSprite(GameObjectSprite.BUSH_DESTROYED);
     }
 
     @Override
@@ -34,23 +34,21 @@ public class Door extends GameObject {
 
     @Override
     public float getLengthX() {
-        return 37f;
+        return 19f;
     }
 
     @Override
     public float getLengthY() {
-        return 15f;
+        return 14f;
     }
 
     @Override
     public float getLengthZ() {
-        return 38f;
+        return 16f;
     }
 
     @Override
-    public void onEnvironmentEntry(InteractiveEnvironment environment) {
-        environment.addLight(new SpotLight(this, 1f, 0.3f, 0.3f));
-    }
+    public void onEnvironmentEntry(InteractiveEnvironment environment) { }
 
     @Override
     public void onEnvironmentExit(InteractiveEnvironment environment) { }
@@ -60,7 +58,7 @@ public class Door extends GameObject {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        // Draw the door sprite.
+        // Draw the bush sprite.
         this.sprite.setSize(this.getLengthX(), this.getLengthZ());
         this.sprite.setPosition(this.getX(), this.getY());
         this.sprite.draw(spriteBatch);
@@ -68,6 +66,6 @@ public class Door extends GameObject {
 
     @Override
     public GameObjectType getType() {
-        return GameObjectType.DOOR;
+        return GameObjectType.BUSH;
     }
 }

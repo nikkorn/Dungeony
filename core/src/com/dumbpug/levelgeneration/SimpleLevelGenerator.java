@@ -36,6 +36,15 @@ public class SimpleLevelGenerator implements ILevelGenerator {
         vendor.setProperty("banter", "terrific");
         addTileEntity(tiles, blueJoe, 3, 16);
 
+        // Add some bushes.
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.TOP_LEFT), 3, 12);
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.BOTTOM_RIGHT), 3, 12);
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.LEFT), 4, 11);
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.RIGHT), 5, 11);
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.TOP_RIGHT), 6, 12);
+        addTileEntity(tiles, new EntityDefinition("BUSH", EntityOffset.BOTTOM_LEFT), 6, 12);
+
+
         // Return the level definition.
         return new LevelDefinition("Simple", tiles);
     }

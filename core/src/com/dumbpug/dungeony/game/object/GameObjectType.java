@@ -7,7 +7,8 @@ public enum GameObjectType {
     PLAYER_SPAWN,
     CHEST,
     VENDOR,
-    DOOR;
+    DOOR,
+    BUSH;
 
     /**
      * Gets whether the string value is a valid enum value.
