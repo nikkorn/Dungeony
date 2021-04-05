@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
+import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
 /**
@@ -35,6 +36,14 @@ public abstract class GameObject extends Entity<SpriteBatch> {
      */
     public void onPositioned() {
         // An object does nothing by default when it is positioned.
+    }
+
+    /**
+     * Called when the game object is hit with a projectile.
+     * @param projectile The projectile that hit the object.
+     */
+    public void onProjectileCollision(Projectile projectile) {
+        // An object does nothing by default when hit with a projectile.
     }
 
     /**
