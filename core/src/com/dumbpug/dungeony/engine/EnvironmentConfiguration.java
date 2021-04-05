@@ -12,7 +12,7 @@ public class EnvironmentConfiguration {
     /**
      * Whether lighting is enabled for the environment.
      */
-    public boolean isLightingEnabled = true;
+    public boolean isLightingEnabled = false;
 
     /**
      * The light level for the environment if lighting is enabled.

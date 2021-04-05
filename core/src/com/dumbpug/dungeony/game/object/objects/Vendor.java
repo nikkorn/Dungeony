@@ -37,7 +37,7 @@ public class Vendor extends GameObject {
     public Vendor(Position origin, IEntityProperties properties) {
         super(origin, properties);
 
-        font = FontProvider.getFont(FontType.MAIN_FONT, FontSize.MEDIUM);
+        font = FontProvider.getFont(FontType.MAIN_FONT, FontSize.STANDARD);
         font.setColor(Color.WHITE);
     }
 

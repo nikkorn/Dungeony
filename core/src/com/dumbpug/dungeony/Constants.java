@@ -7,10 +7,9 @@ public class Constants {
     //==============================================================================================
     // FONT
     //==============================================================================================
-    public static final String FONT_TYPE_MAIN                                    = "Boxy-Bold.ttf";
-    public static final int FONT_SIZE_SMALL                                      = 4;
-    public static final int FONT_SIZE_MEDIUM                                     = 8;
-    public static final int FONT_SIZE_LARGE                                      = 12;
+    public static final String FONT_TYPE_MAIN                                    = "nokiafc22.ttf";
+    public static final int FONT_SIZE_STANDARD                                   = 8;
+    public static final int FONT_SIZE_LARGE                                      = 16;
 
     //==============================================================================================
     // DISPLAY
