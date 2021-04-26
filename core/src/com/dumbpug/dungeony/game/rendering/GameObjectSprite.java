@@ -5,6 +5,7 @@ package com.dumbpug.dungeony.game.rendering;
  */
 public enum GameObjectSprite {
     BUSH,
+    BUSH_SHADOW,
     BUSH_DESTROYED,
     VENDOR,
     CHEST,

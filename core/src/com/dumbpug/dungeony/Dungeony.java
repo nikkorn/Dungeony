@@ -44,7 +44,7 @@ public class Dungeony extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Write the FPS to the console.
-		System.out.println(Gdx.graphics.getFramesPerSecond() + " FPS");
+		// System.out.println(Gdx.graphics.getFramesPerSecond() + " FPS");
 
 		// Update the current application state.
 		this.stateManager.update();

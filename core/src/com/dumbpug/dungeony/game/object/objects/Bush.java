@@ -10,6 +10,8 @@ import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
+import com.dumbpug.dungeony.utilities.supersprite.DynamicSprite;
+import com.dumbpug.dungeony.utilities.supersprite.SqueezeDynamicSpriteModifier;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
 /**
@@ -17,9 +19,10 @@ import com.dumbpug.levelgeneration.IEntityProperties;
  */
 public class Bush extends GameObject {
     /**
-     * The door sprites.
+     * The bush sprites.
      */
-    private Sprite sprite, destroyedSprite;
+    private DynamicSprite sprite;
+    private Sprite shadow, destroyedSprite;
     /**
      * Whether the bush has been destroyed.
      */
@@ -31,13 +34,14 @@ public class Bush extends GameObject {
      */
     public Bush(Position origin, IEntityProperties properties) {
         super(origin, properties);
-        sprite          = Resources.getSprite(GameObjectSprite.BUSH);
+        sprite          = new DynamicSprite(Resources.getSprite(GameObjectSprite.BUSH));
+        shadow          = Resources.getSprite(GameObjectSprite.BUSH_SHADOW);
         destroyedSprite = Resources.getSprite(GameObjectSprite.BUSH_DESTROYED);
     }
 
     @Override
     public float getLengthX() {
-        return 19f;
+        return 17f;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class Bush extends GameObject {
 
     @Override
     public float getLengthZ() {
-        return 16f;
+        return 15f;
     }
 
     @Override
@@ -80,22 +84,35 @@ public class Bush extends GameObject {
         if (!this.isDestroyed) {
             // TODO Generate leaf particles!
 
-            this.isDestroyed = true;
+            // this.isDestroyed = true;
         }
+
+        this.sprite.applySqueeze(new SqueezeDynamicSpriteModifier(0.5f, 500));
     }
 
     @Override
-    public void update(InteractiveEnvironment environment, float delta) { }
+    public void update(InteractiveEnvironment environment, float delta) {
+        this.sprite.update(delta);
+    }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        // The sprite we are drawing depends on whether the bush is destroyed.
-        Sprite spriteToDraw = this.isDestroyed ? this.destroyedSprite : this.sprite;
+        // What we render depends on whether the bush is destroyed or not.
+        if (isDestroyed) {
+            // Draw the destroyed bush sprite.
+            this.destroyedSprite.setSize(this.getLengthX(), this.getLengthZ());
+            this.destroyedSprite.setPosition(this.getX(), this.getY());
+            this.destroyedSprite.draw(spriteBatch);
+        } else {
+            // Draw the shadow under the bush.
+            this.shadow.setPosition(this.getX(), this.getY() - (this.shadow.getHeight() / 4f));
+            this.shadow.draw(spriteBatch);
 
-        // Draw the bush sprite.
-        spriteToDraw.setSize(this.getLengthX(), this.getLengthZ());
-        spriteToDraw.setPosition(this.getX(), this.getY());
-        spriteToDraw.draw(spriteBatch);
+            // Draw the bush sprite.
+            this.sprite.setSize(this.getLengthX(), this.getLengthZ());
+            this.sprite.setPosition(this.getX(), this.getY());
+            this.sprite.draw(spriteBatch);
+        }
     }
 
     @Override
