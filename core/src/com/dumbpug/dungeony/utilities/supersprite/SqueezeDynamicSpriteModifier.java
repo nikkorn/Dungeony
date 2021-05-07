@@ -12,7 +12,7 @@ public class SqueezeDynamicSpriteModifier implements IDynamicSpriteModifier {
     private float squeezeValue = 0;
 
     /**
-     * Creates a new instance of the Squeeze class.
+     * Creates a new instance of the SqueezeDynamicSpriteModifier class.
      * @param amount A value between 0 and 1, representing the amount to squeeze the sprite.
      * @param duration The duration of the squeeze in millis.
      */
@@ -28,7 +28,17 @@ public class SqueezeDynamicSpriteModifier implements IDynamicSpriteModifier {
             modifierStartTime = System.currentTimeMillis();
         }
 
-        squeezeValue = easeOut(System.currentTimeMillis() - modifierStartTime, 0, amount,  duration);
+        float currentTime  = System.currentTimeMillis() - modifierStartTime;
+        float halfDuration = duration / 2;
+
+        // Are we going in or out lads?
+        if (currentTime < halfDuration) {
+            System.out.println("in");
+            squeezeValue = easeIn(currentTime, 0, amount,  halfDuration);
+        } else {
+            System.out.println("out");
+            squeezeValue = easeIn(currentTime - halfDuration, amount, -amount,  halfDuration);
+        }
 
         System.out.println((System.currentTimeMillis() - modifierStartTime) + "ms - value: " + squeezeValue);
 

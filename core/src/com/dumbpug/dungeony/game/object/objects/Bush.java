@@ -11,6 +11,7 @@ import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
 import com.dumbpug.dungeony.utilities.supersprite.DynamicSprite;
+import com.dumbpug.dungeony.utilities.supersprite.ResizeDynamicSpriteModifier;
 import com.dumbpug.dungeony.utilities.supersprite.SqueezeDynamicSpriteModifier;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
@@ -87,7 +88,8 @@ public class Bush extends GameObject {
             // this.isDestroyed = true;
         }
 
-        this.sprite.applySqueeze(new SqueezeDynamicSpriteModifier(0.5f, 500));
+        this.sprite.apply(new SqueezeDynamicSpriteModifier(0.2f, 75));
+        //this.sprite.apply(new ResizeDynamicSpriteModifier(0.2f, 1000));
     }
 
     @Override

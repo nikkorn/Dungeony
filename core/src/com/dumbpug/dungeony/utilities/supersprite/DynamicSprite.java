@@ -15,7 +15,8 @@ public class DynamicSprite {
      * The sprite modifiers.
      */
     private SqueezeDynamicSpriteModifier squeeze = null;
-    private HoverDynamicSpriteModifier hover = null;
+    private HoverDynamicSpriteModifier hover     = null;
+    private ResizeDynamicSpriteModifier resize   = null;
 
     /**
      * Creates a new instance of the SqueezySprite class.
@@ -33,12 +34,16 @@ public class DynamicSprite {
         this.sprite.setSize(width, height);
     }
 
-    public void applySqueeze(SqueezeDynamicSpriteModifier squeeze) {
+    public void apply(SqueezeDynamicSpriteModifier squeeze) {
         this.squeeze = squeeze;
     }
 
-    public void applyHover(HoverDynamicSpriteModifier hover) {
+    public void apply(HoverDynamicSpriteModifier hover) {
         this.hover = hover;
+    }
+
+    public void apply(ResizeDynamicSpriteModifier resize) {
+        this.resize = resize;
     }
 
     public void update(float delta) {
@@ -48,6 +53,7 @@ public class DynamicSprite {
 
             if (this.squeeze.isComplete()) {
                 this.squeeze = null;
+                sprite.setScale(1, 1);
             }
         }
 
@@ -57,6 +63,15 @@ public class DynamicSprite {
 
             if (this.hover.isComplete()) {
                 this.hover = null;
+            }
+        }
+
+        // Process the resize modifier.
+        if (this.resize != null) {
+            this.resize.update(delta);
+
+            if (this.resize.isComplete()) {
+                this.resize = null;
             }
         }
     }
@@ -79,6 +94,11 @@ public class DynamicSprite {
         // Apply the hover modifier.
         if (this.hover != null) {
             this.hover.apply(this.sprite);
+        }
+
+        // Apply the resize modifier.
+        if (this.resize != null) {
+            this.resize.apply(this.sprite);
         }
 
         this.sprite.draw(batch);
