@@ -1,4 +1,4 @@
-package com.dumbpug.dungeony.utilities.supersprite;
+package com.dumbpug.dungeony.utilities.dynamicsprite;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -33,14 +33,10 @@ public class SqueezeDynamicSpriteModifier implements IDynamicSpriteModifier {
 
         // Are we going in or out lads?
         if (currentTime < halfDuration) {
-            System.out.println("in");
             squeezeValue = easeIn(currentTime, 0, amount,  halfDuration);
         } else {
-            System.out.println("out");
             squeezeValue = easeIn(currentTime - halfDuration, amount, -amount,  halfDuration);
         }
-
-        System.out.println((System.currentTimeMillis() - modifierStartTime) + "ms - value: " + squeezeValue);
 
         // https://www.kirupa.com/html5/animating_with_easing_functions_in_javascript.htm
         // http://www.gizma.com/easing/#quint1

@@ -1,4 +1,4 @@
-package com.dumbpug.dungeony.utilities.supersprite;
+package com.dumbpug.dungeony.utilities.dynamicsprite;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

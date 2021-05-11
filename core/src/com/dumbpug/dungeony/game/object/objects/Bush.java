@@ -10,9 +10,8 @@ import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
-import com.dumbpug.dungeony.utilities.supersprite.DynamicSprite;
-import com.dumbpug.dungeony.utilities.supersprite.ResizeDynamicSpriteModifier;
-import com.dumbpug.dungeony.utilities.supersprite.SqueezeDynamicSpriteModifier;
+import com.dumbpug.dungeony.utilities.dynamicsprite.DynamicSprite;
+import com.dumbpug.dungeony.utilities.dynamicsprite.SqueezeDynamicSpriteModifier;
 import com.dumbpug.levelgeneration.IEntityProperties;
 
 /**
