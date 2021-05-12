@@ -7,7 +7,6 @@ import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.enemy.EnemyType;
 import com.dumbpug.dungeony.game.character.friendly.FriendlyType;
 import com.dumbpug.dungeony.game.character.player.PlayerType;
-import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.projectile.ProjectileType;
 import com.dumbpug.dungeony.game.weapon.WeaponState;
 import com.dumbpug.dungeony.game.weapon.WeaponType;
@@ -30,6 +29,10 @@ public class Resources {
      */
     private static HashMap<GameObjectSprite, Sprite> gameObjectSpriteMap;
     /**
+     * Particle sprite map.
+     */
+    private static HashMap<ParticleSprite, Sprite> particleSpriteMap;
+    /**
      * Projectile texture map.
      */
     private static HashMap<ProjectileType, Texture> projectileTextureMap;
@@ -46,6 +49,11 @@ public class Resources {
         gameObjectSpriteMap = new HashMap<GameObjectSprite, Sprite>() {{
             for (GameObjectSprite sprite : GameObjectSprite.values()) {
                 put(sprite, new Sprite(new Texture("images/game_object/" + sprite + ".png")));
+            }
+        }};
+        particleSpriteMap = new HashMap<ParticleSprite, Sprite>() {{
+            for (ParticleSprite sprite : ParticleSprite.values()) {
+                put(sprite, new Sprite(new Texture("images/particle/" + sprite + ".png")));
             }
         }};
         projectileTextureMap = new HashMap<ProjectileType, Texture>() {{
@@ -80,6 +88,15 @@ public class Resources {
      */
     public static Sprite getSprite(GameObjectSprite gameObjectSprite) {
         return gameObjectSpriteMap.get(gameObjectSprite);
+    }
+
+    /**
+     * Gets the sprite for the specified particle type.
+     * @param particleSprite
+     * @return
+     */
+    public static Sprite getSprite(ParticleSprite particleSprite) {
+        return particleSpriteMap.get(particleSprite);
     }
 
     /**

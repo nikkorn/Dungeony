@@ -1,26 +1,43 @@
 package com.dumbpug.dungeony.game.character.particles.walking;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.particles.Particle;
-import com.dumbpug.dungeony.game.projectile.ProjectileType;
-import com.dumbpug.dungeony.game.rendering.Animation;
+import com.dumbpug.dungeony.game.character.FacingDirection;
+import com.dumbpug.dungeony.game.rendering.ParticleSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
-import java.util.Random;
 
+/**
+ * A dust particle that slowly moves away from an entity waling in the opposite direction.
+ */
 public class WalkingDustParticle extends Particle<SpriteBatch> {
-    private float angle;
-
-    // The particle animation.
-    private Animation animation;
+    /**
+     * The facing direction of the entity that spawned the particle.
+     */
+    private FacingDirection direction;
+    /**
+     * The particle sprite.
+     */
+    private Sprite sprite;
 
     /**
      * Creates a new instance of the WalkingDustParticle class.
+     * @param direction The facing direction of the entity that spawned the particle.
      */
-    public WalkingDustParticle() {
-        this.animation = Resources.getProjectileAnimation(ProjectileType.BULLET);
+    public WalkingDustParticle(FacingDirection direction) {
+        this.direction = direction;
+
+        switch (direction) {
+            case LEFT:
+                this.sprite = Resources.getSprite(ParticleSprite.WALKING_DUST_RIGHT);
+                break;
+            case RIGHT:
+                this.sprite = Resources.getSprite(ParticleSprite.WALKING_DUST_LEFT);
+                break;
+            default:
+        }
     }
 
     @Override
@@ -38,36 +55,32 @@ public class WalkingDustParticle extends Particle<SpriteBatch> {
         // Set the initial particle position.
         this.setX(emitterPosX);
         this.setY(emitterPosY);
-        // Pick an angle to move the particle.
-        this.angle = new Random().nextFloat() * 360;
     }
 
     @Override
     public void onUpdate(InteractiveEnvironment environment, float delta) {
-        environment.moveByAngle(this, this.angle, 100f, delta);
+        environment.moveByAngle(this, this.direction.getAngle(), 10f, delta);
     }
 
     @Override
     public void onRender(SpriteBatch spriteBatch) {
-        // Get the current animation frame for the animation.
-        TextureRegion currentFrame = this.animation.getCurrentFrame();
-
-        // Draw the current animation frame.
-        spriteBatch.draw(currentFrame, this.getX(), this.getY(), this.getLengthX(), this.getLengthZ());
+        this.sprite.setPosition(this.getX(), this.getY());
+        this.sprite.setSize(this.getLengthX(), this.getLengthZ());
+        this.sprite.draw(spriteBatch);
     }
 
     @Override
     public float getLengthX() {
-        return Constants.LEVEL_TILE_SIZE * 0.2f;
+        return 6f;
     }
 
     @Override
     public float getLengthY() {
-        return Constants.LEVEL_TILE_SIZE * 0.25f;
+        return 0;
     }
 
     @Override
     public float getLengthZ() {
-        return Constants.LEVEL_TILE_SIZE * 0.25f;
+        return 5f;
     }
 }

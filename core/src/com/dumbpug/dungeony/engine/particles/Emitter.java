@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.engine.particles;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
+import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -10,19 +11,11 @@ import java.util.Iterator;
  * A particle emitter entity.
  * @param <TRenderContext> The render context.
  */
-public class Emitter<TRenderContext> extends Entity<TRenderContext> {
+public abstract class Emitter<TRenderContext> extends Entity<TRenderContext> {
     /**
      * A reference to the environment that the emitter is currently in.
      */
     private InteractiveEnvironment environment;
-    /**
-     * The particle generator.
-     */
-    private IParticleGenerator particleGenerator;
-    /**
-     * The emitter activity.
-     */
-    private IEmitterActivity emitterActivity;
     /**
      * The list of all emitter particles.
      */
@@ -32,13 +25,17 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
      */
     private ArrayList<Particle<TRenderContext>> inactiveParticles = new ArrayList<Particle<TRenderContext>>();
     /**
-     * Whether the emitter is active.
+     * Whether the emitter has had its initial update.
      */
-    private boolean isActive = true;
+    private boolean hasHadInitialUpdate = false;
+    /**
+     * Whether the emitter is enabled.
+     */
+    private boolean isEnabled = true;
     /**
      * The maximum number of particles permitted.
      */
-    private int maxParticleCount = 300;
+    private int maxParticleCount = 100;
     /**
      * Whether to destroy inactive particles or reuse them.
      */
@@ -47,13 +44,9 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
     /**
      * Create a new instance of the Emitter class.
      * @param position The emitter position.
-     * @param emitterActivity The emitter activity.
-     * @param particleGenerator The particle generator.
      */
-    public Emitter(Position position, IEmitterActivity emitterActivity, IParticleGenerator particleGenerator) {
+    public Emitter(Position position) {
         super(position);
-        this.emitterActivity   = emitterActivity;
-        this.particleGenerator = particleGenerator;
     }
 
     /**
@@ -74,19 +67,18 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
 
     @Override
     public int getCollisionLayers() {
-        return 0;
+        return EntityCollisionFlag.NOTHING;
     }
 
     @Override
     public int getCollisionMask() {
-        return 0;
+        return EntityCollisionFlag.NOTHING;
     }
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
         // Keep a reference to the environment that the emitter is placed in.
         this.environment = environment;
-
     }
 
     @Override
@@ -97,12 +89,12 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
 
     @Override
     public void update(InteractiveEnvironment environment, float delta) {
-        // If the emitter is active then invoke the emitter activity.
-        if (this.isActive) {
-            this.emitterActivity.act(this, delta);
-        }
+        // If the emitter is active then invoke the custom emitter update.
+        if (this.isEnabled) {
+            onUpdate(!this.hasHadInitialUpdate, delta);
 
-        System.out.println("PART: " + this.particles.size());
+            this.hasHadInitialUpdate = true;
+        }
 
         Iterator<Particle<TRenderContext>> iterator = this.particles.iterator();
 
@@ -124,7 +116,7 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
     }
 
     @Override
-    public final void render(TRenderContext tRenderContext) {
+    public final void render(TRenderContext renderContext) {
         // We never need to render the emitter, we just care about the particles which will be drawn as part of the environment render.
     }
 
@@ -144,9 +136,29 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
     }
 
     /**
-     * Attempts to spawn a new particle and ad it to the game environment.
+     * Enable the emitter.
      */
-    public void spawnParticle() {
+    public void enable() {
+        if (!this.isEnabled) {
+            this.isEnabled           = true;
+            this.hasHadInitialUpdate = false;
+        }
+    }
+
+    /**
+     * Disable the emitter.
+     */
+    public void disable() {
+        if (this.isEnabled) {
+            this.isEnabled = false;
+        }
+    }
+
+    /**
+     * Attempts to spawn a particle and add it to the game environment.
+     * Inactive particles will be reused if they exist.
+     */
+    protected void spawnParticle() {
         if (this.environment == null) {
             throw new RuntimeException("cannot add emitter particle when emitter is not part of an environment.");
         }
@@ -172,7 +184,7 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
             nextInactiveParticle.onActivate(this.getX(), this.getY());
         } else {
             // Generate a brand new particle.
-            Particle particle = this.particleGenerator.generate();
+            Particle particle = generateParticle();
 
             // Add it to our collection of particles.
             particles.add(particle);
@@ -183,4 +195,8 @@ public class Emitter<TRenderContext> extends Entity<TRenderContext> {
             particle.onActivate(this.getX(), this.getY());
         }
     }
+
+    protected abstract void onUpdate(boolean isInitialUpdate, float delta);
+
+    protected abstract Particle<TRenderContext> generateParticle();
 }
