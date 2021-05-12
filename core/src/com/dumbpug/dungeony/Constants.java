@@ -7,10 +7,9 @@ public class Constants {
     //==============================================================================================
     // FONT
     //==============================================================================================
-    public static final String FONT_TYPE_MAIN                                    = "Boxy-Bold.ttf";
-    public static final int FONT_SIZE_SMALL                                      = 4;
-    public static final int FONT_SIZE_MEDIUM                                     = 8;
-    public static final int FONT_SIZE_LARGE                                      = 12;
+    public static final String FONT_TYPE_MAIN                                    = "nokiafc22.ttf";
+    public static final int FONT_SIZE_STANDARD                                   = 8;
+    public static final int FONT_SIZE_LARGE                                      = 16;
 
     //==============================================================================================
     // DISPLAY
@@ -41,6 +40,12 @@ public class Constants {
     public static final float LEVEL_GRID_CELL_SIZE                               = LEVEL_TILE_SIZE * 4f;
     public static final float LEVEL_DEFAULT_ZOOM                                 = 0.25f; // 0.18f;
     public static final float LEVEL_CAMERA_SHAKE_POWER                           = 1;
+
+    //==============================================================================================
+    // HUD
+    //==============================================================================================
+    public static final int HUD_VIEWPORT_HEIGHT                                  = 520;
+    public static final float HUD_PANEL_MARGIN                                   = 3f;
 
     //==============================================================================================
     // CHARACTER

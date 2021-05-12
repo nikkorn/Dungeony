@@ -61,6 +61,8 @@ public class Bullet extends Projectile {
 
     @Override
     public void onGameObjectCollision(GameObject object, InteractiveEnvironment environment, float delta) {
+        // Let the game object handle what to do on projectile collision.
+        object.onProjectileCollision(this);
     }
 
     @Override

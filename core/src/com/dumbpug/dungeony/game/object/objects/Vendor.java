@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.game.object.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Area;
 import com.dumbpug.dungeony.engine.Entity;
@@ -12,6 +13,8 @@ import com.dumbpug.dungeony.game.character.player.Player;
 import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.object.GameObject;
 import com.dumbpug.dungeony.game.object.GameObjectType;
+import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
+import com.dumbpug.dungeony.game.rendering.Resources;
 import com.dumbpug.dungeony.text.FontProvider;
 import com.dumbpug.dungeony.text.FontSize;
 import com.dumbpug.dungeony.text.FontType;
@@ -26,6 +29,10 @@ public class Vendor extends GameObject {
      * The area of interaction on front of the vendor.
      */
     private Area areaOfInteraction;
+    /**
+     * The vendor sprite.
+     */
+    private Sprite sprite;
 
     Player usingPlayer = null;
     BitmapFont font;
@@ -37,7 +44,9 @@ public class Vendor extends GameObject {
     public Vendor(Position origin, IEntityProperties properties) {
         super(origin, properties);
 
-        font = FontProvider.getFont(FontType.MAIN_FONT, FontSize.MEDIUM);
+        sprite = Resources.getSprite(GameObjectSprite.VENDOR);
+
+        font = FontProvider.getFont(FontType.MAIN_FONT, FontSize.STANDARD);
         font.setColor(Color.WHITE);
     }
 
@@ -89,17 +98,16 @@ public class Vendor extends GameObject {
         }
     }
 
-    /**
-     * Render the renderable using the provided sprite batch.
-     * @param batch The sprite batch to use in rendering the renderable.
-     */
     @Override
-    public void render(SpriteBatch batch) {
-        super.render(batch);
+    public void render(SpriteBatch spriteBatch) {
+        // Draw the vendor sprite.
+        this.sprite.setSize(this.getLengthX(), this.getLengthZ());
+        this.sprite.setPosition(this.getX(), this.getY());
+        this.sprite.draw(spriteBatch);
 
         if (usingPlayer != null)
         {
-            font.draw(batch, "HELLO!", this.getX(), this.getY() + this.getLengthZ(), Gdx.graphics.getWidth(), Align.left, true);
+            font.draw(spriteBatch, "HELLO!", this.getX(), this.getY() + this.getLengthZ(), Gdx.graphics.getWidth(), Align.left, true);
         }
     }
 

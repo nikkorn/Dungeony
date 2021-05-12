@@ -1,5 +1,6 @@
 package com.dumbpug.dungeony.game.object.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.object.GameObject;
@@ -38,6 +39,9 @@ public class Chest extends GameObject {
 
     @Override
     public void update(InteractiveEnvironment environment, float delta) { }
+
+    @Override
+    public void render(SpriteBatch spriteBatch) { }
 
     @Override
     public GameObjectType getType() {

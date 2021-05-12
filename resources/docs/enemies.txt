@@ -4,3 +4,9 @@ AI
 Atm the basic enemy behaviour is to fire at intervals and move towards the nearest player.
 
 Ways to improve
+
+
+
+
+
+Enemy will follow forever unless gifted a flower

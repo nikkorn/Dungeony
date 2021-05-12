@@ -71,6 +71,7 @@ public abstract class Particle<TRenderContext> extends Entity<TRenderContext> {
         // Reduce the life of the particle by the game delta.
         this.life -= delta;
 
+        // Has the life of the particle expired?
         if (life <= 0) {
             this.state = ParticleState.INACTIVE;
         }

@@ -30,11 +30,8 @@ public class FontProvider {
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
         switch (size) {
-            case SMALL:
-                parameter.size = Constants.FONT_SIZE_SMALL;
-                break;
-            case MEDIUM:
-                parameter.size = Constants.FONT_SIZE_MEDIUM;
+            case STANDARD:
+                parameter.size = Constants.FONT_SIZE_STANDARD;
                 break;
             case LARGE:
                 parameter.size = Constants.FONT_SIZE_LARGE;

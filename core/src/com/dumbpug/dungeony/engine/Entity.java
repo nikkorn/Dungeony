@@ -81,6 +81,14 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     }
 
     /**
+     * Gets the positional offset of the entity on the z axis.
+     * @return The positional offset of the entity on the z axis.
+     */
+    public float getOffsetZ() {
+        return 0;
+    }
+
+    /**
      * Gets whether the entity can block the line of sight between entities.
      * @return Whether the entity can block the line of sight between entities.
      */

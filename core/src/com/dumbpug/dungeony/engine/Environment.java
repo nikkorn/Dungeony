@@ -3,7 +3,6 @@ package com.dumbpug.dungeony.engine;
 import com.dumbpug.dungeony.engine.audio.IAudioPlayer;
 import com.dumbpug.dungeony.engine.dialog.Dialogs;
 import com.dumbpug.dungeony.engine.lighting.Lights;
-import com.dumbpug.dungeony.engine.rendering.IRenderWindow;
 import com.dumbpug.dungeony.engine.rendering.Renderables;
 
 /**
@@ -117,6 +116,14 @@ public abstract class Environment<TRenderContext> {
     }
 
     /**
+     * Gets the configured light level for the environment.
+     * @return The configured light level for the environment.
+     */
+    public float getLightLevel() {
+        return this.configuration.lightLevel;
+    }
+
+    /**
      * Update the environment and any contained entities.
      * @param delta The delta time.
      */
@@ -136,11 +143,15 @@ public abstract class Environment<TRenderContext> {
         this.renderables.render(context, this.camera);
 
         onAfterEntitiesRender(context);
-        onBeforeLightsRender(context);
 
-        this.lights.render(context);
+        if (this.configuration.isLightingEnabled) {
+            onBeforeLightsRender(context);
 
-        onAfterLightsRender(context);
+            this.lights.render(context);
+
+            onAfterLightsRender(context);
+        }
+
         onBeforeDialogsRender(context);
 
         this.dialogs.render(context);

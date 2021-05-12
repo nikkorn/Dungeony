@@ -7,7 +7,6 @@ import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.enemy.EnemyType;
 import com.dumbpug.dungeony.game.character.friendly.FriendlyType;
 import com.dumbpug.dungeony.game.character.player.PlayerType;
-import com.dumbpug.dungeony.game.object.GameObjectState;
 import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.projectile.ProjectileType;
 import com.dumbpug.dungeony.game.weapon.WeaponState;
@@ -45,7 +44,9 @@ public class Resources {
             }
         }};
         gameObjectSpriteMap = new HashMap<GameObjectSprite, Sprite>() {{
-            put(GameObjectSprite.POT, new Sprite(new Texture("images/game_object/POT.png")));
+            for (GameObjectSprite sprite : GameObjectSprite.values()) {
+                put(sprite, new Sprite(new Texture("images/game_object/" + sprite + ".png")));
+            }
         }};
         projectileTextureMap = new HashMap<ProjectileType, Texture>() {{
             for (ProjectileType type : ProjectileType.values()) {
@@ -79,16 +80,6 @@ public class Resources {
      */
     public static Sprite getSprite(GameObjectSprite gameObjectSprite) {
         return gameObjectSpriteMap.get(gameObjectSprite);
-    }
-
-    /**
-     * Gets the animation for the specified game object state type.
-     * @param state The state type.
-     * @param type The game object type.
-     * @return The animation for the specified game object state and type.
-     */
-    public static Animation getGameObjectAnimation(GameObjectState state, GameObjectType type) {
-        return new Animation(new Texture("images/game_object/" + type  + "/" + state + ".png"), 4, 1, 1/8f);
     }
 
     /**

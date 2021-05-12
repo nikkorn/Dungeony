@@ -48,7 +48,7 @@ public class LevelEnvironment extends Environment<SpriteBatch> {
 
         // Draw to the light frame buffer.
         frameBuffer.begin();
-        Gdx.gl.glClearColor(0.4f,0.4f,0.4f,1);
+        Gdx.gl.glClearColor(this.getLightLevel(), this.getLightLevel(), this.getLightLevel(),1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         spriteBatch.setProjectionMatrix(this.levelCamera.getCombinedViewMatrix());
         spriteBatch.setBlendFunction(GL20.GL_ONE,GL20.GL_ONE);

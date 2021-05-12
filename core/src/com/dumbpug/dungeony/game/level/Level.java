@@ -35,6 +35,10 @@ public class Level {
      */
     private LevelEnvironmentCamera levelCamera;
     /**
+     * The list of players in the level.
+     */
+    private ArrayList<Player> players;
+    /**
      * The music to play on loop while the level is active.
      */
     private Music backgroundMusic;
@@ -66,7 +70,7 @@ public class Level {
         }
 
         // Create and add all of the player entities to the game environment.
-        addPlayerEntities(playerDetails, playerSpawns);
+        createPlayerEntities(playerDetails, playerSpawns);
 
         // Add all of the tile entities to the game environment.
         this.environment.getEntities().add(tiles, "tile");
@@ -90,6 +94,14 @@ public class Level {
      */
     public LevelEnvironmentCamera getCamera() {
         return this.levelCamera;
+    }
+
+    /**
+     * Gets the list of players in the level.
+     * @return The list of players in the level.
+     */
+    public ArrayList<Player> getPlayers() {
+        return this.players;
     }
 
     /**
@@ -155,11 +167,13 @@ public class Level {
     }
 
     /**
-     * Add new player entities to the level environment.
+     * Create and add new player entities to the level environment.
      * @param playerDetails The list of player details.
      * @param spawns The available player spawns.
      */
-    private void addPlayerEntities(ArrayList<PlayerDetails> playerDetails, ArrayList<TileSpawn> spawns) {
+    private void createPlayerEntities(ArrayList<PlayerDetails> playerDetails, ArrayList<TileSpawn> spawns) {
+        this.players = new ArrayList<Player>();
+
         // Create an in-level Player instance for each player, giving them each an initial spawn position.
         for (PlayerDetails playerDetail : playerDetails) {
             // TODO Eventually handle the fact that a tile spawn can represent a spawn path to follow before the level begins.
@@ -170,9 +184,11 @@ public class Level {
             // TODO: Remove this weapon test.
             player.setWeapon(new Pistol(WeaponQuality.AVERAGE));
 
-            // Add the player to the game environment.
-            this.environment.getEntities().add(player, "player");
+            this.players.add(player);
         }
+
+        // Add all of the players to the game environment.
+        this.environment.getEntities().add(this.players, "player");
     }
 
     /**
