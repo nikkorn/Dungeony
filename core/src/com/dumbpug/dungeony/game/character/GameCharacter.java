@@ -264,7 +264,20 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     public void walk(InteractiveEnvironment environment, float movementAxisX, float movementAxisY, float delta) {
         // Is the character idle and not moving in any direction?
         if (movementAxisX == 0f && movementAxisY == 0f) {
+            // If we were running then we have just stopped.
+            if (this.getState() == GameCharacterState.RUNNING) {
+                onWalkingStop(environment, delta);
+            }
+
+            // The character has not moved on either axis so is now idle.
+            this.setState(GameCharacterState.IDLE);
+
             return;
+        }
+
+        // If we were idle then we have just started walking.
+        if (this.getState() == GameCharacterState.IDLE) {
+            onWalkingStart(environment, delta);
         }
 
         // If the character has no defined angle of view, then the direction they are moving on the x axis will determine their new facing direction.
@@ -352,6 +365,18 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * @return The character movements speed per second.
      */
     public abstract float getMovementSpeed();
+
+    public void onWalkingStart(InteractiveEnvironment environment, float delta) {
+        System.out.println("STARTED!");
+    }
+
+    public void onWalkingStop(InteractiveEnvironment environment, float delta) {
+        System.out.println("STOPPED!");
+    }
+
+    public void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
+        System.out.println("DIRECTION CHANGE!");
+    }
 
     /**
      * Called when the character takes damage.

@@ -17,7 +17,7 @@ public class WalkingDustEmitter extends Emitter<SpriteBatch> {
     /**
      * The number of seconds since the last particle spawn.
      */
-    private float secondsSinceLastSpawn = 0.02f;
+    private float secondsSinceLastSpawn = 1f;
 
     /**
      * Create a new instance of the WalkingDustEmitter class.
@@ -31,7 +31,7 @@ public class WalkingDustEmitter extends Emitter<SpriteBatch> {
 
     @Override
     public void onUpdate(boolean isInitialUpdate, float delta) {
-        if (secondsSinceLastSpawn >= 0.02f) {
+        if (secondsSinceLastSpawn >= 1f) {
             spawnParticle();
             secondsSinceLastSpawn = 0;
         } else {
