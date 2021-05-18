@@ -50,6 +50,10 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     private long lastDamagedReceivedTime = 0l;
     /**
+     * The character state during pre-update.
+     */
+    private GameCharacterState preUpdateState;
+    /**
      * The mappings of character facing directions to state and animation mappings.
      */
     private HashMap<FacingDirection, HashMap<GameCharacterState, Animation>> animations;
@@ -199,6 +203,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        System.out.println("HERE FOR " + this.getClass().getName());
         environment.addEntity(this.leftWalkingDustEmitter);
         environment.addEntity(this.rightWalkingDustEmitter);
     }
@@ -221,6 +226,45 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     protected void setAnimation(GameCharacterState state, FacingDirection direction, Animation animation) {
         this.animations.get(direction).put(state, animation);
+    }
+
+    /**
+     * Called before the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onBeforeUpdate(InteractiveEnvironment environment, float delta) {
+        this.preUpdateState = this.getState();
+    }
+
+    /**
+     * Called after the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {
+        // There is nothing to do if there has been no change to the character state during the update.
+        if (this.getState() == this.preUpdateState)
+            return;
+
+        // Handle character state changes that happen during the update.
+        switch (this.preUpdateState) {
+            case HIDDEN:
+            case SLEEPING:
+            case IDLE:
+            case DEAD:
+                if (this.getState() == GameCharacterState.RUNNING || this.getState() == GameCharacterState.DODGING) {
+                    onWalkingStart(environment, delta);
+                }
+                break;
+
+            case RUNNING:
+            case DODGING:
+                if (this.getState() != GameCharacterState.RUNNING && this.getState() != GameCharacterState.DODGING) {
+                    onWalkingStop(environment, delta);
+                }
+                break;
+        }
     }
 
     /**
@@ -282,11 +326,6 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     public void walk(InteractiveEnvironment environment, float movementAxisX, float movementAxisY, float delta) {
         // Is the character idle and not moving in any direction?
         if (movementAxisX == 0f && movementAxisY == 0f) {
-            // If we were running then we have just stopped.
-            if (this.getState() == GameCharacterState.RUNNING) {
-                onWalkingStop(environment, delta);
-            }
-
             // The character has not moved on either axis so is now idle.
             this.setState(GameCharacterState.IDLE);
 
@@ -315,14 +354,9 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         // Any entity movement has to be taken care of by the level grid which handles all entity collisions.
         environment.move(this, movementAxisX, movementAxisY, delta);
 
-        // If we were idle then we have just started walking.
-        if (wasCharacterIdle) {
-            onWalkingStart(environment, delta);
-        } else {
-            // We were already walking, but have we changed the direction that we are facing?
-            if (originalFacingDirection != this.getFacingDirection()) {
-                onWalkingDirectionChange(environment, delta);
-            }
+        // Were we walking as part of the last update and changed direction?
+        if (originalFacingDirection != this.getFacingDirection() && !wasCharacterIdle) {
+            onWalkingDirectionChange(environment, delta);
         }
     }
 
