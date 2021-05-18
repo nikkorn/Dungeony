@@ -186,6 +186,20 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     }
 
     /**
+     * Called before the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onBeforeUpdate(InteractiveEnvironment environment, float delta) {}
+
+    /**
+     * Called after the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {}
+
+    /**
      * Gets whether the entity has been marked as to be destroyed.
      * @return Whether the entity has been marked as to be destroyed.
      */

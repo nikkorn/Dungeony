@@ -14,9 +14,13 @@ public abstract class Particle<TRenderContext> extends Entity<TRenderContext> {
      */
     private ParticleState state = ParticleState.ACTIVE;
     /**
+     * The total life of this particle in seconds, defaults to a second.
+     */
+    private float totalLife = 1f;
+    /**
      * The remaining life of this particle in seconds, defaults to a second.
      */
-    private float life = 5f;
+    private float remainingLife = 1f;
 
     /**
      * Creates a new instance of the Particle class.
@@ -42,16 +46,25 @@ public abstract class Particle<TRenderContext> extends Entity<TRenderContext> {
     }
 
     /**
+     * Get the total life of this particle in seconds.
+     * @return The total life of this particle in seconds.
+     */
+    public float getTotalLife() { return this.totalLife; }
+
+    /**
      * Get the remaining life of this particle in seconds.
      * @return The remaining life of this particle in seconds.
      */
-    public float getLife() { return life; }
+    public float getRemainingLife() { return this.remainingLife; }
 
     /**
-     * Set the remaining life of this particle in seconds.
-     * @param life The remaining life of this particle in seconds.
+     * Set the life of this particle in seconds.
+     * @param life The life of this particle in seconds.
      */
-    public void setLife(float life) { this.life = life; }
+    public void setLife(float life) {
+        this.totalLife     = life;
+        this.remainingLife = life;
+    }
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) { }
@@ -68,12 +81,13 @@ public abstract class Particle<TRenderContext> extends Entity<TRenderContext> {
 
         this.onUpdate(environment, delta);
 
-        // Reduce the life of the particle by the game delta.
-        this.life -= delta;
+        // Reduce the remaining life of the particle by the game delta.
+        this.remainingLife -= delta;
 
         // Has the life of the particle expired?
-        if (life <= 0) {
-            this.state = ParticleState.INACTIVE;
+        if (this.remainingLife <= 0) {
+            this.remainingLife = 0;
+            this.state         = ParticleState.INACTIVE;
         }
     }
 

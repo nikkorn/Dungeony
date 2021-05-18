@@ -8,7 +8,9 @@ import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
+import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitter;
 import com.dumbpug.dungeony.game.inventory.Inventory;
+import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.rendering.Animation;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import com.dumbpug.dungeony.utilities.shaders.ShaderProvider;
@@ -52,6 +54,10 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     private HashMap<FacingDirection, HashMap<GameCharacterState, Animation>> animations;
     /**
+     * The walking dust particle emitters for the player.
+     */
+    private WalkingDustEmitter leftWalkingDustEmitter, rightWalkingDustEmitter;
+    /**
      * The game character shadow sprite.
      */
     protected Sprite shadowSprite;
@@ -68,6 +74,12 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
             put(FacingDirection.LEFT, new HashMap<GameCharacterState, Animation>());
             put(FacingDirection.RIGHT, new HashMap<GameCharacterState, Animation>());
         }};
+
+        // Create the walking dust emitters.
+        this.leftWalkingDustEmitter  = new WalkingDustEmitter(new Position(origin), FacingDirection.LEFT);
+        this.rightWalkingDustEmitter = new WalkingDustEmitter(new Position(origin), FacingDirection.RIGHT);
+
+        onPositionChange();
     }
 
     /**
@@ -76,7 +88,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     public void setX(float x) {
         super.setX(x);
-        this.updateWeaponPosition();
+        this.onPositionChange();
     }
 
     /**
@@ -85,7 +97,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     public void setY(float y) {
         super.setY(y);
-        this.updateWeaponPosition();
+        this.onPositionChange();
     }
 
     /**
@@ -185,6 +197,12 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         return EntityCollisionFlag.WALL | EntityCollisionFlag.CHARACTER | EntityCollisionFlag.OBJECT;
     }
 
+    @Override
+    public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        environment.addEntity(this.leftWalkingDustEmitter);
+        environment.addEntity(this.rightWalkingDustEmitter);
+    }
+
     /**
      * Gets the character animation for the given state and facing direction.
      * @param state The character state.
@@ -275,10 +293,11 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
             return;
         }
 
-        // If we were idle then we have just started walking.
-        if (this.getState() == GameCharacterState.IDLE) {
-            onWalkingStart(environment, delta);
-        }
+        // Check whether the character was idle before attempting to walk.
+        boolean wasCharacterIdle = this.getState() == GameCharacterState.IDLE;
+
+        // Get the direction that the character was facing before we do any walking.
+        FacingDirection originalFacingDirection = this.getFacingDirection();
 
         // If the character has no defined angle of view, then the direction they are moving on the x axis will determine their new facing direction.
         if (this.angleOfView == null) {
@@ -295,6 +314,16 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
 
         // Any entity movement has to be taken care of by the level grid which handles all entity collisions.
         environment.move(this, movementAxisX, movementAxisY, delta);
+
+        // If we were idle then we have just started walking.
+        if (wasCharacterIdle) {
+            onWalkingStart(environment, delta);
+        } else {
+            // We were already walking, but have we changed the direction that we are facing?
+            if (originalFacingDirection != this.getFacingDirection()) {
+                onWalkingDirectionChange(environment, delta);
+            }
+        }
     }
 
     /**
@@ -348,9 +377,20 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Called whenever the x/y position of the character changes.
+     */
+    private void onPositionChange() {
+        // Update the position of the character weapon.
+        updateWeaponPosition();
+
+        // Update the position of the walking particle emitters.
+        updateWalkingParticleEmitterPositions();
+    }
+
+    /**
      * Updates the position of the equipped weapon if there is one.
      */
-    protected void updateWeaponPosition() {
+    private void updateWeaponPosition() {
         if (this.weapon != null) {
             // Where the weapon is positioned in the world will depend on the position of the character holding it.
             float weaponPositionY = this.getOrigin().getY() - (this.getLengthY() * 0.3f);
@@ -361,22 +401,45 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Updates the position of the walking particle emitters.
+     */
+    private void updateWalkingParticleEmitterPositions() {
+        this.leftWalkingDustEmitter.setX(this.getX() + this.getLengthX());
+        this.leftWalkingDustEmitter.setY(this.getY());
+        this.rightWalkingDustEmitter.setX(this.getX());
+        this.rightWalkingDustEmitter.setY(this.getY());
+    }
+
+    public void onWalkingStart(InteractiveEnvironment environment, float delta) {
+        if (getFacingDirection() == FacingDirection.LEFT) {
+            this.leftWalkingDustEmitter.enable();
+            this.rightWalkingDustEmitter.disable();
+        } else {
+            this.leftWalkingDustEmitter.disable();
+            this.rightWalkingDustEmitter.enable();
+        }
+    }
+
+    public void onWalkingStop(InteractiveEnvironment environment, float delta) {
+        this.leftWalkingDustEmitter.disable();
+        this.rightWalkingDustEmitter.disable();
+    }
+
+    public void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
+        if (getFacingDirection() == FacingDirection.LEFT) {
+            this.leftWalkingDustEmitter.enable();
+            this.rightWalkingDustEmitter.disable();
+        } else {
+            this.leftWalkingDustEmitter.disable();
+            this.rightWalkingDustEmitter.enable();
+        }
+    }
+
+    /**
      * Gets the character movements speed per second.
      * @return The character movements speed per second.
      */
     public abstract float getMovementSpeed();
-
-    public void onWalkingStart(InteractiveEnvironment environment, float delta) {
-        System.out.println("STARTED!");
-    }
-
-    public void onWalkingStop(InteractiveEnvironment environment, float delta) {
-        System.out.println("STOPPED!");
-    }
-
-    public void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
-        System.out.println("DIRECTION CHANGE!");
-    }
 
     /**
      * Called when the character takes damage.

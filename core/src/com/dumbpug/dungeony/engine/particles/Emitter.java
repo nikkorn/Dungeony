@@ -178,8 +178,8 @@ public abstract class Emitter<TRenderContext> extends Entity<TRenderContext> {
 
             nextInactiveParticle.setState(ParticleState.ACTIVE);
 
-            // TODO: Find a way to reset particle life nicely.
-            nextInactiveParticle.setLife(1f);
+            // Set the life of the particle to be its original total life.
+            nextInactiveParticle.setLife(nextInactiveParticle.getTotalLife());
 
             nextInactiveParticle.onActivate(this.getX(), this.getY());
         } else {

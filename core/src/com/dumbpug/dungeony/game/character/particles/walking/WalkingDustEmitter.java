@@ -26,6 +26,7 @@ public class WalkingDustEmitter extends Emitter<SpriteBatch> {
      */
     public WalkingDustEmitter(Position position, FacingDirection direction) {
         super(position);
+        this.disable();
         this.direction = direction;
     }
 

@@ -24,11 +24,6 @@ public class Player extends GameCharacter {
      * The player details.
      */
     private PlayerDetails details;
-    /**
-     * The walking dust particle emitters for the player.
-     * TODO: Move to GameCharacter.
-     */
-    private WalkingDustEmitter leftWalkingDustEmitter, rightWalkingDustEmitter;
 
     /**
      * Creates a new instance of the Player class.
@@ -47,10 +42,6 @@ public class Player extends GameCharacter {
 
         // Set the player shadow sprite.
         this.shadowSprite = Resources.getCharacterSprite(GameCharacterSprite.SHADOW, details.getType());
-
-        // Create the walking dust emitters.
-        this.leftWalkingDustEmitter  = new WalkingDustEmitter(new Position(origin), FacingDirection.LEFT);
-        this.rightWalkingDustEmitter = new WalkingDustEmitter(new Position(origin), FacingDirection.RIGHT);
     }
 
     /**
@@ -83,9 +74,8 @@ public class Player extends GameCharacter {
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        super.onEnvironmentEntry(environment);
         environment.addLight(new SpotLight(this, 1f, 0.3f, 0.3f));
-        environment.addEntity(this.leftWalkingDustEmitter);
-        environment.addEntity(this.rightWalkingDustEmitter);
     }
 
     @Override
@@ -124,19 +114,6 @@ public class Player extends GameCharacter {
         // Are we using our equipped weapon?
         if (this.getWeapon() != null && playerInputProvider.isControlPressed(Control.PRIMARY_ACTION)) {
             this.getWeapon().use(environment, this, playerInputProvider.isControlJustPressed(Control.PRIMARY_ACTION), delta);
-        }
-
-        this.leftWalkingDustEmitter.setX(this.getX());
-        this.leftWalkingDustEmitter.setY(this.getY());
-        this.rightWalkingDustEmitter.setX(this.getX());
-        this.rightWalkingDustEmitter.setY(this.getY());
-
-        if (getFacingDirection() == FacingDirection.RIGHT) {
-            this.leftWalkingDustEmitter.enable();
-            this.rightWalkingDustEmitter.disable();
-        } else {
-            this.leftWalkingDustEmitter.disable();
-            this.rightWalkingDustEmitter.enable();
         }
     }
 }

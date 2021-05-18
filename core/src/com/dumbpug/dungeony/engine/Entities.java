@@ -248,8 +248,14 @@ public class Entities<TRenderContext>  {
         for (Entity<TRenderContext> entity : this.updatableEntities) {
             // TODO: Skip here if the update strategy of the entity is 'DELAY' and we have not waited long enough for the next update.
 
+            // Allow the entity to do some pre-update logic.
+            entity.onBeforeUpdate(this.interactiveEnvironment, delta);
+
             // Update the entity, passing the environment interactivity layer with which the entity can interact with the environment.
             entity.update(this.interactiveEnvironment, delta);
+
+            // Allow the entity to do some post-update logic.
+            entity.onAfterUpdate(this.interactiveEnvironment, delta);
         }
 
         // Unset the flag that says whether we are currently in an update, any entities

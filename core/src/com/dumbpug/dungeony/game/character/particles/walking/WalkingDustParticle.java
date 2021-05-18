@@ -2,7 +2,6 @@ package com.dumbpug.dungeony.game.character.particles.walking;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.particles.Particle;
 import com.dumbpug.dungeony.game.character.FacingDirection;
@@ -18,6 +17,10 @@ public class WalkingDustParticle extends Particle<SpriteBatch> {
      */
     private FacingDirection direction;
     /**
+     * The angle to move the particle.
+     */
+    private float angleOfMovement;
+    /**
      * The particle sprite.
      */
     private Sprite sprite;
@@ -29,12 +32,16 @@ public class WalkingDustParticle extends Particle<SpriteBatch> {
     public WalkingDustParticle(FacingDirection direction) {
         this.direction = direction;
 
+        this.setLife(0.5f);
+
         switch (direction) {
             case LEFT:
-                this.sprite = Resources.getSprite(ParticleSprite.WALKING_DUST_RIGHT);
+                this.sprite          = Resources.getSprite(ParticleSprite.WALKING_DUST_LEFT);
+                this.angleOfMovement = FacingDirection.RIGHT.getAngle();
                 break;
             case RIGHT:
-                this.sprite = Resources.getSprite(ParticleSprite.WALKING_DUST_LEFT);
+                this.sprite          = Resources.getSprite(ParticleSprite.WALKING_DUST_RIGHT);
+                this.angleOfMovement = FacingDirection.LEFT.getAngle();
                 break;
             default:
         }
@@ -59,13 +66,18 @@ public class WalkingDustParticle extends Particle<SpriteBatch> {
 
     @Override
     public void onUpdate(InteractiveEnvironment environment, float delta) {
-        environment.moveByAngle(this, this.direction.getAngle(), 10f, delta);
+        environment.moveByAngle(this, this.angleOfMovement, 10f, delta);
     }
 
     @Override
     public void onRender(SpriteBatch spriteBatch) {
+        float lifeRatio = this.getRemainingLife() / this.getTotalLife();
+        float scale     = 0.8f + (1f - lifeRatio);
+
         this.sprite.setPosition(this.getX(), this.getY());
         this.sprite.setSize(this.getLengthX(), this.getLengthZ());
+        this.sprite.setScale(scale, scale);
+        this.sprite.setColor(1,1,1, lifeRatio);
         this.sprite.draw(spriteBatch);
     }
 
