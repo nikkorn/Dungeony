@@ -5,5 +5,6 @@ package com.dumbpug.dungeony.game.rendering;
  */
 public enum ParticleSprite {
     WALKING_DUST_LEFT,
-    WALKING_DUST_RIGHT
+    WALKING_DUST_RIGHT,
+    BULLET_TRAIL
 }

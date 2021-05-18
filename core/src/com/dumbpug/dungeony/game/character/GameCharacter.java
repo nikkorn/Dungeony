@@ -203,7 +203,6 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
-        System.out.println("HERE FOR " + this.getClass().getName());
         environment.addEntity(this.leftWalkingDustEmitter);
         environment.addEntity(this.rightWalkingDustEmitter);
     }

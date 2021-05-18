@@ -1,4 +1,4 @@
-package com.dumbpug.dungeony.game.projectile.projectiles;
+package com.dumbpug.dungeony.game.projectile.projectiles.bullet;
 
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.audio.AudioProvider;
@@ -21,6 +21,10 @@ public class Bullet extends Projectile {
      * The bullet spotlight.
      */
     private SmallSpotLight light;
+    /**
+     * The bullet trail particle emitter.
+     */
+    private BulletTrailParticleEmitter trailEmitter;
     
     /**
      * Creates a new instance of the Bullet class.
@@ -30,7 +34,8 @@ public class Bullet extends Projectile {
      */
     public Bullet(Position origin, float angleOfFire, Entity owner) {
         super(origin, angleOfFire, owner);
-        light = new SmallSpotLight(this, 1f, 1f, 1f);
+        this.light = new SmallSpotLight(this, 1f, 1f, 1f);
+        this.trailEmitter = new BulletTrailParticleEmitter(new Position(origin));
     }
 
     @Override
@@ -78,14 +83,23 @@ public class Bullet extends Projectile {
         AudioProvider.getSoundEffect(SoundEffect.PROJECTILE_THUD).play();
     }
 
-
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
         environment.addLight(light);
+        environment.addEntity(this.trailEmitter);
     }
 
     @Override
     public void onEnvironmentExit(InteractiveEnvironment environment) {
         environment.removeLight(this.light);
+        environment.removeEntity(this.trailEmitter);
+    }
+
+    @Override
+    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {
+        super.onAfterUpdate(environment, delta);
+
+        this.trailEmitter.setX(this.getX());
+        this.trailEmitter.setY(this.getY());
     }
 }
