@@ -76,7 +76,9 @@ public class Bullet extends Projectile {
 
     @Override
     public void onCollided(InteractiveEnvironment environment, float delta) {
-        // TODO Show projectile death animation.
+        // Show projectile impact particles.
+        // TODO Check whether this position is right. An impact moving left looks like it is spawned too far right.
+        environment.addEntity(new BulletImpactParticleEmitter(new Position(this.getOrigin())));
 
         // Make a bullet impact sound!
         // TODO This should eventually differ based on the type of entity that it collided with,
