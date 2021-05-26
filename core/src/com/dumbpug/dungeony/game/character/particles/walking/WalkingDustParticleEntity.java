@@ -3,7 +3,7 @@ package com.dumbpug.dungeony.game.character.particles.walking;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.game.character.FacingDirection;
 import com.dumbpug.dungeony.game.rendering.ParticleSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
@@ -11,7 +11,7 @@ import com.dumbpug.dungeony.game.rendering.Resources;
 /**
  * A dust particle that slowly moves away from an entity waling in the opposite direction.
  */
-public class WalkingDustParticle extends Particle<SpriteBatch> {
+public class WalkingDustParticleEntity extends ParticleEntity<SpriteBatch> {
     /**
      * The facing direction of the entity that spawned the particle.
      */
@@ -29,7 +29,7 @@ public class WalkingDustParticle extends Particle<SpriteBatch> {
      * Creates a new instance of the WalkingDustParticle class.
      * @param direction The facing direction of the entity that spawned the particle.
      */
-    public WalkingDustParticle(FacingDirection direction) {
+    public WalkingDustParticleEntity(FacingDirection direction) {
         this.direction = direction;
 
         this.setLife(0.5f);

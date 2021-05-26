@@ -2,18 +2,18 @@ package com.dumbpug.dungeony.game.projectile.projectiles.bullet;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.engine.particles.Emitter;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.EmitterEntity;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 
 /**
  *
  */
-public class BulletImpactParticleEmitter extends Emitter<SpriteBatch> {
+public class BulletImpactParticleEmitterEntity extends EmitterEntity<SpriteBatch> {
     /**
      * Create a new instance of the Emitter class.
      * @param position The emitter position.
      */
-    public BulletImpactParticleEmitter(Position position) {
+    public BulletImpactParticleEmitterEntity(Position position) {
         super(position);
     }
 
@@ -29,10 +29,12 @@ public class BulletImpactParticleEmitter extends Emitter<SpriteBatch> {
         }
 
         // TODO This needs to clear itself up after all of the particles are dead!!!
+
+        // TODO Just have a basic impact animation on top of this that aims away from the thing we are impacting?
     }
 
     @Override
-    protected Particle<SpriteBatch> generateParticle() {
-        return new BulletImpactParticle();
+    protected ParticleEntity<SpriteBatch> generateParticle() {
+        return new BulletImpactParticleEntity();
     }
 }

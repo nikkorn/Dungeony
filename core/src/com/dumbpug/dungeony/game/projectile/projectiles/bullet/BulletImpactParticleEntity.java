@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.engine.utilities.lotto.Lotto;
 import com.dumbpug.dungeony.game.rendering.ParticleSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * A particle left as part of a bullet trail.
  */
-public class BulletImpactParticle extends Particle<SpriteBatch> {
+public class BulletImpactParticleEntity extends ParticleEntity<SpriteBatch> {
     /**
      * The RNG to use in for this particle.
      */
@@ -48,7 +48,7 @@ public class BulletImpactParticle extends Particle<SpriteBatch> {
     /**
      * Creates a new instance of the BulletTrailParticle class.
      */
-    public BulletImpactParticle() {
+    public BulletImpactParticleEntity() {
         this.rng = new Random();
 
         // Pick a random impact sprite for this particle.

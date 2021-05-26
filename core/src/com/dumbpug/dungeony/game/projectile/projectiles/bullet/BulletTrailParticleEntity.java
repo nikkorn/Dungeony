@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.game.rendering.ParticleSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
 
 /**
  * A particle left as part of a bullet trail.
  */
-public class BulletTrailParticle extends Particle<SpriteBatch> {
+public class BulletTrailParticleEntity extends ParticleEntity<SpriteBatch> {
     /**
      * The particle sprite.
      */
@@ -20,7 +20,7 @@ public class BulletTrailParticle extends Particle<SpriteBatch> {
     /**
      * Creates a new instance of the BulletTrailParticle class.
      */
-    public BulletTrailParticle() {
+    public BulletTrailParticleEntity() {
         this.sprite = Resources.getSprite(ParticleSprite.BULLET_TRAIL);
         this.setLife(0.2f);
     }

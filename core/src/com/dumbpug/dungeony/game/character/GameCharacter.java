@@ -8,9 +8,8 @@ import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
-import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitter;
+import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitterEntity;
 import com.dumbpug.dungeony.game.inventory.Inventory;
-import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.rendering.Animation;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import com.dumbpug.dungeony.utilities.shaders.ShaderProvider;
@@ -60,7 +59,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     /**
      * The walking dust particle emitters for the player.
      */
-    private WalkingDustEmitter leftWalkingDustEmitter, rightWalkingDustEmitter;
+    private WalkingDustEmitterEntity leftWalkingDustEmitter, rightWalkingDustEmitter;
     /**
      * The game character shadow sprite.
      */
@@ -80,8 +79,8 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         }};
 
         // Create the walking dust emitters.
-        this.leftWalkingDustEmitter  = new WalkingDustEmitter(new Position(origin), FacingDirection.LEFT);
-        this.rightWalkingDustEmitter = new WalkingDustEmitter(new Position(origin), FacingDirection.RIGHT);
+        this.leftWalkingDustEmitter  = new WalkingDustEmitterEntity(new Position(origin), FacingDirection.LEFT);
+        this.rightWalkingDustEmitter = new WalkingDustEmitterEntity(new Position(origin), FacingDirection.RIGHT);
 
         onPositionChange();
     }

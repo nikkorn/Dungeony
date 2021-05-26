@@ -2,14 +2,14 @@ package com.dumbpug.dungeony.game.character.particles.walking;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.engine.particles.Emitter;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.EmitterEntity;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.game.character.FacingDirection;
 
 /**
  *
  */
-public class WalkingDustEmitter extends Emitter<SpriteBatch> {
+public class WalkingDustEmitterEntity extends EmitterEntity<SpriteBatch> {
     /**
      * The facing direction of the entity that spawned the particle.
      */
@@ -24,7 +24,7 @@ public class WalkingDustEmitter extends Emitter<SpriteBatch> {
      * @param position The emitter position.
      * @param direction The facing direction of the entity that spawned the particle.
      */
-    public WalkingDustEmitter(Position position, FacingDirection direction) {
+    public WalkingDustEmitterEntity(Position position, FacingDirection direction) {
         super(position);
         this.disable();
         this.direction = direction;
@@ -41,7 +41,7 @@ public class WalkingDustEmitter extends Emitter<SpriteBatch> {
     }
 
     @Override
-    public Particle<SpriteBatch> generateParticle() {
-        return new WalkingDustParticle(this.direction);
+    public ParticleEntity<SpriteBatch> generateParticle() {
+        return new WalkingDustParticleEntity(this.direction);
     }
 }

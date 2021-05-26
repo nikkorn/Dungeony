@@ -9,7 +9,6 @@ import com.dumbpug.dungeony.engine.utilities.GameMath;
 import com.dumbpug.dungeony.game.character.FacingDirection;
 import com.dumbpug.dungeony.game.character.GameCharacter;
 import com.dumbpug.dungeony.game.character.GameCharacterState;
-import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitter;
 import com.dumbpug.dungeony.game.lights.SpotLight;
 import com.dumbpug.dungeony.game.rendering.GameCharacterSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;

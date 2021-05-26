@@ -2,10 +2,10 @@ package com.dumbpug.dungeony.game.projectile.projectiles.bullet;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.engine.particles.Emitter;
-import com.dumbpug.dungeony.engine.particles.Particle;
+import com.dumbpug.dungeony.engine.particles.EmitterEntity;
+import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 
-public class BulletTrailParticleEmitter extends Emitter<SpriteBatch> {
+public class BulletTrailParticleEmitterEntity extends EmitterEntity<SpriteBatch> {
     /**
      * The number of seconds since the last particle spawn.
      */
@@ -15,7 +15,7 @@ public class BulletTrailParticleEmitter extends Emitter<SpriteBatch> {
      * Create a new instance of the Emitter class.
      * @param position The emitter position.
      */
-    public BulletTrailParticleEmitter(Position position) {
+    public BulletTrailParticleEmitterEntity(Position position) {
         super(position);
     }
 
@@ -30,7 +30,7 @@ public class BulletTrailParticleEmitter extends Emitter<SpriteBatch> {
     }
 
     @Override
-    protected Particle<SpriteBatch> generateParticle() {
-        return new BulletTrailParticle();
+    protected ParticleEntity<SpriteBatch> generateParticle() {
+        return new BulletTrailParticleEntity();
     }
 }

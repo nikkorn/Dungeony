@@ -24,7 +24,7 @@ public class Bullet extends Projectile {
     /**
      * The bullet trail particle emitter.
      */
-    private BulletTrailParticleEmitter trailEmitter;
+    private BulletTrailParticleEmitterEntity trailEmitter;
     
     /**
      * Creates a new instance of the Bullet class.
@@ -35,7 +35,7 @@ public class Bullet extends Projectile {
     public Bullet(Position origin, float angleOfFire, Entity owner) {
         super(origin, angleOfFire, owner);
         this.light = new SmallSpotLight(this, 1f, 1f, 1f);
-        this.trailEmitter = new BulletTrailParticleEmitter(new Position(origin));
+        this.trailEmitter = new BulletTrailParticleEmitterEntity(new Position(origin));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Bullet extends Projectile {
     public void onCollided(InteractiveEnvironment environment, float delta) {
         // Show projectile impact particles.
         // TODO Check whether this position is right. An impact moving left looks like it is spawned too far right.
-        environment.addEntity(new BulletImpactParticleEmitter(new Position(this.getOrigin())));
+        environment.addEntity(new BulletImpactParticleEmitterEntity(new Position(this.getOrigin())));
 
         // Make a bullet impact sound!
         // TODO This should eventually differ based on the type of entity that it collided with,
