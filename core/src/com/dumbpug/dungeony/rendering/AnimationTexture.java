@@ -31,23 +31,23 @@ public class AnimationTexture {
 
     /**
      * Creates a new instance of the AnimationTexture class.
-     * @param animationJsonFile
+     * @param textureFilePath
      */
-    public AnimationTexture(String animationJsonFile) {
-        // Create a file wrapper for the JSON file.
-        File jsonFile = new File(animationJsonFile);
-
-        // Check the JSON file exists.
-        if (!jsonFile.exists()) {
-            throw new RuntimeException("cannot locate animation JSON file: " + jsonFile.getAbsolutePath());
-        }
-
-        // Create a file wrapper for the texture file which should be in the same directory as the JSON file and with the same name plus the .png extension.
-        File textureFile = new File(jsonFile.getParentFile(), jsonFile.getName().replace(".json","") + ".png");
+    public AnimationTexture(String textureFilePath) {
+        // Create a file wrapper for the texture file.
+        File textureFile = new File(textureFilePath);
 
         // Check the texture file exists.
         if (!textureFile.exists()) {
             throw new RuntimeException("cannot locate animation texture file: " + textureFile.getAbsolutePath());
+        }
+
+        // Create a file wrapper for the JSON file which should be in the same directory as the texture file and with the same name plus the .json extension.
+        File jsonFile = new File(textureFile.getParentFile(), textureFile.getName() + ".json");
+
+        // Check the JSON file exists.
+        if (!jsonFile.exists()) {
+            throw new RuntimeException("cannot locate animation JSON file: " + jsonFile.getAbsolutePath());
         }
 
         parseJsonFile(jsonFile);

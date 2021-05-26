@@ -59,12 +59,12 @@ public class Resources {
         }};
         particleSpriteMap = new HashMap<ParticleSprite, Sprite>() {{
             for (ParticleSprite sprite : ParticleSprite.values()) {
-                put(sprite, new Sprite(new Texture("images/particle/sprite/" + sprite + ".png")));
+                put(sprite, new Sprite(new Texture("images/particle/" + sprite + ".png")));
             }
         }};
         particleAnimationMap = new HashMap<ParticleAnimation, AnimationTexture>() {{
             for (ParticleAnimation animation : ParticleAnimation.values()) {
-                put(animation, new AnimationTexture("images/particle/animation/" + animation + ".json"));
+                put(animation, new AnimationTexture("images/particle/" + animation + ".png"));
             }
         }};
         projectileTextureMap = new HashMap<ProjectileType, Texture>() {{
