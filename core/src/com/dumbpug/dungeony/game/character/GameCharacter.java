@@ -10,7 +10,7 @@ import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitterEntity;
 import com.dumbpug.dungeony.game.inventory.Inventory;
-import com.dumbpug.dungeony.game.rendering.Animation;
+import com.dumbpug.dungeony.rendering.Animation;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import com.dumbpug.dungeony.utilities.shaders.ShaderProvider;
 import com.dumbpug.dungeony.utilities.shaders.ShaderType;

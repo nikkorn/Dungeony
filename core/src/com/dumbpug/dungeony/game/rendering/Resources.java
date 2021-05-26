@@ -10,6 +10,8 @@ import com.dumbpug.dungeony.game.character.player.PlayerType;
 import com.dumbpug.dungeony.game.projectile.ProjectileType;
 import com.dumbpug.dungeony.game.weapon.WeaponState;
 import com.dumbpug.dungeony.game.weapon.WeaponType;
+import com.dumbpug.dungeony.rendering.Animation;
+import com.dumbpug.dungeony.rendering.AnimationTexture;
 import java.util.HashMap;
 
 /**
@@ -33,6 +35,10 @@ public class Resources {
      */
     private static HashMap<ParticleSprite, Sprite> particleSpriteMap;
     /**
+     * Particle animation texture map.
+     */
+    private static HashMap<ParticleAnimation, AnimationTexture> particleAnimationMap;
+    /**
      * Projectile texture map.
      */
     private static HashMap<ProjectileType, Texture> projectileTextureMap;
@@ -53,7 +59,12 @@ public class Resources {
         }};
         particleSpriteMap = new HashMap<ParticleSprite, Sprite>() {{
             for (ParticleSprite sprite : ParticleSprite.values()) {
-                put(sprite, new Sprite(new Texture("images/particle/" + sprite + ".png")));
+                put(sprite, new Sprite(new Texture("images/particle/sprite/" + sprite + ".png")));
+            }
+        }};
+        particleAnimationMap = new HashMap<ParticleAnimation, AnimationTexture>() {{
+            for (ParticleAnimation animation : ParticleAnimation.values()) {
+                put(animation, new AnimationTexture("images/particle/animation/" + animation + ".json"));
             }
         }};
         projectileTextureMap = new HashMap<ProjectileType, Texture>() {{

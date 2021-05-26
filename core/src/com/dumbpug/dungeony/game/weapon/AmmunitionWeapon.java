@@ -12,9 +12,8 @@ import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.engine.lighting.Light;
 import com.dumbpug.dungeony.engine.utilities.GameMath;
-import com.dumbpug.dungeony.game.lights.SmallSpotLight;
 import com.dumbpug.dungeony.game.lights.SpotLight;
-import com.dumbpug.dungeony.game.rendering.Animation;
+import com.dumbpug.dungeony.rendering.Animation;
 
 /**
  * A weapon that uses ammunition.
