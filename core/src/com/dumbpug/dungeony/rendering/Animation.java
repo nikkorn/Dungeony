@@ -1,7 +1,6 @@
 package com.dumbpug.dungeony.rendering;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -9,62 +8,34 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Animation {
     /**
+     * The animation texture.
+     */
+    private AnimationDetails details;
+    /**
      * The underlying LIBGDX animation.
      */
     private com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> animation;
     /**
-     * The animation frames.
-     */
-    private TextureRegion[] frames;
-    /**
-     * The state time.
+     * The animation state time.
      */
     private float stateTime = 0f;
-    /**
-     * Whether the animation should loop.
-     */
-    private boolean loop = true;
 
     /**
-     * Creates a new instance of the Animation class that is associated with some entity state.
-     * @param texture The animation texture.
-     * @param columns The number of columns in the texture.
-     * @param rows The number of rows in the texture.
-     * @param step The time step for the animation.
+     * Creates a new instance of the Animation class.
+     * @param details The animation details.
      */
-    public Animation(Texture texture, int columns, int rows, float step) {
-        TextureRegion[][] tempRegion = TextureRegion.split(texture, texture.getWidth()/columns, texture.getHeight()/rows);
-        frames = new TextureRegion[rows*columns];
-        int index = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                frames[index++] = tempRegion[i][j];
-            }
-        }
-        animation = new com.badlogic.gdx.graphics.g2d.Animation<>(step, frames);
+    public Animation(AnimationDetails details) {
+        this.details   = details;
+        this.animation = new com.badlogic.gdx.graphics.g2d.Animation(details.getStep(), details.getFrames());
     }
 
-
-    /**
-     * Creates a new instance of the Animation class that is associates.
-     * @param texture The animation texture.
-     * @param columns The number of columns in the texture.
-     * @param rows The number of rows in the texture.
-     * @param step The time step for the animation.
-     * @param loop Whether the animation should loop.
-     */
-    public Animation(Texture texture, int columns, int rows, float step, boolean loop) {
-        this(texture, columns, rows, step);
-        this.loop = loop;
-    }
-
-    /**
+    /**details
      * Gets the current animation frame.
      * @return The current animation frame.
      */
     public TextureRegion getCurrentFrame() {
         stateTime += Gdx.graphics.getDeltaTime();
-        return animation.getKeyFrame(stateTime, loop);
+        return animation.getKeyFrame(stateTime, details.isLoopingAnimation());
     }
 
     /**

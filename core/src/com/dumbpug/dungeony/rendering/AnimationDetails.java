@@ -11,7 +11,7 @@ import java.nio.file.Files;
 /**
  * Represents an animation texture loaded from disk.
  */
-public class AnimationTexture {
+public class AnimationDetails {
     /**
      * The time step for the animation.
      */
@@ -33,7 +33,7 @@ public class AnimationTexture {
      * Creates a new instance of the AnimationTexture class.
      * @param textureFilePath
      */
-    public AnimationTexture(String textureFilePath) {
+    public AnimationDetails(String textureFilePath) {
         // Create a file wrapper for the texture file.
         File textureFile = new File(textureFilePath);
 
@@ -55,10 +55,34 @@ public class AnimationTexture {
         createFrames(textureFile);
     }
 
-    public Animation createAnimation() {
-        return null;
+    /**
+     * Gets the time step for the animation.
+     * @return The time step for the animation.
+     */
+    public float getStep() {
+        return step;
     }
 
+    /**
+     * Gets whether the animation loops.
+     * @return Whether the animation loops.
+     */
+    public boolean isLoopingAnimation() {
+        return loop;
+    }
+
+    /**
+     * Gets the animation frames.
+     * @return The animation frames.
+     */
+    public TextureRegion[] getFrames() {
+        return frames;
+    }
+
+    /**
+     * Parses information about the animation texture from the given JSON file.
+     * @param file The JSON file to parse information from.
+     */
     private void parseJsonFile(File file) {
         // Read the JSON as a string from the file.
         String content = null;
@@ -97,6 +121,10 @@ public class AnimationTexture {
         this.step    = (float)jsonObject.getDouble("step");
     }
 
+    /**
+     * Create the animation frames based on the given texture file.
+     * @param textureFile The texture file.
+     */
     private void createFrames(File textureFile) {
         Texture texture = new Texture(textureFile.getAbsolutePath());
 
