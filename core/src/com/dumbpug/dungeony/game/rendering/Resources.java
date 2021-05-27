@@ -34,18 +34,18 @@ public class Resources {
      * Particle sprite map.
      */
     private static HashMap<ParticleSprite, Sprite> particleSpriteMap;
-    /**
-     * Particle animation texture map.
-     */
-    private static HashMap<ParticleAnimation, AnimationDetails> particleAnimationMap;
-    /**
-     * Projectile texture map.
-     */
-    private static HashMap<ProjectileType, Texture> projectileTextureMap;
 
-    private static HashMap<PlayerType, HashMap<String, AnimationDetails>> playerStateAnimationMap     = new HashMap<PlayerType, HashMap<String, AnimationDetails>>();
-    private static HashMap<EnemyType, HashMap<String, AnimationDetails>> enemyStateAnimationMap       = new HashMap<EnemyType, HashMap<String, AnimationDetails>>();
-    private static HashMap<FriendlyType, HashMap<String, AnimationDetails>> friendlyStateAnimationMap = new HashMap<FriendlyType, HashMap<String, AnimationDetails>>();
+
+
+    private static HashMap<ParticleAnimation, AnimationDetails> particleAnimationMap;
+
+    private static HashMap<PlayerType, HashMap<String, AnimationDetails>> playerStateAnimationMap;
+    private static HashMap<EnemyType, HashMap<String, AnimationDetails>> enemyStateAnimationMap;
+    private static HashMap<FriendlyType, HashMap<String, AnimationDetails>> friendlyStateAnimationMap;
+
+    private static HashMap<WeaponType, HashMap<WeaponState, AnimationDetails>> weaponAnimationMap;
+
+    private static HashMap<ProjectileType, AnimationDetails> projectileAnimationMap;
 
     static {
         levelSpriteMap = new HashMap<LevelSprite, Sprite>() {{
@@ -69,11 +69,6 @@ public class Resources {
         particleAnimationMap = new HashMap<ParticleAnimation, AnimationDetails>() {{
             for (ParticleAnimation animation : ParticleAnimation.values()) {
                 put(animation, new AnimationDetails("images/particle/" + animation + ".png"));
-            }
-        }};
-        projectileTextureMap = new HashMap<ProjectileType, Texture>() {{
-            for (ProjectileType type : ProjectileType.values()) {
-                put(type, new Texture("images/projectile/" + type + ".png"));
             }
         }};
         playerStateAnimationMap = new HashMap<PlayerType, HashMap<String, AnimationDetails>>() {{
@@ -116,6 +111,22 @@ public class Resources {
                     animationMap.put(createCharacterAnimationKey(state, FacingDirection.RIGHT),
                             new AnimationDetails("images/character/friendly/" + friendlyType  + "/" + state +  "_" + FacingDirection.RIGHT +".png"));
                 }
+            }
+        }};
+        weaponAnimationMap = new HashMap<WeaponType, HashMap<WeaponState, AnimationDetails>>() {{
+            for (WeaponType weaponType : WeaponType.values()) {
+                HashMap<WeaponState, AnimationDetails> animationMap = new HashMap<WeaponState, AnimationDetails>();
+
+                put(weaponType, animationMap);
+
+                for (WeaponState weaponState : WeaponState.values()) {
+                    animationMap.put(weaponState, new AnimationDetails("images/weapon/" + weaponType  + "/" + weaponState + ".png"));
+                }
+            }
+        }};
+        projectileAnimationMap = new HashMap<ProjectileType, AnimationDetails>() {{
+            for (ProjectileType projectileType : ProjectileType.values()) {
+                put(projectileType, new AnimationDetails("images/projectile/" + projectileType + ".png"));
             }
         }};
     }
@@ -163,7 +174,7 @@ public class Resources {
      * @return The animation for the specified weapon state and type.
      */
     public static Animation getWeaponAnimation(WeaponState state, WeaponType type) {
-        return new Animation(new Texture("images/weapon/" + type  + "/" + state + ".png"), 4, 1, 1/8f);
+        return new Animation(weaponAnimationMap.get(type).get(state));
     }
 
     /**
@@ -172,7 +183,7 @@ public class Resources {
      * @return The animation for the specified projectile type.
      */
     public static Animation getProjectileAnimation(ProjectileType type) {
-        return new Animation(projectileTextureMap.get(type), 4, 1, 1/16f);
+        return new Animation(projectileAnimationMap.get(type));
     }
 
     /**
