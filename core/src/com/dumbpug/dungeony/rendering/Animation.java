@@ -29,7 +29,7 @@ public class Animation {
         this.animation = new com.badlogic.gdx.graphics.g2d.Animation(details.getStep(), details.getFrames());
     }
 
-    /**details
+    /**
      * Gets the current animation frame.
      * @return The current animation frame.
      */

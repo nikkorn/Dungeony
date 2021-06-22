@@ -2,11 +2,13 @@ package com.dumbpug.dungeony.game.object.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.dumbpug.dungeony.engine.Area;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import com.dumbpug.dungeony.game.object.GameObject;
 import com.dumbpug.dungeony.game.object.GameObjectType;
+import com.dumbpug.dungeony.game.object.particles.LeafEmitterEntity;
 import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
@@ -27,6 +29,10 @@ public class Bush extends GameObject {
      * Whether the bush has been destroyed.
      */
     private boolean isDestroyed;
+    /**
+     * The leaf particle emitter.
+     */
+    private LeafEmitterEntity leafEmitterEntity;
 
     /**
      * Creates a new instance of the Bush class.
@@ -73,22 +79,31 @@ public class Bush extends GameObject {
     }
 
     @Override
-    public void onEnvironmentEntry(InteractiveEnvironment environment) { }
+    public void onPositioned() {
+        leafEmitterEntity = new LeafEmitterEntity(this.getOrigin());
+    }
 
     @Override
-    public void onEnvironmentExit(InteractiveEnvironment environment) { }
+    public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        environment.addEntity(this.leafEmitterEntity);
+    }
+
+    @Override
+    public void onEnvironmentExit(InteractiveEnvironment environment) {
+        environment.removeEntity(this.leafEmitterEntity);
+    }
 
     @Override
     public void onProjectileCollision(Projectile projectile) {
         // If the bush is not already destroyed then destroy it and generate some leafy particles.
         if (!this.isDestroyed) {
-            // TODO Generate leaf particles!
+            // Generate some leaf particles!
+            this.leafEmitterEntity.spitThemOut();
 
             // this.isDestroyed = true;
         }
 
         this.sprite.apply(new SqueezeDynamicSpriteModifier(0.2f, 75));
-        //this.sprite.apply(new ResizeDynamicSpriteModifier(0.2f, 1000));
     }
 
     @Override

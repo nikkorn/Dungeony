@@ -159,12 +159,21 @@ public class Resources {
     }
 
     /**
-     * Gets the sprite for the specified particle type.
+     * Gets the sprite for the specified particle sprite type.
      * @param particleSprite
      * @return
      */
     public static Sprite getSprite(ParticleSprite particleSprite) {
         return particleSpriteMap.get(particleSprite);
+    }
+
+    /**
+     * Gets the animation for the specified particle animation type.
+     * @param particleAnimation
+     * @return
+     */
+    public static Animation getAnimation(ParticleAnimation particleAnimation) {
+        return new Animation(particleAnimationMap.get(particleAnimation));
     }
 
     /**
