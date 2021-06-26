@@ -29,4 +29,12 @@ public interface IPosition {
      * @return The distance from this position to the target position.
      */
     float getDistanceTo(IPosition target);
+
+    /**
+     * Gets a new position based on this position and a given x/y offset.
+     * @param x The x offset.
+     * @param y The y offset.
+     * @return A new position based on this position and a given x/y offset.
+     */
+    IPosition getOffset(float x, float y);
 }

@@ -30,7 +30,7 @@ public class LeafParticleEntity extends ParticleEntity<SpriteBatch> {
     private Animation animation;
 
     /**
-     *
+     * Creates a new instance of the LeafParticleEntity class.
      */
     public LeafParticleEntity() {
         this.rng = new Random();
@@ -38,13 +38,8 @@ public class LeafParticleEntity extends ParticleEntity<SpriteBatch> {
         // Pick a random impact sprite for this particle.
         this.animation = Resources.getAnimation(ParticleAnimation.BUSH_FALLING_LEAF);
 
-        // Pick a random angle of movement.
-        this.angleOfMovement = this.rng.nextFloat() * 360f;
-
-        // Pick a random distance of movement.
-        this.distanceOfMovement =  1f + (this.rng.nextFloat() * 500f);
-
-        this.setLife(1000f);
+        // Pick a random number of seconds for particle life between 50 and 60.
+        this.setLife(50f + (this.rng.nextFloat() * 10f));
     }
 
     @Override
@@ -69,11 +64,11 @@ public class LeafParticleEntity extends ParticleEntity<SpriteBatch> {
         // Set the initial particle position.
         this.setOrigin(emitterOrigin);
 
-        // Pick a new random angle of movement.
+        // Pick a random angle of movement.
         this.angleOfMovement = new Random().nextFloat() * 360f;
 
-        // Pick a new random distance of movement.
-        this.distanceOfMovement =  5f + (this.rng.nextFloat() * 5f);
+        // Pick a random distance of movement.
+        this.distanceOfMovement =  3f + (this.rng.nextFloat() * 15f);
     }
 
     @Override

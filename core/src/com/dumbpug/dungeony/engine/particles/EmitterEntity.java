@@ -121,17 +121,17 @@ public abstract class EmitterEntity<TRenderContext> extends Entity<TRenderContex
     }
 
     @Override
-    public float getLengthZ() {
+    public final float getLengthZ() {
         return 0;
     }
 
     @Override
-    public float getLengthX() {
+    public final float getLengthX() {
         return 0;
     }
 
     @Override
-    public float getLengthY() {
+    public final float getLengthY() {
         return 0;
     }
 

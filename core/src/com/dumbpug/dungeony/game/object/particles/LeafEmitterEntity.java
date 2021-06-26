@@ -2,7 +2,6 @@ package com.dumbpug.dungeony.game.object.particles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.IPosition;
-import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.engine.particles.EmitterEntity;
 import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 
@@ -16,6 +15,17 @@ public class LeafEmitterEntity extends EmitterEntity<SpriteBatch> {
     }
 
     public void spitThemOut() {
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
+        spawnParticle();
         spawnParticle();
         spawnParticle();
         spawnParticle();

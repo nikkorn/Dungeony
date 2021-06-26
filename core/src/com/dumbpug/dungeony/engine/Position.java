@@ -95,4 +95,14 @@ public class Position implements IPosition {
     public float getDistanceTo(IPosition target) {
         return GameMath.getLength(this.getX(), this.getY(), target.getX(), target.getY());
     }
+
+    /**
+     * Gets a new position based on this position and a given x/y offset.
+     * @param x The x offset.
+     * @param y The y offset.
+     * @return A new position based on this position and a given x/y offset.
+     */
+    public IPosition getOffset(float x, float y) {
+        return new Position(this.getX() + x, this.getY() + y);
+    }
 }

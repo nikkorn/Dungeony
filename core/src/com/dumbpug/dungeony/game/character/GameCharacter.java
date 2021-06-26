@@ -27,7 +27,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     /**
      * The character health.
      */
-    private Health health = new Health(Constants.CHARACTER_DEFAULT_HEALTH_SLOTS);
+    private GameCharacterHealth health = new GameCharacterHealth(Constants.CHARACTER_DEFAULT_HEALTH_SLOTS);
     /**
      * The character inventory.
      */
@@ -123,7 +123,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * Ges the character health.
      * @return The character health.
      */
-    public Health getHealth() {
+    public GameCharacterHealth getHealth() {
         return health;
     }
 
@@ -276,7 +276,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         }
 
         // Reduce the characters health points by the amount specified.
-        this.health.setHealthPoints(this.health.getHealthPoints() - points);
+        this.health.reduceHealthPoints(points);
 
         this.lastDamagedReceivedTime = System.currentTimeMillis();
 
