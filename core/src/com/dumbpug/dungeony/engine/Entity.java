@@ -26,7 +26,7 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
      * Creates a new instance of the Entity class.
      * @param origin The initial origin of the entity.
      */
-    public Entity(Position origin) {
+    public Entity(IPosition origin) {
         // Set the entity origin.
         this.origin = new Position(origin);
         // Find the position as the bottom-left point of the entity based on its origin and size.
@@ -40,7 +40,7 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
      * Gets the entity origin.
      * @return The entity origin.
      */
-    public Position getOrigin() {
+    public IPosition getOrigin() {
         return origin;
     }
 

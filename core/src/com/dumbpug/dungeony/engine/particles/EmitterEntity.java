@@ -1,8 +1,8 @@
 package com.dumbpug.dungeony.engine.particles;
 
 import com.dumbpug.dungeony.engine.Entity;
+import com.dumbpug.dungeony.engine.IPosition;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
-import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,7 +45,7 @@ public abstract class EmitterEntity<TRenderContext> extends Entity<TRenderContex
      * Create a new instance of the Emitter class.
      * @param position The emitter position.
      */
-    public EmitterEntity(Position position) {
+    public EmitterEntity(IPosition position) {
         super(position);
     }
 

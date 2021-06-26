@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.IEnvironmentCamera;
-import com.dumbpug.dungeony.engine.Position;
+import com.dumbpug.dungeony.engine.IPosition;
 import com.dumbpug.dungeony.engine.rendering.IRenderable;
 
 /**
@@ -134,9 +134,9 @@ public class LevelEnvironmentCamera implements IEnvironmentCamera {
 
         // We will try to lerp toward the target entity if one is defined.
         if (this.target != null) {
-            Position targetOrigin = this.target.getOrigin();
-            cameraTargetX         = targetOrigin.getX();
-            cameraTargetY         = targetOrigin.getY();
+            IPosition targetOrigin = this.target.getOrigin();
+            cameraTargetX          = targetOrigin.getX();
+            cameraTargetY          = targetOrigin.getY();
         }
 
         // Lerp towards the camera target.
