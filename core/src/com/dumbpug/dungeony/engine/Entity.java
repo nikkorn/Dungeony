@@ -37,14 +37,6 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     }
 
     /**
-     * Gets the entity origin.
-     * @return The entity origin.
-     */
-    public IPosition getOrigin() {
-        return origin;
-    }
-
-    /**
      * Gets the x position of the box.
      * @return The y position of the box.
      */
@@ -78,6 +70,34 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     public void setY(float y) {
         this.position.setY(y);
         this.origin.setY(y + (this.getLengthY() / 2f));
+    }
+
+    /**
+     * Gets the entity origin.
+     * @return The entity origin.
+     */
+    public IPosition getOrigin() {
+        return origin;
+    }
+
+    /**
+     * Sets the entity origin.
+     * @param x The x position.
+     * @param y The y position.
+     */
+    public void setOrigin(float x, float y) {
+        this.position.setX(x - (this.getLengthX() / 2f));
+        this.origin.setX(x);
+        this.position.setY(y - (this.getLengthY() / 2f));
+        this.origin.setY(y);
+    }
+
+    /**
+     * Sets the entity origin.
+     * @param position The position.
+     */
+    public void setOrigin(IPosition position) {
+        this.setOrigin(position.getX(), position.getY());
     }
 
     /**

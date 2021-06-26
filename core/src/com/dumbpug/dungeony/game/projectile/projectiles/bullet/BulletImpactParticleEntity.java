@@ -3,6 +3,7 @@ package com.dumbpug.dungeony.game.projectile.projectiles.bullet;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.Constants;
+import com.dumbpug.dungeony.engine.IPosition;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.engine.utilities.lotto.Lotto;
@@ -79,10 +80,9 @@ public class BulletImpactParticleEntity extends ParticleEntity<SpriteBatch> {
     }
 
     @Override
-    public void onActivate(float emitterPosX, float emitterPosY) {
+    public void onActivate(IPosition emitterOrigin) {
         // Set the initial particle position.
-        this.setX(emitterPosX);
-        this.setY(emitterPosY);
+        this.setOrigin(emitterOrigin);
 
         // Pick a new random angle of movement.
         this.angleOfMovement = new Random().nextFloat() * 360f;

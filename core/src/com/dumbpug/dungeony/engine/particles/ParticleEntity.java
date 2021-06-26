@@ -1,6 +1,7 @@
 package com.dumbpug.dungeony.engine.particles;
 
 import com.dumbpug.dungeony.engine.Entity;
+import com.dumbpug.dungeony.engine.IPosition;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 
@@ -116,8 +117,7 @@ public abstract class ParticleEntity<TRenderContext> extends Entity<TRenderConte
 
     /**
      * Called when the particle is first made active or reset due to is being reused by an emitter after it has become inactive.
-     * @param emitterPosX The x position of the emitter.
-     * @param emitterPosX The y position of the emitter.
+     * @param emitterOrigin The origin of the emitter.
      */
-    public abstract void onActivate(float emitterPosX, float emitterPosY);
+    public abstract void onActivate(IPosition emitterOrigin);
 }

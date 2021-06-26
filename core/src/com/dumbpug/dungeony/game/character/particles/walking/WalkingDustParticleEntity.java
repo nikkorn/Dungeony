@@ -2,6 +2,7 @@ package com.dumbpug.dungeony.game.character.particles.walking;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.dumbpug.dungeony.engine.IPosition;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.particles.ParticleEntity;
 import com.dumbpug.dungeony.game.character.FacingDirection;
@@ -58,10 +59,9 @@ public class WalkingDustParticleEntity extends ParticleEntity<SpriteBatch> {
     }
 
     @Override
-    public void onActivate(float emitterPosX, float emitterPosY) {
+    public void onActivate(IPosition emitterOrigin) {
         // Set the initial particle position.
-        this.setX(emitterPosX);
-        this.setY(emitterPosY);
+        this.setOrigin(emitterOrigin);
     }
 
     @Override

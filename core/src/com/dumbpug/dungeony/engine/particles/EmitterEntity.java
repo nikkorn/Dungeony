@@ -181,7 +181,7 @@ public abstract class EmitterEntity<TRenderContext> extends Entity<TRenderContex
             // Set the life of the particle to be its original total life.
             nextInactiveParticleEntity.setLife(nextInactiveParticleEntity.getTotalLife());
 
-            nextInactiveParticleEntity.onActivate(this.getX(), this.getY());
+            nextInactiveParticleEntity.onActivate(this.getOrigin());
         } else {
             // Generate a brand new particle.
             ParticleEntity particleEntity = generateParticle();
@@ -192,7 +192,7 @@ public abstract class EmitterEntity<TRenderContext> extends Entity<TRenderContex
             // Add the particle to the environment.
             this.environment.addEntity(particleEntity);
 
-            particleEntity.onActivate(this.getX(), this.getY());
+            particleEntity.onActivate(this.getOrigin());
         }
     }
 
