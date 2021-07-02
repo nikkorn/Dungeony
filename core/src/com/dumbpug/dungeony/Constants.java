@@ -5,9 +5,9 @@ package com.dumbpug.dungeony;
  */
 public class Constants {
     //==============================================================================================
-    // APPLICATION
+    // DEBUG
     //==============================================================================================
-    public static final boolean APPLICATION_PRINT_FPS                            = true;
+    public static final boolean DEBUG_PRINT_FPS                                  = true;
 
     //==============================================================================================
     // FONT
