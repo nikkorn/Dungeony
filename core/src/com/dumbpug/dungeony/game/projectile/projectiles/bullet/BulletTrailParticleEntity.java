@@ -32,7 +32,7 @@ public class BulletTrailParticleEntity extends ParticleEntity<SpriteBatch> {
     @Override
     public void onRender(SpriteBatch spriteBatch) {
         float lifeRatio = this.getRemainingLife() / this.getTotalLife();
-        this.sprite.setPosition(this.getX(), this.getY());
+        this.sprite.setPosition(this.getOrigin().getX(), this.getOrigin().getY());
         this.sprite.setSize(this.getLengthX(), this.getLengthZ());
         this.sprite.setScale(lifeRatio);
         this.sprite.setColor(1,1,1, lifeRatio);
