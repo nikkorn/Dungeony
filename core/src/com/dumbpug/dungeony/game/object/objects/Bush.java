@@ -6,7 +6,9 @@ import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import com.dumbpug.dungeony.game.object.GameObject;
+import com.dumbpug.dungeony.game.object.GameObjectHeath;
 import com.dumbpug.dungeony.game.object.GameObjectType;
+import com.dumbpug.dungeony.game.object.particles.LeafEmitterEntity;
 import com.dumbpug.dungeony.game.projectile.Projectile;
 import com.dumbpug.dungeony.game.rendering.GameObjectSprite;
 import com.dumbpug.dungeony.game.rendering.Resources;
@@ -24,9 +26,9 @@ public class Bush extends GameObject {
     private DynamicSprite sprite;
     private Sprite shadow, destroyedSprite;
     /**
-     * Whether the bush has been destroyed.
+     * The leaf particle emitter.
      */
-    private boolean isDestroyed;
+    private LeafEmitterEntity leafEmitterEntity;
 
     /**
      * Creates a new instance of the Bush class.
@@ -37,6 +39,9 @@ public class Bush extends GameObject {
         sprite          = new DynamicSprite(Resources.getSprite(GameObjectSprite.BUSH));
         shadow          = Resources.getSprite(GameObjectSprite.BUSH_SHADOW);
         destroyedSprite = Resources.getSprite(GameObjectSprite.BUSH_DESTROYED);
+
+        // Bushes should have health as they can be destroyed.
+        setHealth(new GameObjectHeath(3));
     }
 
     @Override
@@ -56,7 +61,7 @@ public class Bush extends GameObject {
 
     @Override
     public int getCollisionLayers() {
-        if (this.isDestroyed) {
+        if (this.getHealth().isHealthDepleted()) {
             return EntityCollisionFlag.NOTHING;
         } else {
             return super.getCollisionLayers();
@@ -65,7 +70,7 @@ public class Bush extends GameObject {
 
     @Override
     public int getCollisionMask() {
-        if (this.isDestroyed) {
+        if (this.getHealth().isHealthDepleted()) {
             return EntityCollisionFlag.NOTHING;
         } else {
             return super.getCollisionMask();
@@ -73,22 +78,33 @@ public class Bush extends GameObject {
     }
 
     @Override
-    public void onEnvironmentEntry(InteractiveEnvironment environment) { }
+    public void onPositioned() {
+        leafEmitterEntity = new LeafEmitterEntity(this.getOrigin().getOffset(0, -4f));
+    }
 
     @Override
-    public void onEnvironmentExit(InteractiveEnvironment environment) { }
+    public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        environment.addEntity(this.leafEmitterEntity);
+    }
+
+    @Override
+    public void onEnvironmentExit(InteractiveEnvironment environment) {
+        environment.removeEntity(this.leafEmitterEntity);
+    }
 
     @Override
     public void onProjectileCollision(Projectile projectile) {
         // If the bush is not already destroyed then destroy it and generate some leafy particles.
-        if (!this.isDestroyed) {
-            // TODO Generate leaf particles!
+        if (!this.getHealth().isHealthDepleted()) {
+            // Generate some leaf particles!
+            this.leafEmitterEntity.spitThemOut();
 
-            // this.isDestroyed = true;
+            // Reduce the health points of this bush.
+            // TODO This will eventually take the projectile damage value.
+            this.getHealth().reduceHealthPoints(1);
         }
 
         this.sprite.apply(new SqueezeDynamicSpriteModifier(0.2f, 75));
-        //this.sprite.apply(new ResizeDynamicSpriteModifier(0.2f, 1000));
     }
 
     @Override
@@ -99,7 +115,7 @@ public class Bush extends GameObject {
     @Override
     public void render(SpriteBatch spriteBatch) {
         // What we render depends on whether the bush is destroyed or not.
-        if (isDestroyed) {
+        if (this.getHealth().isHealthDepleted()) {
             // Draw the destroyed bush sprite.
             this.destroyedSprite.setSize(this.getLengthX(), this.getLengthZ());
             this.destroyedSprite.setPosition(this.getX(), this.getY());

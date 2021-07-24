@@ -12,12 +12,33 @@ import com.dumbpug.levelgeneration.IEntityProperties;
  */
 public abstract class GameObject extends Entity<SpriteBatch> {
     /**
+     * The health of the game object, null if the game object has no health.
+     */
+    protected GameObjectHeath health = null;
+
+    /**
      * Creates a new instance of the GameObject class.
      * @param origin The initial origin of the GameObject.
      * @param properties The entity properties.
      */
     public GameObject(Position origin, IEntityProperties properties) {
         super(origin);
+    }
+
+    /**
+     * Gets the game object health.
+     * @return The game object health.
+     */
+    protected GameObjectHeath getHealth() {
+        return health;
+    }
+
+    /**
+     * Sets the game object health.
+     * @param health The game object health.
+     */
+    protected void setHealth(GameObjectHeath health) {
+        this.health = health;
     }
 
     @Override
@@ -44,6 +65,7 @@ public abstract class GameObject extends Entity<SpriteBatch> {
      */
     public void onProjectileCollision(Projectile projectile) {
         // An object does nothing by default when hit with a projectile.
+        // TODO Will projectile have a damage value that we can eventually apply as a reduction to object health?
     }
 
     /**

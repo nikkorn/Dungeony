@@ -5,7 +5,7 @@ import com.dumbpug.dungeony.engine.utilities.GameMath;
 /**
  * An in-game position.
  */
-public class Position {
+public class Position implements IPosition {
     /**
      * The x/y values of the position.
      */
@@ -32,7 +32,7 @@ public class Position {
      * Creates a new instance of the Position class with values matching the specified position.
      * @param position The position to copy.
      */
-    public Position(Position position) {
+    public Position(IPosition position) {
         this(position.getX(), position.getY());
     }
 
@@ -83,7 +83,7 @@ public class Position {
      * @param target The target position.
      * @return The angle from this position to the target position.
      */
-    public float getAngleTo(Position target) {
+    public float getAngleTo(IPosition target) {
         return GameMath.getAngle(this.getX(), this.getY(), target.getX(), target.getY());
     }
 
@@ -92,7 +92,17 @@ public class Position {
      * @param target The target position.
      * @return The distance from this position to the target position.
      */
-    public float getDistanceTo(Position target) {
+    public float getDistanceTo(IPosition target) {
         return GameMath.getLength(this.getX(), this.getY(), target.getX(), target.getY());
+    }
+
+    /**
+     * Gets a new position based on this position and a given x/y offset.
+     * @param x The x offset.
+     * @param y The y offset.
+     * @return A new position based on this position and a given x/y offset.
+     */
+    public IPosition getOffset(float x, float y) {
+        return new Position(this.getX() + x, this.getY() + y);
     }
 }

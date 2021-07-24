@@ -4,7 +4,7 @@ import com.dumbpug.dungeony.Constants;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.game.projectile.projectiles.Bullet;
+import com.dumbpug.dungeony.game.projectile.projectiles.bullet.Bullet;
 import com.dumbpug.dungeony.game.weapon.AmmunitionWeapon;
 import com.dumbpug.dungeony.game.weapon.WeaponCategory;
 import com.dumbpug.dungeony.game.weapon.WeaponQuality;

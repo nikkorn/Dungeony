@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
-import com.dumbpug.dungeony.game.rendering.Animation;
+import com.dumbpug.dungeony.rendering.Animation;
 import com.dumbpug.dungeony.game.rendering.Resources;
 import java.util.HashMap;
 

@@ -49,6 +49,7 @@ public class Grunt extends Enemy {
 
     @Override
     public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        super.onEnvironmentEntry(environment);
         environment.addLight(new SpotLight(this, 1f, 0.3f, 0.3f));
     }
 

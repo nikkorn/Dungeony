@@ -7,10 +7,11 @@ import com.dumbpug.dungeony.game.character.GameCharacterState;
 import com.dumbpug.dungeony.game.character.enemy.EnemyType;
 import com.dumbpug.dungeony.game.character.friendly.FriendlyType;
 import com.dumbpug.dungeony.game.character.player.PlayerType;
-import com.dumbpug.dungeony.game.object.GameObjectType;
 import com.dumbpug.dungeony.game.projectile.ProjectileType;
 import com.dumbpug.dungeony.game.weapon.WeaponState;
 import com.dumbpug.dungeony.game.weapon.WeaponType;
+import com.dumbpug.dungeony.rendering.Animation;
+import com.dumbpug.dungeony.rendering.AnimationDetails;
 import java.util.HashMap;
 
 /**
@@ -30,9 +31,21 @@ public class Resources {
      */
     private static HashMap<GameObjectSprite, Sprite> gameObjectSpriteMap;
     /**
-     * Projectile texture map.
+     * Particle sprite map.
      */
-    private static HashMap<ProjectileType, Texture> projectileTextureMap;
+    private static HashMap<ParticleSprite, Sprite> particleSpriteMap;
+
+
+
+    private static HashMap<ParticleAnimation, AnimationDetails> particleAnimationMap;
+
+    private static HashMap<PlayerType, HashMap<String, AnimationDetails>> playerStateAnimationMap;
+    private static HashMap<EnemyType, HashMap<String, AnimationDetails>> enemyStateAnimationMap;
+    private static HashMap<FriendlyType, HashMap<String, AnimationDetails>> friendlyStateAnimationMap;
+
+    private static HashMap<WeaponType, HashMap<WeaponState, AnimationDetails>> weaponAnimationMap;
+
+    private static HashMap<ProjectileType, AnimationDetails> projectileAnimationMap;
 
     static {
         levelSpriteMap = new HashMap<LevelSprite, Sprite>() {{
@@ -48,9 +61,72 @@ public class Resources {
                 put(sprite, new Sprite(new Texture("images/game_object/" + sprite + ".png")));
             }
         }};
-        projectileTextureMap = new HashMap<ProjectileType, Texture>() {{
-            for (ProjectileType type : ProjectileType.values()) {
-                put(type, new Texture("images/projectile/" + type + ".png"));
+        particleSpriteMap = new HashMap<ParticleSprite, Sprite>() {{
+            for (ParticleSprite sprite : ParticleSprite.values()) {
+                put(sprite, new Sprite(new Texture("images/particle/" + sprite + ".png")));
+            }
+        }};
+        particleAnimationMap = new HashMap<ParticleAnimation, AnimationDetails>() {{
+            for (ParticleAnimation animation : ParticleAnimation.values()) {
+                put(animation, new AnimationDetails("images/particle/" + animation + ".png"));
+            }
+        }};
+        playerStateAnimationMap = new HashMap<PlayerType, HashMap<String, AnimationDetails>>() {{
+            for (PlayerType playerType : PlayerType.values()) {
+                HashMap<String, AnimationDetails> animationMap = new HashMap<String, AnimationDetails>();
+
+                put(playerType, animationMap);
+
+                for (GameCharacterState state : GameCharacterState.values()) {
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.LEFT),
+                            new AnimationDetails("images/character/player/" + playerType  + "/" + state +  "_" + FacingDirection.LEFT +".png"));
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.RIGHT),
+                            new AnimationDetails("images/character/player/" + playerType  + "/" + state +  "_" + FacingDirection.RIGHT +".png"));
+                }
+            }
+        }};
+        enemyStateAnimationMap = new HashMap<EnemyType, HashMap<String, AnimationDetails>>() {{
+            for (EnemyType enemyType : EnemyType.values()) {
+                HashMap<String, AnimationDetails> animationMap = new HashMap<String, AnimationDetails>();
+
+                put(enemyType, animationMap);
+
+                for (GameCharacterState state : GameCharacterState.values()) {
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.LEFT),
+                            new AnimationDetails("images/character/enemy/" + enemyType  + "/" + state +  "_" + FacingDirection.LEFT +".png"));
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.RIGHT),
+                            new AnimationDetails("images/character/enemy/" + enemyType  + "/" + state +  "_" + FacingDirection.RIGHT +".png"));
+                }
+            }
+        }};
+        friendlyStateAnimationMap = new HashMap<FriendlyType, HashMap<String, AnimationDetails>>() {{
+            for (FriendlyType friendlyType : FriendlyType.values()) {
+                HashMap<String, AnimationDetails> animationMap = new HashMap<String, AnimationDetails>();
+
+                put(friendlyType, animationMap);
+
+                for (GameCharacterState state : GameCharacterState.values()) {
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.LEFT),
+                            new AnimationDetails("images/character/friendly/" + friendlyType  + "/" + state +  "_" + FacingDirection.LEFT +".png"));
+                    animationMap.put(createCharacterAnimationKey(state, FacingDirection.RIGHT),
+                            new AnimationDetails("images/character/friendly/" + friendlyType  + "/" + state +  "_" + FacingDirection.RIGHT +".png"));
+                }
+            }
+        }};
+        weaponAnimationMap = new HashMap<WeaponType, HashMap<WeaponState, AnimationDetails>>() {{
+            for (WeaponType weaponType : WeaponType.values()) {
+                HashMap<WeaponState, AnimationDetails> animationMap = new HashMap<WeaponState, AnimationDetails>();
+
+                put(weaponType, animationMap);
+
+                for (WeaponState weaponState : WeaponState.values()) {
+                    animationMap.put(weaponState, new AnimationDetails("images/weapon/" + weaponType  + "/" + weaponState + ".png"));
+                }
+            }
+        }};
+        projectileAnimationMap = new HashMap<ProjectileType, AnimationDetails>() {{
+            for (ProjectileType projectileType : ProjectileType.values()) {
+                put(projectileType, new AnimationDetails("images/projectile/" + projectileType + ".png"));
             }
         }};
     }
@@ -83,13 +159,31 @@ public class Resources {
     }
 
     /**
+     * Gets the sprite for the specified particle sprite type.
+     * @param particleSprite
+     * @return
+     */
+    public static Sprite getSprite(ParticleSprite particleSprite) {
+        return particleSpriteMap.get(particleSprite);
+    }
+
+    /**
+     * Gets the animation for the specified particle animation type.
+     * @param particleAnimation
+     * @return
+     */
+    public static Animation getAnimation(ParticleAnimation particleAnimation) {
+        return new Animation(particleAnimationMap.get(particleAnimation));
+    }
+
+    /**
      * Gets the animation for the specified weapon and weapon state type.
      * @param state The weapon state type.
      * @param type The weapon type.
      * @return The animation for the specified weapon state and type.
      */
     public static Animation getWeaponAnimation(WeaponState state, WeaponType type) {
-        return new Animation(new Texture("images/weapon/" + type  + "/" + state + ".png"), 4, 1, 1/8f);
+        return new Animation(weaponAnimationMap.get(type).get(state));
     }
 
     /**
@@ -98,7 +192,7 @@ public class Resources {
      * @return The animation for the specified projectile type.
      */
     public static Animation getProjectileAnimation(ProjectileType type) {
-        return new Animation(projectileTextureMap.get(type), 4, 1, 1/16f);
+        return new Animation(projectileAnimationMap.get(type));
     }
 
     /**
@@ -139,7 +233,7 @@ public class Resources {
      * @return The animation for the specified player state and type.
      */
     public static Animation getCharacterAnimation(GameCharacterState state, PlayerType type, FacingDirection direction) {
-        return getCharacterAnimation(state, direction, "player", type.toString());
+        return new Animation(playerStateAnimationMap.get(type).get(createCharacterAnimationKey(state, direction)));
     }
 
     /**
@@ -150,7 +244,7 @@ public class Resources {
      * @return The animation for the specified enemy state and type.
      */
     public static Animation getCharacterAnimation(GameCharacterState state, EnemyType type, FacingDirection direction) {
-        return getCharacterAnimation(state, direction, "enemy", type.toString());
+        return new Animation(enemyStateAnimationMap.get(type).get(createCharacterAnimationKey(state, direction)));
     }
 
     /**
@@ -161,53 +255,16 @@ public class Resources {
      * @return The animation for the specified friendly state and type.
      */
     public static Animation getCharacterAnimation(GameCharacterState state, FriendlyType type, FacingDirection direction) {
-        return getCharacterAnimation(state, direction, "friendly", type.toString());
+        return new Animation(friendlyStateAnimationMap.get(type).get(createCharacterAnimationKey(state, direction)));
     }
 
     /**
-     * Gets the animation for the specified game character state type.
+     * Creates a unique key based on a facing direction value and a game character state value.
      * @param state The state type.
      * @param direction The character facing direction.
-     * @param category The character category (enemy/friendly/player).
-     * @param type The character type.
-     * @return The animation for the specified game character state and type.
+     * @return A unique key based on a facing direction value and a game character state value.
      */
-    private static Animation getCharacterAnimation(GameCharacterState state, FacingDirection direction, String category, String type) {
-        // The number of animation frame columns will differ between animations.
-        int columns = 0;
-
-        // Whether the animation should loop.
-        boolean loop = true;
-
-        // The speed of the animation.
-        // TODO Find a nicer way to do this at a later time.
-        float speed = 1/12f;
-
-        switch (state) {
-            case HIDDEN:
-                columns = 1;
-                break;
-            case IDLE:
-                speed = category.equals("player") ? 1/12f : 1/2f;
-                columns = category.equals("player") ? 24 : 16;
-                break;
-            case RUNNING:
-            case DODGING:
-                speed = category.equals("player") ? 1/12f : 1/8f;
-                columns = category.equals("player") ? 8 : 16;
-                break;
-            case DEAD:
-                loop = false;
-                columns = 4;
-                break;
-            case SLEEPING:
-                speed = 1/2f;
-                columns = 2;
-                break;
-            default:
-                throw new RuntimeException("unknown game character state: " + state);
-        }
-        return new Animation(new Texture("images/character/" + category.toLowerCase() + "/" + type.toUpperCase()  + "/" + state +  "_" + direction +".png"), columns, 1, speed, loop);
+    private static String createCharacterAnimationKey(GameCharacterState state, FacingDirection direction) {
+        return state + "_" + direction;
     }
-
 }

@@ -3,10 +3,6 @@ package com.dumbpug.dungeony;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dumbpug.dungeony.state.StateManager;
 import com.dumbpug.dungeony.state.states.CharacterSelection;
 import com.dumbpug.dungeony.state.states.Game;
@@ -44,7 +40,8 @@ public class Dungeony extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Write the FPS to the console.
-		System.out.println(Gdx.graphics.getFramesPerSecond() + " FPS");
+		if (Constants.DEBUG_PRINT_FPS)
+			System.out.println(Gdx.graphics.getFramesPerSecond() + " FPS");
 
 		// Update the current application state.
 		this.stateManager.update();

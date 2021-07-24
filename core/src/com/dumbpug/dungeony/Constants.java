@@ -5,6 +5,11 @@ package com.dumbpug.dungeony;
  */
 public class Constants {
     //==============================================================================================
+    // DEBUG
+    //==============================================================================================
+    public static final boolean DEBUG_PRINT_FPS                                  = true;
+
+    //==============================================================================================
     // FONT
     //==============================================================================================
     public static final String FONT_TYPE_MAIN                                    = "nokiafc22.ttf";
@@ -106,9 +111,9 @@ public class Constants {
     public static final float PROJECTILE_DEFAULT_MOVEMENT_PS                      = LEVEL_TILE_SIZE * 3f;
     public static final float PROJECTILE_FAST_MOVEMENT_PS                         = LEVEL_TILE_SIZE * 3.6f;
     public static final float PROJECTILE_VERY_FAST_MOVEMENT_PS                    = LEVEL_TILE_SIZE * 4.6f;
-    public static final float PROJECTILE_SIZE_SMALL                               = 6f;
-    public static final float PROJECTILE_SIZE_MEDIUM                              = 8f;
-    public static final float PROJECTILE_SIZE_LARGE                               = 12f;
+    public static final float PROJECTILE_SIZE_SMALL                               = 4f;
+    public static final float PROJECTILE_SIZE_MEDIUM                              = 6f;
+    public static final float PROJECTILE_SIZE_LARGE                               = 10f;
 
     //==============================================================================================
     // WEAPONS

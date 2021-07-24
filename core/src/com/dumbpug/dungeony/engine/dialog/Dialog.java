@@ -12,22 +12,28 @@ public abstract class Dialog<TRenderContext> {
      */
     private Entity targetEntity;
     /**
-     * The dialog interacting entity.
-     */
-    private Entity interactingEntity = null;
-    /**
      * The dialog position, relative to the target entity.
      */
     private DialogPosition position;
+    /**
+     * The margin between the dialog and the target entity.
+     */
+    private DialogMargin margin;
+    /**
+     * The dialog interacting entity.
+     */
+    private Entity interactingEntity = null;
 
     /**
      * Creates a new instance of the Dialog class.
      * @param entity The dialog target entity.
      * @param position The dialog position, relative to the target entity.
+     * @param margin The margin between the dialog and the target entity.
      */
-    public Dialog(Entity entity, DialogPosition position) {
+    public Dialog(Entity entity, DialogPosition position, DialogMargin margin) {
         this.targetEntity = entity;
         this.position     = position;
+        this.margin       = margin;
     }
 
     /**
@@ -49,7 +55,20 @@ public abstract class Dialog<TRenderContext> {
     /**
      * Render the dialog.
      * @param context The render context.
+     * @param originX The X origin position of the dialog.
+     * @param originY The Y origin position of the dialog.
      */
-    // TODO: This should also take params defining the position of the dialog to render.
-    public abstract void render(TRenderContext context);
+    public abstract void render(TRenderContext context, float originX, float originY);
+
+    /**
+     * Gets the width of the dialog.
+     * @return The width of the dialog.
+     */
+    public abstract float getWidth();
+
+    /**
+     * Gets the height of the dialog.
+     * @return The height of the dialog.
+     */
+    public abstract float getHeight();
 }

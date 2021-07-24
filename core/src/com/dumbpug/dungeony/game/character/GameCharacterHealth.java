@@ -3,7 +3,7 @@ package com.dumbpug.dungeony.game.character;
 /**
  * Represents character health.
  */
-public class Health {
+public class GameCharacterHealth {
     /**
      * The current amount of health that a character has, out of all available health slots.
      */
@@ -26,10 +26,10 @@ public class Health {
     public boolean isInvincible = false;
 
     /**
-     * Creates a new instance of the Health class.
+     * Creates a new instance of the GameCharacterHealth class.
      * @param healthSlots The number of standard health slots.
      */
-    public Health(int healthSlots) {
+    public GameCharacterHealth(int healthSlots) {
         this.healthSlots  = healthSlots;
         this.healthPoints = healthSlots;
     }
@@ -69,6 +69,14 @@ public class Health {
         if (this.healthPoints < 0) {
             this.healthPoints = 0;
         }
+    }
+
+    /**
+     * Reduces the current amount of health that a character has, out of all available health slots.
+     * @param points The amount of points to reduce the total amount of health points by.
+     */
+    public void reduceHealthPoints(int points) {
+        setHealthPoints(getHealthPoints() - points);
     }
 
     /**

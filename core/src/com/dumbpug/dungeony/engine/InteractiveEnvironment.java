@@ -235,7 +235,7 @@ public class InteractiveEnvironment {
      * @param sound
      * @param source
      */
-    public void playSound(String sound, Position source, float volume) {
+    public void playSound(String sound, IPosition source, float volume) {
         float cameraXMin = this.camera.getX() - (this.camera.getWidth() / 2f);
         float cameraXMax = this.camera.getX() + (this.camera.getWidth() / 2f);
         float cameraYMin = this.camera.getY() - (this.camera.getHeight() / 2f);

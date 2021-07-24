@@ -26,7 +26,7 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
      * Creates a new instance of the Entity class.
      * @param origin The initial origin of the entity.
      */
-    public Entity(Position origin) {
+    public Entity(IPosition origin) {
         // Set the entity origin.
         this.origin = new Position(origin);
         // Find the position as the bottom-left point of the entity based on its origin and size.
@@ -34,14 +34,6 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
                 origin.getX() - (this.getLengthX() / 2f),
                 origin.getY() - (this.getLengthY() / 2f)
         );
-    }
-
-    /**
-     * Gets the entity origin.
-     * @return The entity origin.
-     */
-    public Position getOrigin() {
-        return origin;
     }
 
     /**
@@ -78,6 +70,34 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
     public void setY(float y) {
         this.position.setY(y);
         this.origin.setY(y + (this.getLengthY() / 2f));
+    }
+
+    /**
+     * Gets the entity origin.
+     * @return The entity origin.
+     */
+    public IPosition getOrigin() {
+        return origin;
+    }
+
+    /**
+     * Sets the entity origin.
+     * @param x The x position.
+     * @param y The y position.
+     */
+    public void setOrigin(float x, float y) {
+        this.position.setX(x - (this.getLengthX() / 2f));
+        this.origin.setX(x);
+        this.position.setY(y - (this.getLengthY() / 2f));
+        this.origin.setY(y);
+    }
+
+    /**
+     * Sets the entity origin.
+     * @param position The position.
+     */
+    public void setOrigin(IPosition position) {
+        this.setOrigin(position.getX(), position.getY());
     }
 
     /**
@@ -184,6 +204,20 @@ public abstract class Entity<TRenderContext> implements IAABB, IRenderable<TRend
         // Get the angle between the two origins of the two entities.
         return GameMath.getAngle(this.getOrigin().getX(), this.getOrigin().getY(), position.getX(), position.getY());
     }
+
+    /**
+     * Called before the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onBeforeUpdate(InteractiveEnvironment environment, float delta) {}
+
+    /**
+     * Called after the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {}
 
     /**
      * Gets whether the entity has been marked as to be destroyed.

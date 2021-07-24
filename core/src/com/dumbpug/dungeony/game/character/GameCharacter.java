@@ -8,8 +8,9 @@ import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
+import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitterEntity;
 import com.dumbpug.dungeony.game.inventory.Inventory;
-import com.dumbpug.dungeony.game.rendering.Animation;
+import com.dumbpug.dungeony.rendering.Animation;
 import com.dumbpug.dungeony.game.weapon.Weapon;
 import com.dumbpug.dungeony.utilities.shaders.ShaderProvider;
 import com.dumbpug.dungeony.utilities.shaders.ShaderType;
@@ -26,7 +27,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     /**
      * The character health.
      */
-    private Health health = new Health(Constants.CHARACTER_DEFAULT_HEALTH_SLOTS);
+    private GameCharacterHealth health = new GameCharacterHealth(Constants.CHARACTER_DEFAULT_HEALTH_SLOTS);
     /**
      * The character inventory.
      */
@@ -48,9 +49,17 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     private long lastDamagedReceivedTime = 0l;
     /**
+     * The character state during pre-update.
+     */
+    private GameCharacterState preUpdateState;
+    /**
      * The mappings of character facing directions to state and animation mappings.
      */
     private HashMap<FacingDirection, HashMap<GameCharacterState, Animation>> animations;
+    /**
+     * The walking dust particle emitters for the player.
+     */
+    private WalkingDustEmitterEntity leftWalkingDustEmitter, rightWalkingDustEmitter;
     /**
      * The game character shadow sprite.
      */
@@ -68,6 +77,12 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
             put(FacingDirection.LEFT, new HashMap<GameCharacterState, Animation>());
             put(FacingDirection.RIGHT, new HashMap<GameCharacterState, Animation>());
         }};
+
+        // Create the walking dust emitters.
+        this.leftWalkingDustEmitter  = new WalkingDustEmitterEntity(new Position(origin), FacingDirection.LEFT);
+        this.rightWalkingDustEmitter = new WalkingDustEmitterEntity(new Position(origin), FacingDirection.RIGHT);
+
+        onPositionChange();
     }
 
     /**
@@ -76,7 +91,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     public void setX(float x) {
         super.setX(x);
-        this.updateWeaponPosition();
+        this.onPositionChange();
     }
 
     /**
@@ -85,7 +100,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     public void setY(float y) {
         super.setY(y);
-        this.updateWeaponPosition();
+        this.onPositionChange();
     }
 
     /**
@@ -108,7 +123,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * Ges the character health.
      * @return The character health.
      */
-    public Health getHealth() {
+    public GameCharacterHealth getHealth() {
         return health;
     }
 
@@ -185,6 +200,12 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         return EntityCollisionFlag.WALL | EntityCollisionFlag.CHARACTER | EntityCollisionFlag.OBJECT;
     }
 
+    @Override
+    public void onEnvironmentEntry(InteractiveEnvironment environment) {
+        environment.addEntity(this.leftWalkingDustEmitter);
+        environment.addEntity(this.rightWalkingDustEmitter);
+    }
+
     /**
      * Gets the character animation for the given state and facing direction.
      * @param state The character state.
@@ -206,6 +227,45 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Called before the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onBeforeUpdate(InteractiveEnvironment environment, float delta) {
+        this.preUpdateState = this.getState();
+    }
+
+    /**
+     * Called after the entity update.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {
+        // There is nothing to do if there has been no change to the character state during the update.
+        if (this.getState() == this.preUpdateState)
+            return;
+
+        // Handle character state changes that happen during the update.
+        switch (this.preUpdateState) {
+            case HIDDEN:
+            case SLEEPING:
+            case IDLE:
+            case DEAD:
+                if (this.getState() == GameCharacterState.RUNNING || this.getState() == GameCharacterState.DODGING) {
+                    onWalkingStart(environment, delta);
+                }
+                break;
+
+            case RUNNING:
+            case DODGING:
+                if (this.getState() != GameCharacterState.RUNNING && this.getState() != GameCharacterState.DODGING) {
+                    onWalkingStop(environment, delta);
+                }
+                break;
+        }
+    }
+
+    /**
      * Applies damage to the game character.
      * @param points The points of damage to apply to the game character.
      */
@@ -216,7 +276,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         }
 
         // Reduce the characters health points by the amount specified.
-        this.health.setHealthPoints(this.health.getHealthPoints() - points);
+        this.health.reduceHealthPoints(points);
 
         this.lastDamagedReceivedTime = System.currentTimeMillis();
 
@@ -264,8 +324,17 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     public void walk(InteractiveEnvironment environment, float movementAxisX, float movementAxisY, float delta) {
         // Is the character idle and not moving in any direction?
         if (movementAxisX == 0f && movementAxisY == 0f) {
+            // The character has not moved on either axis so is now idle.
+            this.setState(GameCharacterState.IDLE);
+
             return;
         }
+
+        // Check whether the character was idle before attempting to walk.
+        boolean wasCharacterIdle = this.getState() == GameCharacterState.IDLE;
+
+        // Get the direction that the character was facing before we do any walking.
+        FacingDirection originalFacingDirection = this.getFacingDirection();
 
         // If the character has no defined angle of view, then the direction they are moving on the x axis will determine their new facing direction.
         if (this.angleOfView == null) {
@@ -282,6 +351,11 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
 
         // Any entity movement has to be taken care of by the level grid which handles all entity collisions.
         environment.move(this, movementAxisX, movementAxisY, delta);
+
+        // Were we walking as part of the last update and changed direction?
+        if (originalFacingDirection != this.getFacingDirection() && !wasCharacterIdle) {
+            onWalkingDirectionChange(environment, delta);
+        }
     }
 
     /**
@@ -335,15 +409,61 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Called whenever the x/y position of the character changes.
+     */
+    private void onPositionChange() {
+        // Update the position of the character weapon.
+        updateWeaponPosition();
+
+        // Update the position of the walking particle emitters.
+        updateWalkingParticleEmitterPositions();
+    }
+
+    /**
      * Updates the position of the equipped weapon if there is one.
      */
-    protected void updateWeaponPosition() {
+    private void updateWeaponPosition() {
         if (this.weapon != null) {
             // Where the weapon is positioned in the world will depend on the position of the character holding it.
             float weaponPositionY = this.getOrigin().getY() - (this.getLengthY() * 0.3f);
             float weaponPositionX = this.getOrigin().getX() + (this.getLengthX() * 0.25f);
             this.getWeapon().getPosition().set(weaponPositionX, weaponPositionY);
             this.getWeapon().setAngleOfAim(this.angleOfView == null ? this.facingDirection.getAngle() : this.angleOfView);
+        }
+    }
+
+    /**
+     * Updates the position of the walking particle emitters.
+     */
+    private void updateWalkingParticleEmitterPositions() {
+        this.leftWalkingDustEmitter.setX(this.getX() + this.getLengthX());
+        this.leftWalkingDustEmitter.setY(this.getY());
+        this.rightWalkingDustEmitter.setX(this.getX());
+        this.rightWalkingDustEmitter.setY(this.getY());
+    }
+
+    public void onWalkingStart(InteractiveEnvironment environment, float delta) {
+        if (getFacingDirection() == FacingDirection.LEFT) {
+            this.leftWalkingDustEmitter.enable();
+            this.rightWalkingDustEmitter.disable();
+        } else {
+            this.leftWalkingDustEmitter.disable();
+            this.rightWalkingDustEmitter.enable();
+        }
+    }
+
+    public void onWalkingStop(InteractiveEnvironment environment, float delta) {
+        this.leftWalkingDustEmitter.disable();
+        this.rightWalkingDustEmitter.disable();
+    }
+
+    public void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
+        if (getFacingDirection() == FacingDirection.LEFT) {
+            this.leftWalkingDustEmitter.enable();
+            this.rightWalkingDustEmitter.disable();
+        } else {
+            this.leftWalkingDustEmitter.disable();
+            this.rightWalkingDustEmitter.enable();
         }
     }
 
