@@ -13,7 +13,7 @@ public enum DialogMargin {
      * Gets the dialog margin size.
      * @return The dialog margin size.
      */
-    public float getAngle() {
+    public float getSize() {
         switch(this) {
             case NONE:
                 return 0f;
