@@ -1,8 +1,20 @@
 package com.dumbpug.dungeony.engine.ui;
 
-public class UIPanel implements IUIElement {
+import com.dumbpug.dungeony.engine.Position;
+
+public class UIPanel<TRenderContext> implements IUIElement<TRenderContext> {
+    /**
+     * Render the element.
+     * @param context The render context.
+     * @param origin The origin of the element.
+     */
     @Override
-    public void render() {
+    public void render(TRenderContext context, Position origin) {
+
+    }
+
+    @Override
+    public void layout() {
 
     }
 
