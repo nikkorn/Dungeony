@@ -58,17 +58,17 @@ public class Player extends GameCharacter {
 
     @Override
     public float getLengthX() {
-        return 18f;
+        return 17f;
     }
 
     @Override
     public float getLengthY() {
-        return 12f;
+        return 10f;
     }
 
     @Override
     public float getLengthZ() {
-        return 24f;
+        return 18f;
     }
 
     @Override
