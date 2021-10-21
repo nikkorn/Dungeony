@@ -8,6 +8,7 @@ import com.dumbpug.dungeony.engine.Entity;
 import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
+import com.dumbpug.dungeony.game.character.dodge.Dodge;
 import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitterEntity;
 import com.dumbpug.dungeony.game.inventory.Inventory;
 import com.dumbpug.dungeony.rendering.Animation;
@@ -45,13 +46,13 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      */
     private Float angleOfView = null;
     /**
+     * The active dodge state of the character.
+     */
+    private Dodge activeDodge = null;
+    /**
      * The time that the character last received damage.
      */
     private long lastDamagedReceivedTime = 0l;
-    /**
-     * The character state during pre-update.
-     */
-    private GameCharacterState preUpdateState;
     /**
      * The mappings of character facing directions to state and animation mappings.
      */
@@ -116,7 +117,11 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * @param state The current character state.
      */
     public void setState(GameCharacterState state) {
+        GameCharacterState originalState = this.state;
         this.state = state;
+        if (originalState != state) {
+            onStateChange(originalState, state);
+        }
     }
 
     /**
@@ -227,45 +232,6 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
-     * Called before the entity update.
-     * @param environment The interactive environment.
-     * @param delta The delta time.
-     */
-    public void onBeforeUpdate(InteractiveEnvironment environment, float delta) {
-        this.preUpdateState = this.getState();
-    }
-
-    /**
-     * Called after the entity update.
-     * @param environment The interactive environment.
-     * @param delta The delta time.
-     */
-    public void onAfterUpdate(InteractiveEnvironment environment, float delta) {
-        // There is nothing to do if there has been no change to the character state during the update.
-        if (this.getState() == this.preUpdateState)
-            return;
-
-        // Handle character state changes that happen during the update.
-        switch (this.preUpdateState) {
-            case HIDDEN:
-            case SLEEPING:
-            case IDLE:
-            case DEAD:
-                if (this.getState() == GameCharacterState.RUNNING || this.getState() == GameCharacterState.DODGING) {
-                    onWalkingStart(environment, delta);
-                }
-                break;
-
-            case RUNNING:
-            case DODGING:
-                if (this.getState() != GameCharacterState.RUNNING && this.getState() != GameCharacterState.DODGING) {
-                    onWalkingStop(environment, delta);
-                }
-                break;
-        }
-    }
-
-    /**
      * Applies damage to the game character.
      * @param points The points of damage to apply to the game character.
      */
@@ -359,13 +325,24 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Make the character dodge in the direction defined by an angle.
+     * @param environment
+     * @param angle
+     */
+    public void dodge(InteractiveEnvironment environment, float angle) {
+        // TODO
+        System.out.println("Dodge!");
+        this.setState(GameCharacterState.DODGING);
+    }
+
+    /**
      * Render the renderable using the provided sprite batch.
      * @param batch The sprite batch to use in rendering the renderable.
      */
     @Override
     public void render(SpriteBatch batch) {
         // Get the relevant animation for the character based on their current state and facing direction.
-        Animation animation = animations.get(this.facingDirection).get(this.state);
+        Animation animation = animations.get(this.facingDirection).get(this.getState());
 
         // Get the current animation frame for the animation.
         TextureRegion currentFrame = animation.getCurrentFrame();
@@ -409,6 +386,18 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Called whenever the state of the character changes.
+     */
+    public void onStateChange(GameCharacterState previous, GameCharacterState current) {
+        // Check whether we have stopped or started walking.
+        if (current == GameCharacterState.RUNNING) {
+            onWalkingStart();
+        } else if (previous == GameCharacterState.RUNNING) {
+            onWalkingStop();
+        }
+    }
+
+    /**
      * Called whenever the x/y position of the character changes.
      */
     private void onPositionChange() {
@@ -442,7 +431,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         this.rightWalkingDustEmitter.setY(this.getY());
     }
 
-    public void onWalkingStart(InteractiveEnvironment environment, float delta) {
+    public void onWalkingStart() {
         if (getFacingDirection() == FacingDirection.LEFT) {
             this.leftWalkingDustEmitter.enable();
             this.rightWalkingDustEmitter.disable();
@@ -452,7 +441,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         }
     }
 
-    public void onWalkingStop(InteractiveEnvironment environment, float delta) {
+    public void onWalkingStop() {
         this.leftWalkingDustEmitter.disable();
         this.rightWalkingDustEmitter.disable();
     }

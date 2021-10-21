@@ -88,6 +88,11 @@ public class Player extends GameCharacter {
 
     @Override
     public void update(InteractiveEnvironment environment, float delta) {
+        // If the player is in the middle of a dodge then they can't do anything until they finish.
+        if (getState() == GameCharacterState.DODGING) {
+            return;
+        }
+
         // Get the input provider for the player.
         IPlayerInputProvider playerInputProvider = this.getDetails().getInputProvider();
 
@@ -99,6 +104,13 @@ public class Player extends GameCharacter {
         float aimInputOffsetX = playerInputProvider.getAimAxisX();
         float aimInputOffsetY = playerInputProvider.getAimAxisY();
         this.setAngleOfView((aimInputOffsetX == 0 && aimInputOffsetY == 0) ? null : GameMath.getAngle(0, 0, aimInputOffsetX, aimInputOffsetY));
+
+        // Check whether the player has pressed the dodge button.
+        if (playerInputProvider.isControlPressed(Control.SECONDARY_ACTION)) {
+            // TODO When a player dodges it should be done in the direction defined by their angle of view.
+            dodge(environment, 0);
+            return;
+        }
 
         // TODO Check for player conditions (etc death, buffs) and update.
         // TODO Check for player actions.
