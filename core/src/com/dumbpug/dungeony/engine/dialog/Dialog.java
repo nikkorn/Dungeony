@@ -37,6 +37,14 @@ public abstract class Dialog<TRenderContext> {
     }
 
     /**
+     * Gets the target entity of the dialog.
+     * @return The target entity of the dialog.
+     */
+    public Entity getTargetEntity() {
+        return targetEntity;
+    }
+
+    /**
      * Gets the dialog interacting entity.
      * @return The dialog interacting entity.
      */
@@ -59,6 +67,22 @@ public abstract class Dialog<TRenderContext> {
      * @param originY The Y origin position of the dialog.
      */
     public abstract void render(TRenderContext context, float originX, float originY);
+
+    /**
+     * Gets whether the dialog should be shown.
+     * @return Whether the dialog should be shown.
+     */
+    public abstract boolean isShown();
+
+    /**
+     * Called when the dialog is shown.
+     */
+    public abstract void onShow();
+
+    /**
+     * Called when the dialog is hidden.
+     */
+    public abstract void onHide();
 
     /**
      * Gets the width of the dialog.

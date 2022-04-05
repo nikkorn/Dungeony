@@ -5,5 +5,6 @@ package com.dumbpug.dungeony.game.character.player;
  */
 public enum PlayerType {
     GREENY,
-    CLOAK
+    CLOAK,
+    MIKE
 }

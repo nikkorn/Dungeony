@@ -23,12 +23,12 @@ public class Dialogs<TRenderContext> {
             @Override
             public int compare(Dialog first, Dialog second) {
                 // We cannot sort two dialogs if either of them do not have a target entity.
-                if (first.getInteractingEntity() == null || second.getInteractingEntity() == null)
+                if (first.getTargetEntity() == null || second.getTargetEntity() == null)
                 {
                     return 0;
                 }
 
-                float difference = first.getInteractingEntity().getRenderOrder() - second.getInteractingEntity().getRenderOrder();
+                float difference = first.getTargetEntity().getRenderOrder() - second.getTargetEntity().getRenderOrder();
 
                 if (difference < 0) {
                     return -1;
@@ -68,7 +68,7 @@ public class Dialogs<TRenderContext> {
         ArrayList<Dialog> activeDialogs = new ArrayList<Dialog>();
 
         for (Dialog dialog : this.dialogs) {
-            if (dialog.getInteractingEntity() == entity) {
+            if (dialog.getTargetEntity() == entity) {
                 activeDialogs.add(dialog);
             }
         }
@@ -86,14 +86,14 @@ public class Dialogs<TRenderContext> {
 
         // Render each dialog.
         for (Dialog dialog : this.dialogs) {
-            // Skip rendering a dialog if it has no interacting entity.
-            if (dialog.getInteractingEntity() == null) {
+            // Skip rendering a dialog if it is not to be shown.
+            if (!dialog.isShown()) {
                 continue;
             }
 
             // TODO Work out the dialog x/y origin basted on the target entity position and dialog offset.
-            float offsetX = dialog.getInteractingEntity().getOrigin().getX();
-            float offsetY = dialog.getInteractingEntity().getOrigin().getY();
+            float offsetX = dialog.getTargetEntity().getOrigin().getX();
+            float offsetY = dialog.getTargetEntity().getOrigin().getY();
 
             // Render the dialog.
             dialog.render(context, offsetX, offsetY);

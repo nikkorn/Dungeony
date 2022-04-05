@@ -58,6 +58,8 @@ public class XboxControllerInputProvider implements IPlayerInputProvider, Contro
                     return controller.getButton(Xbox.R_BUMPER);
                 case SECONDARY_ACTION:
                     return controller.getButton(Xbox.L_BUMPER);
+                case TERTIARY_ACTION:
+                    return controller.getButton(Xbox.A);
                 default:
                     return false;
             }
@@ -67,11 +69,11 @@ public class XboxControllerInputProvider implements IPlayerInputProvider, Contro
 
     @Override
     public boolean isControlJustPressed(Control control) {
-        // TODO
         // We only care about handing inputs where we care about acting upon single presses.
         switch (control) {
             case PRIMARY_ACTION:
             case SECONDARY_ACTION:
+            case TERTIARY_ACTION:
                 boolean isPressed = justPressedControls.contains(control);
                 justPressedControls.remove(control);
                 return isPressed;
@@ -101,6 +103,11 @@ public class XboxControllerInputProvider implements IPlayerInputProvider, Contro
 
         if (buttonCode == Xbox.L_BUMPER) {
             this.justPressedControls.add(Control.SECONDARY_ACTION);
+            return true;
+        }
+
+        if (buttonCode == Xbox.A) {
+            this.justPressedControls.add(Control.TERTIARY_ACTION);
             return true;
         }
 

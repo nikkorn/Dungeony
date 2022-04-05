@@ -34,17 +34,16 @@ public class Resources {
      * Particle sprite map.
      */
     private static HashMap<ParticleSprite, Sprite> particleSpriteMap;
-
-
+    /**
+     * Dialog sprite map.
+     */
+    private static HashMap<DialogSprite, Sprite> dialogSpriteMap;
 
     private static HashMap<ParticleAnimation, AnimationDetails> particleAnimationMap;
-
     private static HashMap<PlayerType, HashMap<String, AnimationDetails>> playerStateAnimationMap;
     private static HashMap<EnemyType, HashMap<String, AnimationDetails>> enemyStateAnimationMap;
     private static HashMap<FriendlyType, HashMap<String, AnimationDetails>> friendlyStateAnimationMap;
-
     private static HashMap<WeaponType, HashMap<WeaponState, AnimationDetails>> weaponAnimationMap;
-
     private static HashMap<ProjectileType, AnimationDetails> projectileAnimationMap;
 
     static {
@@ -64,6 +63,11 @@ public class Resources {
         particleSpriteMap = new HashMap<ParticleSprite, Sprite>() {{
             for (ParticleSprite sprite : ParticleSprite.values()) {
                 put(sprite, new Sprite(new Texture("images/particle/" + sprite + ".png")));
+            }
+        }};
+        dialogSpriteMap = new HashMap<DialogSprite, Sprite>() {{
+            for (DialogSprite sprite : DialogSprite.values()) {
+                put(sprite, new Sprite(new Texture("images/dialog/" + sprite + ".png")));
             }
         }};
         particleAnimationMap = new HashMap<ParticleAnimation, AnimationDetails>() {{

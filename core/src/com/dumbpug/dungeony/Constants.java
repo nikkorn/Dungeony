@@ -59,6 +59,11 @@ public class Constants {
     public static final int CHARACTER_INVENTORY_SLOTS                            = 8;
     public static final int CHARACTER_INVENTORY_MAX_STACK_SIZE                   = 40;
     public static final long CHARACTER_DAMAGE_OVERLAY_DURATION_MS                = 100l;
+    public static final long CHARACTER_DODGE_DURATION_MS                         = 500l;
+    public static final float CHARACTER_FAST_DODGE_SPEED_MODIFIER                = 1.4f;
+    public static final float CHARACTER_DEFAULT_DODGE_SPEED_MODIFIER             = 1.2f;
+    public static final float CHARACTER_SLOW_DODGE_SPEED_MODIFIER                = 1f;
+    public static final float CHARACTER_HEAVY_DODGE_SPEED_MODIFIER               = 0.8f;
 
     //==============================================================================================
     // NPC

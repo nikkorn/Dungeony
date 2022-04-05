@@ -29,6 +29,20 @@ public class VendorDialog extends Dialog<SpriteBatch> {
         // TODO
     }
 
+    @Override
+    public boolean isShown() {
+        return false;
+    }
+
+    @Override
+    public void onShow() {
+
+    }
+
+    @Override
+    public void onHide() {
+
+    }
 
     /**
      * Gets the width of the dialog.
