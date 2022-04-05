@@ -9,6 +9,7 @@ import com.dumbpug.dungeony.engine.InteractiveEnvironment;
 import com.dumbpug.dungeony.engine.Position;
 import com.dumbpug.dungeony.game.EntityCollisionFlag;
 import com.dumbpug.dungeony.game.character.dodge.Dodge;
+import com.dumbpug.dungeony.game.character.dodge.DodgeSpeed;
 import com.dumbpug.dungeony.game.character.particles.walking.WalkingDustEmitterEntity;
 import com.dumbpug.dungeony.game.inventory.Inventory;
 import com.dumbpug.dungeony.rendering.Animation;
@@ -288,6 +289,11 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * @param delta
      */
     public void walk(InteractiveEnvironment environment, float movementAxisX, float movementAxisY, float delta) {
+        // There is nothing to do if the character cannot walk.
+        if (!this.canWalk()) {
+            return;
+        }
+
         // Is the character idle and not moving in any direction?
         if (movementAxisX == 0f && movementAxisY == 0f) {
             // The character has not moved on either axis so is now idle.
@@ -330,8 +336,15 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
      * @param angle
      */
     public void dodge(InteractiveEnvironment environment, float angle) {
-        // TODO
-        System.out.println("Dodge!");
+        // We cannot dodge if we are already dodging.
+        if (this.getState() == GameCharacterState.DODGING) {
+            return;
+        }
+
+        // Start the character dodge.
+        this.activeDodge = new Dodge(DodgeSpeed.DEFAULT, angle, Constants.CHARACTER_DODGE_DURATION_MS);
+
+        // Set the character state.
         this.setState(GameCharacterState.DODGING);
     }
 
@@ -386,9 +399,48 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
     }
 
     /**
+     * Gets the character movements speed per second.
+     * @return The character movements speed per second.
+     */
+    public abstract float getMovementSpeed();
+
+    /**
+     * Called when the character takes damage.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     * @param points The points of damage taken.
+     */
+    public abstract void onDamageTaken(InteractiveEnvironment environment, float delta, int points);
+
+    /**
+     * Called when the characters health is depleted.
+     * @param environment The interactive environment.
+     * @param delta The delta time.
+     */
+    public abstract void onHealthDepleted(InteractiveEnvironment environment, float delta);
+
+    /**
+     * Gets whether the character can walk.
+     * @return Whether the character can walk.
+     */
+    private boolean canWalk() {
+        // The character cannot walk if they are dead.
+        if (this.getState() == GameCharacterState.DEAD) {
+            return false;
+        }
+
+        // The character cannot walk if they are currently dodging.
+        if (this.getState() == GameCharacterState.DODGING) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Called whenever the state of the character changes.
      */
-    public void onStateChange(GameCharacterState previous, GameCharacterState current) {
+    private void onStateChange(GameCharacterState previous, GameCharacterState current) {
         // Check whether we have stopped or started walking.
         if (current == GameCharacterState.RUNNING) {
             onWalkingStart();
@@ -431,7 +483,7 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         this.rightWalkingDustEmitter.setY(this.getY());
     }
 
-    public void onWalkingStart() {
+    private void onWalkingStart() {
         if (getFacingDirection() == FacingDirection.LEFT) {
             this.leftWalkingDustEmitter.enable();
             this.rightWalkingDustEmitter.disable();
@@ -441,12 +493,12 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
         }
     }
 
-    public void onWalkingStop() {
+    private void onWalkingStop() {
         this.leftWalkingDustEmitter.disable();
         this.rightWalkingDustEmitter.disable();
     }
 
-    public void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
+    private void onWalkingDirectionChange(InteractiveEnvironment environment, float delta) {
         if (getFacingDirection() == FacingDirection.LEFT) {
             this.leftWalkingDustEmitter.enable();
             this.rightWalkingDustEmitter.disable();
@@ -455,25 +507,4 @@ public abstract class GameCharacter extends Entity<SpriteBatch> {
             this.rightWalkingDustEmitter.enable();
         }
     }
-
-    /**
-     * Gets the character movements speed per second.
-     * @return The character movements speed per second.
-     */
-    public abstract float getMovementSpeed();
-
-    /**
-     * Called when the character takes damage.
-     * @param environment The interactive environment.
-     * @param delta The delta time.
-     * @param points The points of damage taken.
-     */
-    public abstract void onDamageTaken(InteractiveEnvironment environment, float delta, int points);
-
-    /**
-     * Called when the characters health is depleted.
-     * @param environment The interactive environment.
-     * @param delta The delta time.
-     */
-    public abstract void onHealthDepleted(InteractiveEnvironment environment, float delta);
 }
