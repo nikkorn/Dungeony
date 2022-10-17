@@ -6,6 +6,8 @@ import com.dumbpug.dungeony.ApplicationModel;
 import com.dumbpug.dungeony.characterselection.PlayerDetails;
 import com.dumbpug.dungeony.game.character.player.PlayerIdentifier;
 import com.dumbpug.dungeony.game.character.player.PlayerType;
+import com.dumbpug.dungeony.input.IPlayerInputProvider;
+import com.dumbpug.dungeony.input.KeyboardInputProvider;
 import com.dumbpug.dungeony.input.XboxControllerInputProvider;
 import com.dumbpug.dungeony.state.State;
 
@@ -40,14 +42,20 @@ public class CharacterSelection extends State {
 
     @Override
     public void update() {
+        IPlayerInputProvider inputProvider = null;
+
         if (Controllers.getControllers().isEmpty()) {
-            return;
+            inputProvider = new KeyboardInputProvider();
         }
+        else
+        {
+            XboxControllerInputProvider xboxControllerInputProvider = new XboxControllerInputProvider();
 
-        XboxControllerInputProvider inputProvider = new XboxControllerInputProvider();
+            Controller controller = Controllers.getControllers().get(0);
+            controller.addListener(xboxControllerInputProvider);
 
-        Controller controller = Controllers.getControllers().get(0);
-        controller.addListener(inputProvider);
+            inputProvider = xboxControllerInputProvider;
+        }
 
         // For now, just add a single player and use keyboard input.
         this.applicationModel.getPlayerDetails().add(new PlayerDetails(PlayerIdentifier.PLAYER_1, PlayerType.MIKE, inputProvider));
